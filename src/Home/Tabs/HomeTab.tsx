@@ -1,0 +1,207 @@
+import React from "react"
+import { ScrollView, StyleSheet, View } from "react-native"
+import { Card, Label, Ripple } from "../../common/components"
+import LinearGradient from "react-native-linear-gradient"
+import { moderateScale } from "react-native-size-matters"
+import { useSelector } from "react-redux"
+import LottieView from 'lottie-react-native'
+import Icon from 'react-native-vector-icons/AntDesign'
+import EntypoIcon from 'react-native-vector-icons/Entypo'
+import { useNavigation } from "@react-navigation/native"
+import { Image } from "react-native"
+import { EmptyImageView } from "../LeaderBoard/IndividualRank"
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1
+    },
+    mainContainer: {
+        marginTop: moderateScale(20),
+        alignSelf: 'center',
+        backgroundColor: 'white',
+        borderRadius: moderateScale(300),
+        width: moderateScale(300),
+        height: moderateScale(300)
+    },
+    innerContainer: {
+        marginTop: moderateScale(10),
+        alignSelf: 'center',
+        borderRadius: moderateScale(280),
+        width: moderateScale(280),
+        height: moderateScale(280)
+    },
+    lottieStyle: {
+        alignSelf: 'center',
+        height: moderateScale(100)
+    },
+    kmView: {
+        marginVertical: moderateScale(20)
+    },
+    rankLottieStyle: {
+        alignSelf: 'center',
+        width: moderateScale(70)
+    },
+    rankContainer: {
+        alignSelf: 'center',
+        marginTop: moderateScale(30)
+    },
+    editContainer: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'row'
+    },
+    editIconStyle: {
+        position: 'absolute',
+        right: moderateScale(40),
+        padding: moderateScale(10)
+    },
+    cardImageStyle: {
+        width: moderateScale(50),
+        height: moderateScale(50),
+        borderRadius: moderateScale(50)
+    },
+    cardStyle: {
+        alignSelf: 'center',
+        height: moderateScale(50),
+        borderRadius: moderateScale(50),
+        width: moderateScale(300),
+        padding: 0,
+        margin: 0,
+        flexDirection: 'row'
+    },
+    rankNumberViewInCard: {
+        position: 'absolute',
+        right: 0,
+        justifyContent: 'center',
+        alignItems: "center",
+        height: moderateScale(50),
+        width: moderateScale(50),
+        borderRadius: moderateScale(50),
+        backgroundColor: 'red'
+    },
+    chatButtonView: {
+        position: 'absolute',
+        right: moderateScale(20),
+        bottom: moderateScale(20),
+        backgroundColor: 'red',
+        width: moderateScale(50),
+        height: moderateScale(50),
+        borderRadius: moderateScale(50),
+        justifyContent: 'center',
+        alignItems: 'center'
+    }
+
+})
+
+export const HomeTab = () => {
+    const navigation: any = useNavigation()
+
+    const user = useSelector((store: any) => store.home.user)
+    const usersList = useSelector((store: any) => store.home.usersList ?? {})
+    const keys = Object.keys(usersList)
+
+    const rankingList = []
+
+    for (let i = 0; i < keys.length; i++) {
+        const userDetails = usersList[keys[i]]
+        let totalSteps = 0;
+        const steps = userDetails?.steps ?? []
+        for (let j = 0; j < steps.length; j++) {
+            totalSteps = totalSteps + parseInt((steps[j]?.count ?? 0))
+        }
+        rankingList.push({ ...userDetails, totalSteps })
+    }
+
+    rankingList.sort((a: any, b: any) => b.totalSteps - a.totalSteps)
+
+    let myRank = rankingList.findIndex((list: any) => list.id === user.id)
+    if (myRank === -1) {
+        myRank = rankingList.length + 1
+    } else {
+        myRank = myRank + 1
+    }
+
+    let totalSteps = 0
+
+    const userActivity = usersList[user.id] ?? {}
+    const steps = [...(userActivity.steps ?? [])]
+    steps.map((obj: any) => {
+        totalSteps = totalSteps + parseInt(obj.count)
+    })
+
+    return (
+        <LinearGradient colors={["#43C6AC", '#F8FFAE']} style={styles.container}>
+            <ScrollView style={styles.container}>
+                <View style={styles.mainContainer}>
+                    <LinearGradient colors={["#43C6AC", '#F8FFAE']} style={styles.innerContainer}>
+
+                        <LottieView
+                            speed={0.6}
+                            style={[styles.lottieStyle]}
+                            source={require('../../../res/lottie/walking.json')}
+                            autoPlay
+                            loop
+                        />
+
+                        <View style={styles.editContainer}>
+                            <View>
+                                <Label bold xxxl center white title={`${totalSteps}`} />
+                                <Label bold m center white title={"Total steps"} />
+                            </View>
+                            <Icon
+                                name="edit"
+                                color="white"
+                                size={moderateScale(30)}
+                                style={styles.editIconStyle}
+                                onPress={() => {
+                                    navigation.navigate("Details")
+                                }} />
+                        </View>
+                        <View style={styles.kmView}>
+                            <Label bold xxxl center white title={`${Math.round(totalSteps * 0.0008 * 100) / 100}`} />
+                            <Label bold m center white title={"Total kilometers"} />
+                        </View>
+                    </LinearGradient>
+                </View>
+                <View style={styles.rankContainer}>
+                    <Card disabled style={styles.cardStyle}>
+                        {
+                            user.photo ?
+                                <Image
+                                    source={{ uri: user.photo }}
+                                    style={styles.cardImageStyle}
+                                />
+                                :
+                                <EmptyImageView name={user.name} style={styles.cardImageStyle} />
+                        }
+                        <View style={{ flex: 0.8, justifyContent: 'center', alignItems: 'center' }}>
+                            <Label center bold m primary title={"Your current rank"} />
+                        </View>
+                        <LinearGradient colors={["#200122", '#6f0000']} style={styles.rankNumberViewInCard}>
+                            <Label center bold white title={`${myRank}`} />
+                        </LinearGradient>
+                    </Card>
+                    <LottieView
+                        speed={0.6}
+                        style={[styles.rankLottieStyle]}
+                        source={require('../../../res/lottie/rank.json')}
+                        autoPlay
+                        loop
+                    />
+                </View>
+                <LinearGradient colors={["#200122", '#6f0000']} style={styles.chatButtonView}>
+                    <Ripple
+                        style={{ flex: 1, width: "100%", justifyContent: "center", alignItems: "center" }}
+                        onPress={() => {
+                            navigation.navigate("ChatTab")
+                        }}>
+                        <EntypoIcon
+                            name="chat"
+                            color="white"
+                            size={moderateScale(20)} />
+                    </Ripple>
+                </LinearGradient>
+            </ScrollView>
+        </LinearGradient>
+    )
+}

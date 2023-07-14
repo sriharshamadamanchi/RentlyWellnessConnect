@@ -1,118 +1,80 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
+import 'react-native-gesture-handler';
+import * as React from 'react';
+import { Home } from './src/Home';
+import { PersistGate } from 'redux-persist/integration/react';
+import { Provider } from 'react-redux';
+import { persistor, store } from './src/common/store';
+import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
+import { StyleSheet, View } from 'react-native';
+import { navigationRef } from './src/common/navigation/navigationService';
+import { theme } from './src/common/theme';
+import { ErrorBoundary } from './src/common/ErrorBoundary/ErrorBoundary';
+import { NavigationContainer } from '@react-navigation/native';
 
-import React from 'react';
-import type {PropsWithChildren} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+// Gets the current screen from navigation state
+const getActiveRouteName: any = (state: any) => {
+  const route = state?.routes[state?.index];
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+  if (route?.state) {
+    // Dive into nested navigators
+    return getActiveRouteName(route.state);
+  }
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
-
-function Section({children, title}: SectionProps): JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
-
-function App(): JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
-  return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
-  );
-}
+  return route?.name;
+};
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
+  container: { flex: 1, backgroundColor: theme.colors.background.default },
 });
 
-export default App;
+const themeForPaper = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    primary: theme.colors.background.base,
+    accent: theme.colors.background.base,
+  },
+};
+
+const App = () => {
+  const routeNameRef = React.useRef();
+
+  React.useEffect(() => {
+    const state = navigationRef?.current?.getRootState();
+
+    // Save the initial route name
+    routeNameRef.current = getActiveRouteName(state);
+  }, []);
+
+  return (
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <PaperProvider theme={themeForPaper}>
+          <ErrorBoundary>
+            <View style={styles.container}>
+              <NavigationContainer
+                ref={navigationRef}
+                onReady={() => {
+                  const state = navigationRef?.current?.getRootState();
+                }}
+                onStateChange={(state: any) => {
+                  const previousRouteName = routeNameRef.current;
+                  const currentRouteName = getActiveRouteName(state);
+                  if (previousRouteName !== currentRouteName) {
+                    console.log('Analytics : ', currentRouteName);
+
+                    routeNameRef.current = currentRouteName;
+                  }
+                }
+                }>
+                <Home />
+              </NavigationContainer>
+            </View>
+          </ErrorBoundary>
+        </PaperProvider>
+      </PersistGate>
+    </Provider>
+  );
+};
+
+export default App

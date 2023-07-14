@@ -45,6 +45,10 @@ target 'RentlyConnect' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
+  pod 'FirebaseCore', :modular_headers => true
+  pod 'FirebaseCoreInternal', :modular_headers => true
+  pod 'GoogleUtilities', :modular_headers => true
+  
   target 'RentlyConnectTests' do
     inherit! :complete
     # Pods for testing
