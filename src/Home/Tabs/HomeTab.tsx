@@ -1,5 +1,5 @@
 import React from "react"
-import { ScrollView, StyleSheet, View } from "react-native"
+import { ScrollView, StatusBar, StyleSheet, View } from "react-native"
 import { Card, Label, Ripple } from "../../common/components"
 import LinearGradient from "react-native-linear-gradient"
 import { moderateScale } from "react-native-size-matters"
@@ -131,6 +131,7 @@ export const HomeTab = () => {
 
     return (
         <LinearGradient colors={["#43C6AC", '#F8FFAE']} style={styles.container}>
+            <StatusBar backgroundColor={"#43C6AC"} barStyle="dark-content" />
             <ScrollView style={styles.container}>
                 <View style={styles.mainContainer}>
                     <LinearGradient colors={["#43C6AC", '#F8FFAE']} style={styles.innerContainer}>

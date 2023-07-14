@@ -1,5 +1,5 @@
 import React from "react"
-import { Image, StyleSheet, View } from "react-native"
+import { Image, StatusBar, StyleSheet, View } from "react-native"
 import { CurvedButton, Label } from "../common/components"
 import { moderateScale } from "react-native-size-matters"
 import { useDispatch, useSelector } from "react-redux"
@@ -56,6 +56,7 @@ export const Login = () => {
 
     return (
         <View style={styles.container}>
+            <StatusBar backgroundColor={"#5EE8F9"} barStyle="dark-content" />
             <LoadingIndicator loading={loading} />
             <LinearGradient colors={["#B2FEFA", '#0ED2F7']} style={styles.container}>
                 <LinearGradient colors={["#B2FEFA", '#0ED2F7']} style={styles.topCircleStyle}>

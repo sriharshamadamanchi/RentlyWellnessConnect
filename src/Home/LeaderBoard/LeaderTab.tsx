@@ -1,5 +1,5 @@
 import React from "react"
-import { StyleSheet } from "react-native"
+import { StatusBar, StyleSheet } from "react-native"
 import { moderateScale } from "react-native-size-matters"
 import { useSelector } from "react-redux"
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs"
@@ -28,6 +28,7 @@ export const LeaderTab = () => {
 
     return (
         <PrimaryView style={{backgroundColor: '#43C6AC'}}>
+            <StatusBar backgroundColor={"#43C6AC"} barStyle="dark-content" />
             <LinearGradient colors={["#43C6AC", '#F8FFAE']} style={styles.container}>
                 <Label xxl center bold white title={"Leaderboard"} style={{ marginVertical: moderateScale(20) }} />
 

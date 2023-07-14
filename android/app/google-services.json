@@ -8,17 +8,17 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:440426391131:android:63f835efb12f55e77e817e",
+        "mobilesdk_app_id": "1:440426391131:android:24cea2859ef16d2a7e817e",
         "android_client_info": {
-          "package_name": "com.moonlanding"
+          "package_name": "com.rently.connect"
         }
       },
       "oauth_client": [
         {
-          "client_id": "440426391131-tqu08oamv7878lq4l2te1c9m1v5cilka.apps.googleusercontent.com",
+          "client_id": "440426391131-1165gn21e7c6j9kcoamojebhpqkqp4vg.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.moonlanding",
+            "package_name": "com.rently.connect",
             "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
           }
         },
@@ -40,54 +40,10 @@
               "client_type": 3
             },
             {
-              "client_id": "440426391131-o6658t4toj5s8so2fqrqnj47748opi5j.apps.googleusercontent.com",
+              "client_id": "440426391131-8qr4d5hcnid9chgjamf2r3tqp5mib1c4.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.moonlanding"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:440426391131:android:13312f707881e1967e817e",
-        "android_client_info": {
-          "package_name": "com.rentlyconnect"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "440426391131-8pvjaqv30ek90j82sfmt2kk17ukklr1k.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.rentlyconnect",
-            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
-          }
-        },
-        {
-          "client_id": "440426391131-dncobr6c7drh5ivm48k34uqd5sthjfnn.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDf4cZJ1QiwfgUPWrfn5Y13Qfn7XIaP5Nc"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "440426391131-dncobr6c7drh5ivm48k34uqd5sthjfnn.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "440426391131-o6658t4toj5s8so2fqrqnj47748opi5j.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.moonlanding"
+                "bundle_id": "com.rently.connect"
               }
             }
           ]

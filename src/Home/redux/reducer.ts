@@ -1,12 +1,13 @@
 import { createReducer, resetState } from '../../common/store/typeSafe';
-import { clearLoginDetailsAction, readMessageAction, resetReducersAction, storeChatsAction, storeLoginDetailsAction, storeMessageAction, storeUsersListAction } from './actions';
+import { clearLoginDetailsAction, readMessageAction, resetReducersAction, storeChatsAction, storeLoginDetailsAction, storeMessageAction, storeRemoteConfigAction, storeUsersListAction } from './actions';
 
 const initialState = {
     isLoggedIn: false,
     user: {},
     usersList: {},
     messages: [],
-    chats: {}
+    chats: {},
+    remoteConfig: {}
 };
 
 
@@ -43,6 +44,12 @@ export const homeReducer = createReducer(initialState)
         storeMessageAction,
         (state: any, action: any) => {
             state.messages = [...state.messages, ...(action.payload ?? [])]
+        }
+    )   
+    .handleAction(
+        storeRemoteConfigAction,
+        (state: any, action: any) => {
+            state.remoteConfig = action.payload ?? {}
         }
     )
     .handleAction(

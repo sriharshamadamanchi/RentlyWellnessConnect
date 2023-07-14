@@ -1,5 +1,5 @@
 import React from "react"
-import { Image, StyleSheet, View } from "react-native"
+import { Image, StatusBar, StyleSheet, View } from "react-native"
 import { CurvedButton, Label, PrimaryView } from "../../common/components"
 import LinearGradient from "react-native-linear-gradient"
 import { moderateScale } from "react-native-size-matters"
@@ -78,6 +78,7 @@ export const AccountTab = () => {
 
     return (
         <PrimaryView style={{ flex: 1, backgroundColor: '#9FE3AD' }}>
+            <StatusBar backgroundColor={"#A0E3A9"} barStyle="dark-content" />
             <View style={styles.container}>
                 <LoadingIndicator loading={loading} />
                 <LinearGradient colors={["#43C6AC", '#F8FFAE']} style={styles.container}>

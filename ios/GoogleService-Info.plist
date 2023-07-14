@@ -3,11 +3,11 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>440426391131-444ui26ctp499vjt6qm6r978413heekn.apps.googleusercontent.com</string>
+	<string>440426391131-8qr4d5hcnid9chgjamf2r3tqp5mib1c4.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.440426391131-444ui26ctp499vjt6qm6r978413heekn</string>
+	<string>com.googleusercontent.apps.440426391131-8qr4d5hcnid9chgjamf2r3tqp5mib1c4</string>
 	<key>ANDROID_CLIENT_ID</key>
-	<string>440426391131-8pvjaqv30ek90j82sfmt2kk17ukklr1k.apps.googleusercontent.com</string>
+	<string>440426391131-1165gn21e7c6j9kcoamojebhpqkqp4vg.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
 	<string>AIzaSyD2ypT2tUyjUTea7yZTVgEISqunEP9rkW8</string>
 	<key>GCM_SENDER_ID</key>
@@ -15,7 +15,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.rentlyconnect</string>
+	<string>com.rently.connect</string>
 	<key>PROJECT_ID</key>
 	<string>moon-landing-a8bee</string>
 	<key>STORAGE_BUCKET</key>
@@ -31,7 +31,7 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:440426391131:ios:34258b69a9e410e67e817e</string>
+	<string>1:440426391131:ios:710d5f00fe35f5af7e817e</string>
 	<key>DATABASE_URL</key>
 	<string>https://moon-landing-a8bee-default-rtdb.firebaseio.com</string>
 </dict>

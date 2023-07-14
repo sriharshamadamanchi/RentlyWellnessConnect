@@ -9,7 +9,6 @@ import { AccountTab } from "./Tabs/AccountTab";
 import { useDispatch, useSelector } from "react-redux";
 import { Login } from "./Login";
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import { StatusBar } from "react-native";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { HomeTab } from "./Tabs/HomeTab";
 import { ActivityTab } from "./Tabs/ActivityTab";
@@ -57,10 +56,10 @@ const styles = StyleSheet.create({
 export const HomeTabbar = () => {
     return (
         <View style={styles.tabsStyle}>
-            <StatusBar backgroundColor={"#43C6AC"} barStyle="dark-content" />
             <Tab.Navigator
                 backBehavior={"initialRoute"}
                 screenOptions={{
+                    unmountOnBlur: true,
                     headerShown: false,
                     tabBarActiveTintColor: "green",
                     tabBarStyle: {
@@ -178,47 +177,6 @@ export const Home = () => {
     React.useEffect(() => {
         SplashScreen.hide();
     }, []);
-
-    // React.useEffect(() => {
-    //     const key = "messages"
-    //     const getBackgroundMessages = async () => {
-    //         const messages = await getItem(key)
-    //         if (messages && messages.length > 0) {
-    //             dispatch(storeMessageAction(messages))
-    //         }
-    //         await removeItem(key)
-    //     }
-
-    //     getBackgroundMessages()
-
-    // }, [])
-
-    // React.useEffect(() => {
-    //     if (isLoggedIn) {
-    //         const _handleAppStateChange: any = (nextAppState: "active" | "background") => {
-    //             if (appState.current.match(/inactive|background/) && nextAppState === "active" && isLoggedIn) {
-    //                 const key = "messages"
-    //                 const getBackgroundMessages = async () => {
-    //                     const messages = await getItem(key)
-    //                     if (messages && messages.length > 0) {
-    //                         dispatch(storeMessageAction(messages))
-    //                     }
-    //                     await removeItem(key)
-    //                 }
-
-    //                 getBackgroundMessages()
-    //             }
-    //             appState.current = nextAppState;
-
-    //         };
-    //         const listener = AppState.addEventListener("change", _handleAppStateChange);
-
-    //         return () => {
-    //             listener.remove();
-    //         };
-    //     }
-
-    // }, [dispatch, isLoggedIn]);
 
     React.useEffect(() => {
         const subscriber =  firebase().collection("users").doc(id).onSnapshot((snapshot) => {

@@ -1,10 +1,11 @@
 import { call, put, takeLatest } from "redux-saga/effects";
 import { getActionType } from "../../common/store/typeSafe";
-import { clearLoginDetailsAction, loginAction, logoutAction, sendMessageAction, storeLoginDetailsAction, storeUsersListAction } from "./actions";
+import { clearLoginDetailsAction, fetchRemoteConfigAction, loginAction, logoutAction, sendMessageAction, storeLoginDetailsAction, storeRemoteConfigAction, storeUsersListAction } from "./actions";
 import { failedLoadingAction, startLoadingAction, successLoadingAction } from "../../common/loaderRedux/actions";
 import { GoogleSignin, statusCodes } from "@react-native-google-signin/google-signin";
 import { Alert } from "react-native";
 import { Firestore } from "../Firestore";
+import remoteConfig from '@react-native-firebase/remote-config';
 
 export function* loginSaga(): any {
   try {
@@ -24,6 +25,7 @@ export function* loginSaga(): any {
       yield put((storeUsersListAction({ usersList: { ...usersList, [id]: { id, email, name, photo, steps: [] } } })))
     }
     yield put(storeLoginDetailsAction({ user: userInfo?.user ?? {} }))
+    yield call(fetchRemotConfigSaga)
     yield put(successLoadingAction({ name: "Login", msg: "" }))
   } catch (error: any) {
     console.log("error in loginSaga", error)
@@ -62,8 +64,29 @@ export function* sendMessageSaga(action: { payload: any }): any {
   }
 }
 
+export function* fetchRemotConfigSaga(): any {
+  try {
+    yield remoteConfig().fetch(6*60*60); // minimum fetch interval 6 hours (in sec)
+    yield remoteConfig().activate();
+    const data = yield remoteConfig().getAll();
+    const config: any = {}
+    Object.entries(data).forEach($ => {
+      const [key, entry]: any = $;
+      try{
+        config[key] = JSON.parse(entry.asString())
+      }catch(e){
+        console.log("error in parsing remote config", e)
+      }
+    })
+    yield put(storeRemoteConfigAction(config))
+  } catch (error: any) {
+    console.log("error in fetchRemotConfigSaga", error)
+  }
+}
+
 export const homeSagas: any = [
   takeLatest(getActionType(loginAction), loginSaga),
   takeLatest(getActionType(logoutAction), logoutSaga),
   takeLatest(getActionType(sendMessageAction), sendMessageSaga),
+  takeLatest(getActionType(fetchRemoteConfigAction), fetchRemotConfigSaga),
 ];

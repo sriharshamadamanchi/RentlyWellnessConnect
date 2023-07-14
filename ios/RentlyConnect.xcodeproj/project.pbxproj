@@ -542,7 +542,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.rentlyconnect;
+				PRODUCT_BUNDLE_IDENTIFIER = com.rently.connect;
 				PRODUCT_NAME = RentlyConnect;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -571,7 +571,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.rentlyconnect;
+				PRODUCT_BUNDLE_IDENTIFIER = com.rently.connect;
 				PRODUCT_NAME = RentlyConnect;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
