@@ -7,6 +7,7 @@ import { Label, Ripple } from "../../common/components"
 import { useNavigation } from "@react-navigation/native"
 import moment from "moment"
 import { EmptyImageView } from "../LeaderBoard/IndividualRank"
+import { teams as _teams } from "../../common/constants"
 
 const styles = StyleSheet.create({
     container: {
@@ -43,7 +44,9 @@ export const Groups = () => {
     const navigation: any = useNavigation()
     const { id } = useSelector((store: any) => store.home.user)
 
-    const teams: any = [{ name: "Team A" }, { name: "Team B" }, { name: "Team C" }]
+    const teams: any = _teams.map((t) => {
+        return {name: t}
+    })
     const keys = Object.keys(teams)
 
     return (

@@ -1,15 +1,14 @@
 import moment from "moment"
 import React, { useState } from "react"
-import { Dimensions, ScrollView, StyleSheet, TextInput, View } from "react-native"
+import { Alert, Dimensions, ScrollView, StyleSheet, TextInput, View } from "react-native"
 import { Calendar } from "react-native-calendars"
 import LinearGradient from "react-native-linear-gradient"
 import { moderateScale } from "react-native-size-matters"
 import { useSelector } from "react-redux"
-import { CurvedButton, Label, Ripple } from "../common/components"
+import { CurvedButton, Label } from "../common/components"
 import { LoadingIndicator } from "../common/components/LoadingIndicator/LoadingIndicator"
 import { Firestore } from "./Firestore"
 import { DropDown } from "../common/components/DropDown/DropDown"
-import Fontisto from 'react-native-vector-icons/Fontisto'
 
 const styles = StyleSheet.create({
     container: {
@@ -54,7 +53,7 @@ const styles = StyleSheet.create({
     }
 })
 
-const InputField = ({ title, value, setText, keyboardType = "default", editable = true, maxLength = 20, style = {} }: { title: string, value: string, setText: any, keyboardType?: any, editable?: boolean, maxLength?: number, style?: any }) => {
+const InputField = ({ title, value, setText, keyboardType = "default", editable = true, maxLength = 20, style = {} }: { title: string, value: string, setText?: any, keyboardType?: any, editable?: boolean, maxLength?: number, style?: any }) => {
     return (
         <View style={{ marginVertical: moderateScale(5) }}>
             <Label m white bold title={title} />
@@ -74,21 +73,6 @@ const InputField = ({ title, value, setText, keyboardType = "default", editable 
     )
 }
 
-const RadioButton = ({ title, setType, checked }: { title: string, setType: any, checked: boolean }) => {
-    return (
-        <Ripple
-            style={{ marginBottom: moderateScale(5), flexDirection: 'row' }}
-            onPress={() => {
-                setType(title)
-            }}>
-            <Label white bold title={title} style={{ marginRight: moderateScale(10) }} />
-            <Fontisto
-                name={checked ? "radio-btn-active" : "radio-btn-passive"}
-                color="white"
-                size={moderateScale(20)} />
-        </Ripple>
-    )
-}
 const data = [
     { label: 'Walking', value: 'Walking' },
     { label: 'Running', value: 'Running' },
@@ -102,43 +86,42 @@ const data = [
 
 export const AddOrEditSteps = () => {
 
-    const { id, name, givenName, email, photo } = useSelector((store: any) => store.home.user)
+    const { id } = useSelector((store: any) => store.home.user)
     const usersList = useSelector((store: any) => store.home.usersList)
-
-    const noActivity = !usersList[id]
+    const user = usersList[id] ?? {}
 
     const [count, setCount] = useState("")
     const [km, setKm] = useState("")
-    const [type, setType] = useState("ADD")
     const [pedoType, setPedoType] = useState(data[0].label)
     const [date, setDate] = useState(moment().format("YYYY-MM-DD"))
     const loading = useSelector((store: any) => store.loader.loading)
 
     const save = async () => {
-        let oldData = {}
+        if(parseInt(count, 0) > 10000){
+            Alert.alert("Rejected", "Day Limit Exceeded")
+            return
+        }
         const formattedDate = moment(date, "YYYY-MM-DD").format("DD/MM/YYYY")
-
-        if (noActivity) {
-            await Firestore.addUser({
-                id, details: {
-                    id,
-                    email,
-                    name,
-                    photo,
-                    steps: []
-                }
-            })
+        const steps = [...(user?.steps ?? [])]
+        const index = steps.findIndex((step) => step.date === formattedDate)
+        if (index !== -1) {
+            const step = steps[index]
+            steps[index] = { ...step, type: pedoType, date: formattedDate, count: `${parseInt(step.count, 10) + parseInt(count, 10)}` }
         } else {
-            const steps = usersList[id].steps ?? []
-            oldData = steps.find((step: any) => step.date === formattedDate) ?? {}
+            steps.push({
+                type: pedoType,
+                date: formattedDate,
+                count
+            })
         }
 
-        const data = { count, date: formattedDate, type: pedoType }
-        await Firestore.updateSteps({ id, oldData, newData: data })
+        await Firestore.updateUser({ id, details: { ...user, steps } })
         setCount("")
         setKm("")
         setDate(moment().format("YYYY-MM-DD"))
     }
+
+    const stepDetails = user?.steps?.find((step: any) => step.date === moment(date, "YYYY-MM-DD").format("DD/MM/YYYY"))
 
     return (
         <LinearGradient colors={["#43C6AC", '#F8FFAE']} style={styles.container}>
@@ -147,19 +130,11 @@ export const AddOrEditSteps = () => {
                 <View style={styles.container}>
 
                     <View style={styles.inputContainer}>
-
-                        {/* <View style={styles.radioButtonContainer}>
-                            <RadioButton
-                                title="ADD"
-                                setType={setType}
-                                checked={type === "ADD"} />
-                                            <Label m white bold title={"(or)"} />
-
-                            <RadioButton
-                                setType={setType}
-                                title="SUBTRACT"
-                                checked={type === "SUBTRACT"} />
-                        </View> */}
+                        <InputField
+                            title={`STEP COUNT ON ${moment(date, "YYYY-MM-DD").format("DD ddd, MMM").toUpperCase()}`}
+                            value={`${stepDetails?.count ?? "0"}`}
+                            editable={false} 
+                            style = {{opacity: 0.75}}/>
                         <DropDown
                             title="TYPE"
                             data={data}
@@ -170,7 +145,7 @@ export const AddOrEditSteps = () => {
                         />
                         <View style={{ flexDirection: 'row' }}>
                             <InputField
-                                style={{ width: moderateScale(90)}}
+                                style={{ width: moderateScale(90) }}
                                 maxLength={5}
                                 title={"ENTER STEPS"}
                                 value={count}
@@ -184,9 +159,9 @@ export const AddOrEditSteps = () => {
                                     }
                                 }}
                                 keyboardType="numeric" />
-                            <Label bold white center title="(or)" style={{marginHorizontal: moderateScale(5)}}/>
+                            <Label bold white center title="(or)" style={{ marginHorizontal: moderateScale(5) }} />
                             <InputField
-                                style={{ width: moderateScale(90)}}
+                                style={{ width: moderateScale(90) }}
                                 maxLength={km.length ? km.length : 1}
                                 title={"ENTER KMS"}
                                 value={km}
@@ -205,7 +180,8 @@ export const AddOrEditSteps = () => {
                             title={"DATE"}
                             value={moment(date, "YYYY-MM-DD").format("DD ddd, MMM")}
                             setText={setDate}
-                            editable={false} />
+                            editable={false} 
+                            style = {{opacity: 0.75}}/>
                     </View>
 
                     <Calendar

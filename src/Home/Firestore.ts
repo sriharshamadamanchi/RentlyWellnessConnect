@@ -2,7 +2,6 @@ import firestore from '@react-native-firebase/firestore';
 import { store } from '../common/store';
 import { storeUsersListAction } from './redux/actions';
 import { hideLoaderAction, showLoaderAction } from '../common/loaderRedux/actions';
-import { Alert } from 'react-native';
 
 interface detailsType {
     id: string,
@@ -15,35 +14,26 @@ interface detailsType {
 const addUser: any = async ({ id, details }: { id: string, details: detailsType }) => {
     try {
         await firestore().collection('users').doc('activity')
-            .update({
-                [id]: details
+            .set({
+                [id]: JSON.stringify(details)
             })
-        console.log("addUser", true)
         await getUsersList()
     } catch (err) {
         console.log("Error in addUser", err)
     }
 }
 
-const updateSteps = async ({ id, oldData, newData }: { id: string, oldData: any, newData: any }) => {
-    const path = `${id}.steps`
+const updateUser: any = async ({ id, details }: { id: string, details: detailsType }) => {
     try {
         store.dispatch(showLoaderAction())
         await firestore().collection('users').doc('activity')
             .update({
-                [path]: firestore.FieldValue.arrayRemove(oldData)
+                [id]: JSON.stringify(details)
             })
-
-        await firestore().collection('users').doc('activity')
-            .update({
-                [path]: firestore.FieldValue.arrayUnion(newData)
-            })
-        console.log("updateSteps", true)
         await getUsersList()
-        Alert.alert("Success", "Updated Successfully!")
     } catch (err) {
-        console.log("Error in updateSteps", err)
-    } finally {
+        console.log("Error in addUser", err)
+    } finally{
         store.dispatch(hideLoaderAction())
     }
 }
@@ -66,8 +56,11 @@ const storeFCMToken = async ({ id, token }: { id: string, token: string }) => {
 
 const getUsersList = async () => {
     try {
-        const usersList = (await firestore().collection('users').doc('activity').get()).data()
-        console.log("getUsersList", usersList)
+        const rawUsersList: any = (await firestore().collection('users').doc('activity').get()).data()
+        const usersList: any = {}
+        Object.keys(rawUsersList ?? {}).map((id: any) => {
+            usersList[id] = JSON.parse(rawUsersList[id] ?? "{}")
+        })
         store.dispatch(storeUsersListAction({ usersList }))
 
         return usersList
@@ -129,7 +122,7 @@ const sendMessage = async ({ from, to, message, timestamp }: { from: string, to:
 
 export const Firestore = {
     addUser,
-    updateSteps,
+    updateUser,
     getUsersList,
     storeFCMToken,
     sendMessage

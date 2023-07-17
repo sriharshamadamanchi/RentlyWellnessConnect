@@ -18,14 +18,35 @@ export function* loginSaga(): any {
     // }else{
     //   yield put(storeLoginDetailsAction({ user: userInfo?.user ?? {} }))
     // }
+
+    const {moon_landing_teams = {}} = yield call(fetchRemotConfigSaga)
+    const lunaTeam = moon_landing_teams.Luna ?? [];
+    const apolloTeam = moon_landing_teams.Apollo ?? [];
+    const rangerTeam = moon_landing_teams.Ranger ?? [];
+
     const usersList = yield call(Firestore.getUsersList)
     const { id, email, name, photo } = userInfo?.user ?? {}
+    let team = "-"
+    lunaTeam.map((emailId: string) => {
+      if(emailId === email){
+        team = "Luna"
+      }
+    })
+    apolloTeam.map((emailId: string) => {
+      if(emailId === email){
+        team = "Apollo"
+      }
+    })
+    rangerTeam.map((emailId: string) => {
+      if(emailId === email){
+        team = "Ranger"
+      }
+    })
     if (!usersList[id]) {
-      yield call(Firestore.addUser, { id, details: { id, email, name, photo, steps: [] } })
-      yield put((storeUsersListAction({ usersList: { ...usersList, [id]: { id, email, name, photo, steps: [] } } })))
+      yield call(Firestore.addUser, { id, details: { id, email, name, photo, steps: [], team } })
+      yield put((storeUsersListAction({ usersList: { ...usersList, [id]: { id, email, name, photo, steps: [], team } } })))
     }
     yield put(storeLoginDetailsAction({ user: userInfo?.user ?? {} }))
-    yield call(fetchRemotConfigSaga)
     yield put(successLoadingAction({ name: "Login", msg: "" }))
   } catch (error: any) {
     console.log("error in loginSaga", error)
@@ -79,6 +100,7 @@ export function* fetchRemotConfigSaga(): any {
       }
     })
     yield put(storeRemoteConfigAction(config))
+    return config ?? {}
   } catch (error: any) {
     console.log("error in fetchRemotConfigSaga", error)
   }

@@ -1,0 +1,1 @@
+export const teams = ["Luna", "Apollo", "Ranger"]

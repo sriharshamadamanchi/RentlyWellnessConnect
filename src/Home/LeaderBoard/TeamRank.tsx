@@ -6,6 +6,7 @@ import { moderateScale } from "react-native-size-matters"
 import { useSelector } from "react-redux"
 import { Card, Divider, Label } from "../../common/components"
 import { AnimatedCircularProgress } from "react-native-circular-progress"
+import { teams } from "../../common/constants"
 
 const styles = StyleSheet.create({
     container: {
@@ -150,11 +151,9 @@ export const TeamRank = () => {
     const usersList = useSelector((store: any) => store.home.usersList ?? {})
     const keys = Object.keys(usersList)
 
-    const rankingList: any = [
-        { name: "A", steps: 0 },
-        { name: "B", steps: 0 },
-        { name: "C", steps: 0 }
-    ]
+    const rankingList: any = teams.map((team) => {
+        return {name: team, steps: 0 }
+    })
 
     for (let i = 0; i < keys.length; i++) {
         const userDetails = usersList[keys[i]]
