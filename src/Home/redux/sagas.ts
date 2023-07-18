@@ -12,43 +12,41 @@ export function* loginSaga(): any {
     yield call(GoogleSignin.hasPlayServices);
     const userInfo = yield call(GoogleSignin.signIn);
     yield put(startLoadingAction({ name: "Login" }))
-    // if(!(userInfo?.user?.email?.includes("@rently.com"))){
-    //   Alert.alert("Alert", "Please use your rently account to sign in")
-    //   yield call(logoutSaga)
-    // }else{
-    //   yield put(storeLoginDetailsAction({ user: userInfo?.user ?? {} }))
-    // }
-
-    const { moon_landing_teams = {} } = yield call(fetchRemotConfigSaga)
-    const lunaTeam = moon_landing_teams.Luna ?? [];
-    const apolloTeam = moon_landing_teams.Apollo ?? [];
-    const rangerTeam = moon_landing_teams.Ranger ?? [];
-
-    const usersList = yield call(Firestore.getUsersList)
-    const { id, email, name, photo } = userInfo?.user ?? {}
-    let team = "-"
-    lunaTeam.map((emailId: string) => {
-      if (emailId === email) {
-        team = "Luna"
-      }
-    })
-    apolloTeam.map((emailId: string) => {
-      if (emailId === email) {
-        team = "Apollo"
-      }
-    })
-    rangerTeam.map((emailId: string) => {
-      if (emailId === email) {
-        team = "Ranger"
-      }
-    })
-    if (Object.keys(usersList).length < 1) {
-      yield call(Firestore.addUser, { id, details: { id, email, name, photo, steps: [], team } })
+    if (!(userInfo?.user?.email?.includes("@rently.com"))) {
+      Alert.alert("Invalid User", "Please use your rently account to sign in")
+      yield call(logoutSaga)
     } else {
-      yield call(Firestore.updateUser, { id, details: { id, email, name, photo, steps: [], team } })
+      const { moon_landing_teams = {} } = yield call(fetchRemotConfigSaga)
+      const lunaTeam = moon_landing_teams.Luna ?? [];
+      const apolloTeam = moon_landing_teams.Apollo ?? [];
+      const rangerTeam = moon_landing_teams.Ranger ?? [];
+
+      const usersList = yield call(Firestore.getUsersList)
+      const { id, email, name, photo } = userInfo?.user ?? {}
+      let team = "-"
+      lunaTeam.map((emailId: string) => {
+        if (emailId === email) {
+          team = "Luna"
+        }
+      })
+      apolloTeam.map((emailId: string) => {
+        if (emailId === email) {
+          team = "Apollo"
+        }
+      })
+      rangerTeam.map((emailId: string) => {
+        if (emailId === email) {
+          team = "Ranger"
+        }
+      })
+      if (Object.keys(usersList).length < 1) {
+        yield call(Firestore.addUser, { id, details: { id, email, name, photo, steps: [], team } })
+      } else {
+        yield call(Firestore.updateUser, { id, details: { id, email, name, photo, steps: [], team } })
+      }
+      yield put((storeUsersListAction({ usersList: { ...usersList, [id]: { id, email, name, photo, steps: [], team } } })))
+      yield put(storeLoginDetailsAction({ user: userInfo?.user ?? {} }))
     }
-    yield put((storeUsersListAction({ usersList: { ...usersList, [id]: { id, email, name, photo, steps: [], team } } })))
-    yield put(storeLoginDetailsAction({ user: userInfo?.user ?? {} }))
     yield put(successLoadingAction({ name: "Login", msg: "" }))
   } catch (error: any) {
     console.log("error in loginSaga", error)
