@@ -16,7 +16,7 @@
 		4D7C5A68050145519A0F5B3A /* Quicksand-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A3685BBFBE5F4961B6E3D296 /* Quicksand-Medium.ttf */; };
 		7699B88040F8A987B510C191 /* libPods-RentlyConnect-RentlyConnectTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-RentlyConnect-RentlyConnectTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		A168B4BE2A6196DF00FC5572 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A168B4BD2A6196DF00FC5572 /* GoogleService-Info.plist */; };
+		A1981B692A66F728008C3152 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A1981B682A66F728008C3152 /* GoogleService-Info.plist */; };
 		B954A682F96E4D339708A40A /* Quicksand-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = D9AE9C9CA8BD4803BA59038D /* Quicksand-Regular.otf */; };
 		C1DB11B3479F431CA3BFFECD /* Quicksand-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = EC24A1B1C98F4DB7A663B6BC /* Quicksand-Light.otf */; };
 /* End PBXBuildFile section */
@@ -48,7 +48,7 @@
 		5DCACB8F33CDC322A6C60F78 /* libPods-RentlyConnect.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RentlyConnect.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = RentlyConnect/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-RentlyConnect-RentlyConnectTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RentlyConnect-RentlyConnectTests.release.xcconfig"; path = "Target Support Files/Pods-RentlyConnect-RentlyConnectTests/Pods-RentlyConnect-RentlyConnectTests.release.xcconfig"; sourceTree = "<group>"; };
-		A168B4BD2A6196DF00FC5572 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		A1981B682A66F728008C3152 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		A3685BBFBE5F4961B6E3D296 /* Quicksand-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Quicksand-Medium.ttf"; path = "../assets/fonts/Quicksand-Medium.ttf"; sourceTree = "<group>"; };
 		AC9247D111894F86A8199E3C /* Quicksand-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Quicksand-Bold.ttf"; path = "../assets/fonts/Quicksand-Bold.ttf"; sourceTree = "<group>"; };
 		D9AE9C9CA8BD4803BA59038D /* Quicksand-Regular.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Quicksand-Regular.otf"; path = "../assets/fonts/Quicksand-Regular.otf"; sourceTree = "<group>"; };
@@ -96,13 +96,13 @@
 		13B07FAE1A68108700A75B9A /* RentlyConnect */ = {
 			isa = PBXGroup;
 			children = (
+				A1981B682A66F728008C3152 /* GoogleService-Info.plist */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
-				A168B4BD2A6196DF00FC5572 /* GoogleService-Info.plist */,
 			);
 			name = RentlyConnect;
 			sourceTree = "<group>";
@@ -272,7 +272,7 @@
 				B954A682F96E4D339708A40A /* Quicksand-Regular.otf in Resources */,
 				3712B067184A4D25881227E0 /* Quicksand-Bold.ttf in Resources */,
 				4D7C5A68050145519A0F5B3A /* Quicksand-Medium.ttf in Resources */,
-				A168B4BE2A6196DF00FC5572 /* GoogleService-Info.plist in Resources */,
+				A1981B692A66F728008C3152 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -527,10 +527,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = R7S39UR27F;
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = R7S39UR27F;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = RentlyConnect/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Rently Connect";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.business";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -544,6 +547,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.rently.connect;
 				PRODUCT_NAME = RentlyConnect;
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = RentlyConnectAdHoc;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -563,6 +567,7 @@
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = R7S39UR27F;
 				INFOPLIST_FILE = RentlyConnect/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Rently Connect";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.business";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
