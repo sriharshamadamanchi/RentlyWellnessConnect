@@ -97,7 +97,7 @@ export const AddOrEditSteps = () => {
     const loading = useSelector((store: any) => store.loader.loading)
 
     const save = async () => {
-        if(parseInt(count, 0) > 10000){
+        if (parseInt(count, 0) > 10000) {
             Alert.alert("Rejected", "Day Limit Exceeded")
             return
         }
@@ -106,12 +106,17 @@ export const AddOrEditSteps = () => {
         const index = steps.findIndex((step) => step.date === formattedDate)
         if (index !== -1) {
             const step = steps[index]
-            steps[index] = { ...step, type: pedoType, date: formattedDate, count: `${parseInt(step.count, 10) + parseInt(count, 10)}` }
+            steps[index] = {
+                ...step,
+                date: formattedDate,
+                count: `${parseInt(step.count, 10) + parseInt(count, 10)}`,
+                history: [...(step.history ?? []), { type: pedoType, count, time: Date.now() }]
+            }
         } else {
             steps.push({
-                type: pedoType,
                 date: formattedDate,
-                count
+                count,
+                history: [{ type: pedoType, count, time: Date.now() }]
             })
         }
 
@@ -133,8 +138,8 @@ export const AddOrEditSteps = () => {
                         <InputField
                             title={`STEP COUNT ON ${moment(date, "YYYY-MM-DD").format("DD ddd, MMM").toUpperCase()}`}
                             value={`${stepDetails?.count ?? "0"}`}
-                            editable={false} 
-                            style = {{opacity: 0.75}}/>
+                            editable={false}
+                            style={{ opacity: 0.75 }} />
                         <DropDown
                             title="TYPE"
                             data={data}
@@ -180,8 +185,8 @@ export const AddOrEditSteps = () => {
                             title={"DATE"}
                             value={moment(date, "YYYY-MM-DD").format("DD ddd, MMM")}
                             setText={setDate}
-                            editable={false} 
-                            style = {{opacity: 0.75}}/>
+                            editable={false}
+                            style={{ opacity: 0.75 }} />
                     </View>
 
                     <Calendar

@@ -1,7 +1,6 @@
 import React from "react"
 import { StatusBar, StyleSheet } from "react-native"
 import { moderateScale } from "react-native-size-matters"
-import { useSelector } from "react-redux"
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs"
 import { StepsList } from "./StepsList"
 import { AddOrEditSteps } from "./AddOrEditSteps"
@@ -15,11 +14,6 @@ const styles = StyleSheet.create({
 const TopTab = createMaterialTopTabNavigator();
 
 export const Details = () => {
-
-    const user = useSelector((store: any) => store.home.user)
-    const usersList = useSelector((store: any) => store.home.usersList)
-
-    const id = user.id;
 
     return (
         <>
@@ -40,7 +34,7 @@ export const Details = () => {
                 }}
             >
                 <TopTab.Screen
-                    name={"Add (or) Edit"}
+                    name={"Add"}
                     children={() => <AddOrEditSteps />} />
                 <TopTab.Screen
                     name={"History"}

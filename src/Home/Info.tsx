@@ -88,16 +88,16 @@ export const Info = () => {
                     rankingList.map((team: any, index: number) => {
                         return (
                             <View style={{ margin: moderateScale(20) }} key={index}>
-                                <View style={{width: "70%", flexDirection:'row'}}>
-                                <Label center xl primary title={`Team ${team.name} is ${GOAL - team.steps} steps away from reaching the goal`} style={{width: "90%", paddingRight: moderateScale(0)}}/>
-                                <AnimatedCircularProgress
-                                    size={120}
-                                    width={15}
-                                    fill={100}
-                                    duration={3000}
-                                    tintColor="#00e0ff"
-                                    onAnimationComplete={() => console.log('onAnimationComplete')}
-                                    backgroundColor="#3d5875" />
+                                <View style={{ width: "70%", flexDirection: 'row' }}>
+                                    <Label center xl primary title={`Team ${team.name} is ${GOAL - team.steps} steps away from reaching the goal`} style={{ width: "90%", paddingRight: moderateScale(0) }} />
+                                    <AnimatedCircularProgress
+                                        size={120}
+                                        width={15}
+                                        fill={100}
+                                        duration={3000}
+                                        tintColor="#00e0ff"
+                                        onAnimationComplete={() => console.log('onAnimationComplete')}
+                                        backgroundColor="#3d5875" />
                                 </View>
                             </View>
                         )

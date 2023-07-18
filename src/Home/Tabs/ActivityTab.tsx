@@ -94,7 +94,7 @@ export const ActivityTab = () => {
                         colors={['#bdc3c7', '#2c3e50']}
                         style={styles.buttonGradientStyle}>
                         <CurvedButton
-                            title="EDIT DETAILS"
+                            title="ADD DETAILS"
                             bold
                             buttonStyle={{ flex: 1, width: "100%", alignSelf: "center", backgroundColor: "transparent" }}
                             onPress={() => {

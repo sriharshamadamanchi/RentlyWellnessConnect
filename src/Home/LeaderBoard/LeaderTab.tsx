@@ -27,7 +27,7 @@ export const LeaderTab = () => {
 
 
     return (
-        <PrimaryView style={{backgroundColor: '#43C6AC'}}>
+        <PrimaryView style={{ backgroundColor: '#43C6AC' }}>
             <StatusBar backgroundColor={"#43C6AC"} barStyle="dark-content" />
             <LinearGradient colors={["#43C6AC", '#F8FFAE']} style={styles.container}>
                 <Label xxl center bold white title={"Leaderboard"} style={{ marginVertical: moderateScale(20) }} />

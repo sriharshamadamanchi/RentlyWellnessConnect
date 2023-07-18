@@ -19,7 +19,7 @@ export function* loginSaga(): any {
     //   yield put(storeLoginDetailsAction({ user: userInfo?.user ?? {} }))
     // }
 
-    const {moon_landing_teams = {}} = yield call(fetchRemotConfigSaga)
+    const { moon_landing_teams = {} } = yield call(fetchRemotConfigSaga)
     const lunaTeam = moon_landing_teams.Luna ?? [];
     const apolloTeam = moon_landing_teams.Apollo ?? [];
     const rangerTeam = moon_landing_teams.Ranger ?? [];
@@ -28,24 +28,26 @@ export function* loginSaga(): any {
     const { id, email, name, photo } = userInfo?.user ?? {}
     let team = "-"
     lunaTeam.map((emailId: string) => {
-      if(emailId === email){
+      if (emailId === email) {
         team = "Luna"
       }
     })
     apolloTeam.map((emailId: string) => {
-      if(emailId === email){
+      if (emailId === email) {
         team = "Apollo"
       }
     })
     rangerTeam.map((emailId: string) => {
-      if(emailId === email){
+      if (emailId === email) {
         team = "Ranger"
       }
     })
-    if (!usersList[id]) {
+    if (Object.keys(usersList).length < 1) {
       yield call(Firestore.addUser, { id, details: { id, email, name, photo, steps: [], team } })
-      yield put((storeUsersListAction({ usersList: { ...usersList, [id]: { id, email, name, photo, steps: [], team } } })))
+    } else {
+      yield call(Firestore.updateUser, { id, details: { id, email, name, photo, steps: [], team } })
     }
+    yield put((storeUsersListAction({ usersList: { ...usersList, [id]: { id, email, name, photo, steps: [], team } } })))
     yield put(storeLoginDetailsAction({ user: userInfo?.user ?? {} }))
     yield put(successLoadingAction({ name: "Login", msg: "" }))
   } catch (error: any) {
@@ -78,8 +80,12 @@ export function* logoutSaga(): any {
 
 export function* sendMessageSaga(action: { payload: any }): any {
   try {
-    const { from, to, message, timestamp } = action.payload
-    yield call(Firestore.sendMessage, {from, to, message, timestamp})
+    const { from, to, message, timestamp, group = false } = action.payload
+    if (group) {
+      yield call(Firestore.sendGroupMessage, { from, to, message, timestamp })
+    } else {
+      yield call(Firestore.sendMessage, { from, to, message, timestamp })
+    }
   } catch (error: any) {
     console.log("error in sendMessageSaga", error)
   }
@@ -87,15 +93,15 @@ export function* sendMessageSaga(action: { payload: any }): any {
 
 export function* fetchRemotConfigSaga(): any {
   try {
-    yield remoteConfig().fetch(6*60*60); // minimum fetch interval 6 hours (in sec)
+    yield remoteConfig().fetch(6 * 60 * 60); // minimum fetch interval 6 hours (in sec)
     yield remoteConfig().activate();
     const data = yield remoteConfig().getAll();
     const config: any = {}
     Object.entries(data).forEach($ => {
       const [key, entry]: any = $;
-      try{
+      try {
         config[key] = JSON.parse(entry.asString())
-      }catch(e){
+      } catch (e) {
         console.log("error in parsing remote config", e)
       }
     })

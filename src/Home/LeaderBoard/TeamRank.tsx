@@ -6,7 +6,8 @@ import { moderateScale } from "react-native-size-matters"
 import { useSelector } from "react-redux"
 import { Card, Divider, Label } from "../../common/components"
 import { AnimatedCircularProgress } from "react-native-circular-progress"
-import { teams } from "../../common/constants"
+import { groupImage, teams } from "../../common/constants"
+import { Image } from "react-native"
 
 const styles = StyleSheet.create({
     container: {
@@ -118,7 +119,7 @@ const RankView = ({ rank, userDetails }: { rank: string, userDetails: any }) => 
     return (
         <View style={styles.rankMainContainer}>
             <View style={{ ...styles.rankContainer, ...style }}>
-                <EmptyImageView name={userDetails.name} style={imageStyle} />
+                <Image source={groupImage[userDetails.name]} style={imageStyle} />
             </View>
             <View style={{ ...styles.rankView, ...style }}>
                 <Label s bold primary center title={rank} />
@@ -152,7 +153,7 @@ export const TeamRank = () => {
     const keys = Object.keys(usersList)
 
     const rankingList: any = teams.map((team) => {
-        return {name: team, steps: 0 }
+        return { name: team, steps: 0 }
     })
 
     for (let i = 0; i < keys.length; i++) {
@@ -206,7 +207,7 @@ export const TeamRank = () => {
                                     </View>
 
                                     <Divider style={{ backgroundColor: 'white', marginTop: moderateScale(10), marginBottom: moderateScale(30), alignSelf: 'center', width: Dimensions.get("window").width * 0.8 }} />
-                                    <Label white bold xl title={`GOAL: ${GOAL} Steps`} center style={{marginBottom: moderateScale(20)}}/>
+                                    <Label white bold xl title={`GOAL: ${GOAL} Steps`} center style={{ marginBottom: moderateScale(20) }} />
                                 </>
                             )
                         }}

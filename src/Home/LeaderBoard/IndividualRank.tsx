@@ -92,10 +92,10 @@ const styles = StyleSheet.create({
         backgroundColor: 'red'
     },
     emptyImageView: {
-        alignSelf:'center',
+        alignSelf: 'center',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor:'#FFFFFF'
+        backgroundColor: '#FFFFFF'
     }
 })
 
@@ -145,9 +145,9 @@ export const EmptyImageView = ({ name = "", style = {} }: { name: string, style:
         formattedName = formattedName + nameSplit[1].charAt(0).toUpperCase()
     }
     return (
-        <View style={{...styles.emptyImageView, ...style}}>
+        <View style={{ ...styles.emptyImageView, ...style }}>
             <Image
-                style = {style}
+                style={style}
                 source={require("../../../res/assets/grey-person-icon.png")} />
         </View>
     )

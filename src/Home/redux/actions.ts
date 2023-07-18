@@ -12,14 +12,16 @@ export const storeUsersListAction = (payload: any): any => action('src/Home/redu
 
 export const sendMessageAction = (payload: any): any => action('src/Home/redux/sendMessageAction', payload);
 
-export const storeMessageAction = (payload: any): any => action('src/Home/redux/storeMessageAction', payload);
-
 export const storeChatsAction = (payload: any): any => action('src/Home/redux/storeChatsAction', payload);
+
+export const storeGroupChatsAction = (payload: any): any => action('src/Home/redux/storeGroupChatsAction', payload);
 
 export const fetchRemoteConfigAction = (payload: any): any => action('src/Home/redux/fetchRemoteConfigAction', payload);
 
 export const storeRemoteConfigAction = (payload: any): any => action('src/Home/redux/storeRemoteConfigAction', payload);
 
 export const readMessageAction = (payload: any): any => action('src/Home/redux/readMessageAction', payload);
+
+export const readGroupMessageAction = (payload: any): any => action('src/Home/redux/readGroupMessageAction', payload);
 
 export const resetReducersAction = (): any => action('src/Home/redux/resetReducersAction');

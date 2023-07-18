@@ -1,13 +1,13 @@
 import React from "react"
-import { FlatList } from "react-native"
+import { FlatList, Image } from "react-native"
 import { StyleSheet, View } from "react-native"
 import { moderateScale } from "react-native-size-matters"
 import { useSelector } from "react-redux"
 import { Label, Ripple } from "../../common/components"
 import { useNavigation } from "@react-navigation/native"
 import moment from "moment"
+import { groupImage, teams } from "../../common/constants"
 import { EmptyImageView } from "../LeaderBoard/IndividualRank"
-import { teams as _teams } from "../../common/constants"
 
 const styles = StyleSheet.create({
     container: {
@@ -43,53 +43,69 @@ export const Groups = () => {
 
     const navigation: any = useNavigation()
     const { id } = useSelector((store: any) => store.home.user)
+    const groupChats = useSelector((store: any) => store.home.groupChats ?? {})
 
-    const teams: any = _teams.map((t) => {
-        return {name: t}
-    })
-    const keys = Object.keys(teams)
 
     return (
         <View style={styles.container}>
-                <View style={styles.container}>
+            <View style={styles.container}>
 
-                    <FlatList
-                        data={keys}
-                        renderItem={({ item }) => {
-                            if (item === id) {
-                                return null
+                <FlatList
+                    data={teams}
+                    renderItem={({ item }) => {
+                        const groupMessages = groupChats[item] ?? []
+                        const lastMessage = groupMessages[groupMessages.length - 1] ?? {}
+                        let unreadCount = 0
+                        groupMessages.map((m: any) => {
+                            if (!m.read) {
+                                unreadCount++
                             }
-                            const user = teams[item]
-                            const userMessages = teams.filter((msg: any) => msg.to === user.id || (msg.from === user.id)) ?? []
-                            const lastMessage = userMessages[userMessages.length - 1] ?? {}
+                        })
 
-                            return (
+                        return (
+                            <View style={{ flex: 0.9, marginHorizontal: moderateScale(20), flexDirection: 'row' }}>
                                 <Ripple
                                     style={styles.cardStyle}
                                     onPress={() => {
-                                        navigation.navigate("ChatDetails", { user })
+                                        navigation.navigate("GroupChatDetails", { group: item })
                                     }}>
-
-                                    <EmptyImageView name={user.name} style={styles.cardImageStyle} />
+                                    {
+                                        groupImage[item] ?
+                                            <Image
+                                                source={groupImage[item]}
+                                                style={styles.cardImageStyle}
+                                            />
+                                            :
+                                            <EmptyImageView name={item} style={styles.cardImageStyle} />
+                                    }
                                     <View style={{ justifyContent: 'center' }}>
-                                        <Label bold primary title={user.name} style={{ marginLeft: moderateScale(10) }} />
+                                        <Label bold m primary title={item} style={{ marginLeft: moderateScale(10) }} />
                                         {
-                                            lastMessage?.message &&
-                                            <Label bold m primary title={lastMessage?.message.length > 20 ? lastMessage?.message.slice(0, 20) + "..." : lastMessage?.message} style={{ marginLeft: moderateScale(10), color: 'grey' }} />
+                                            lastMessage?.m &&
+                                            <Label bold m primary title={lastMessage?.m.length > 20 ? lastMessage?.m.slice(0, 20) + "..." : lastMessage?.m} style={{ marginLeft: moderateScale(10), color: 'grey' }} />
                                         }
                                     </View>
-                                    {lastMessage.timestamp &&
+                                    {lastMessage.t &&
                                         <View style={{ flex: 1, marginRight: moderateScale(20), justifyContent: 'center' }}>
-                                            <Label bold right s primary title={moment(parseInt(lastMessage.timestamp, 10)).format("MM/DD/YY")} style={{}} />
-                                            <Label bold right xs primary title={moment(parseInt(lastMessage.timestamp, 10)).format("h:mm A")} style={{}} />
+                                            <Label bold right xs primary title={moment(parseInt(lastMessage.t, 10)).format("MM/DD/YY")} style={{}} />
+                                            <Label bold right xs primary title={moment(parseInt(lastMessage.t, 10)).format("h:mm A")} style={{}} />
                                         </View>
                                     }
+
                                 </Ripple>
-                            )
-                        }}
-                        keyExtractor={(item) => item}
-                    />
-                </View>
+                                {unreadCount > 0 &&
+                                    <View style={{ flex: 0.1, justifyContent: 'center', alignItems: 'center', marginHorizontal: moderateScale(10) }}>
+                                        <View style={{ backgroundColor: 'lightgreen', width: moderateScale(25), height: moderateScale(25), borderRadius: moderateScale(25), justifyContent: 'center', alignItems: 'center' }}>
+                                            <Label bold right xs primary title={`${unreadCount}`} style={{}} />
+                                        </View>
+                                    </View>
+                                }
+                            </View>
+                        )
+                    }}
+                    keyExtractor={(item) => item}
+                />
+            </View>
         </View>
     )
 }

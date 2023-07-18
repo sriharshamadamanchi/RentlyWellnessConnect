@@ -33,7 +33,7 @@ const updateUser: any = async ({ id, details }: { id: string, details: detailsTy
         await getUsersList()
     } catch (err) {
         console.log("Error in addUser", err)
-    } finally{
+    } finally {
         store.dispatch(hideLoaderAction())
     }
 }
@@ -120,10 +120,41 @@ const sendMessage = async ({ from, to, message, timestamp }: { from: string, to:
     })
 }
 
+const sendGroupMessage = async ({ from, to, message, timestamp }: { from: string, to: string, message: string, timestamp: number }) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const groupDocRef = firestore().collection("users").doc("groupChats")
+            const groupDoc = await groupDocRef.get();
+
+            if (groupDoc.exists) {
+                const data = groupDoc.data() ?? {}
+                if (data[to]) {
+                    const rawMessages = data[to] ?? "[]"
+                    const messages = JSON.parse(rawMessages) ?? []
+                    await groupDocRef.update({
+                        [to]: JSON.stringify([...messages, { f: from, m: message, t: timestamp }])
+                    })
+                } else {
+                    await groupDocRef.update({
+                        [to]: JSON.stringify([{ f: from, m: message, t: timestamp }])
+                    })
+                }
+            } else {
+                await groupDocRef.set({ [to]: JSON.stringify([{ f: from, m: message, t: timestamp }]) })
+            }
+            resolve(true)
+        } catch (err) {
+            console.log("Error in sendGroupMessage", err)
+            reject(true)
+        }
+    })
+}
+
 export const Firestore = {
     addUser,
     updateUser,
     getUsersList,
     storeFCMToken,
-    sendMessage
+    sendMessage,
+    sendGroupMessage
 }

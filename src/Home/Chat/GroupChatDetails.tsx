@@ -1,17 +1,16 @@
 import React from "react"
-import { FlatList, Image, StyleSheet, TextInput, View } from "react-native"
+import { FlatList, Image, KeyboardAvoidingView, Platform, StyleSheet, TextInput, View } from "react-native"
 import { moderateScale } from "react-native-size-matters"
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { useDispatch, useSelector } from "react-redux"
 import moment from "moment"
 import { Card, Label, PrimaryView } from "../../common/components"
-import { readMessageAction, sendMessageAction } from "../redux/actions"
+import { readGroupMessageAction, sendMessageAction } from "../redux/actions"
 import { HeaderBackButton } from "@react-navigation/elements"
 import { useNavigation } from "@react-navigation/native"
 import { EmptyImageView } from "../LeaderBoard/IndividualRank"
 import { StatusBar } from "react-native"
-import { Platform } from "react-native"
-import { KeyboardAvoidingView } from "react-native"
+import { groupImage } from "../../common/constants"
 
 const styles = StyleSheet.create({
     container: {
@@ -41,10 +40,12 @@ const styles = StyleSheet.create({
     },
     myCardViewContainer: {
         flexDirection: 'row-reverse',
+        alignItems: 'center',
         marginLeft: moderateScale(10)
     },
     cardViewContainer: {
         flexDirection: 'row',
+        alignItems: 'center',
         marginLeft: moderateScale(10)
     },
     cardContainer: {
@@ -56,11 +57,16 @@ const styles = StyleSheet.create({
         width: moderateScale(30),
         height: moderateScale(30),
         borderRadius: moderateScale(30)
+    },
+    userImageStyle: {
+        width: moderateScale(30),
+        height: moderateScale(30),
+        borderRadius: moderateScale(30),
+        marginRight: moderateScale(5)
     }
-
 })
 
-const SendMessage = ({ from, to, token, value, setMessage }: { from: string, to: string, token: string, value: string, setMessage: any }) => {
+const SendMessage = ({ from, to, value, setMessage }: { from: string, to: string, value: string, setMessage: any }) => {
 
     const dispatch = useDispatch();
 
@@ -89,14 +95,14 @@ const SendMessage = ({ from, to, token, value, setMessage }: { from: string, to:
                             return
                         }
                         setMessage("")
-                        dispatch(sendMessageAction({ token, from, to, message, timestamp: moment().valueOf() }))
+                        dispatch(sendMessageAction({ group: true, from, to, message, timestamp: moment().valueOf() }))
                     }} />
             </View>
         </KeyboardAvoidingView>
     )
 }
 
-const Header = ({ title, photo }: { title: string, photo: string }) => {
+const Header = ({ title, photo }: { title: string, photo: any }) => {
     const navigation = useNavigation()
 
     return (
@@ -111,7 +117,7 @@ const Header = ({ title, photo }: { title: string, photo: string }) => {
                 {
                     photo ?
                         <Image
-                            source={{ uri: photo }}
+                            source={photo}
                             style={styles.imageStyle}
                         />
                         :
@@ -123,60 +129,87 @@ const Header = ({ title, photo }: { title: string, photo: string }) => {
     )
 }
 
-export const ChatDetails = ({ navigation, route: { params = {} } }: any) => {
+export const GroupChatDetails = ({ navigation, route: { params = {} } }: any) => {
 
     const dispatch = useDispatch();
-    const user = params.user ?? {}
-    const token = user.token
-    const { id } = useSelector((store: any) => store.home.user)
-    const chats = useSelector((store: any) => store.home.chats ?? {})
+    const group = params.group
+    const user = useSelector((store: any) => store.home.user) ?? {}
+    const groupChats = useSelector((store: any) => store.home.groupChats ?? {})
+    const usersList = useSelector((store: any) => store.home.usersList ?? {})
 
     const flatListRef: any = React.useRef(null);
     const [message, setMessage] = React.useState("")
 
     React.useEffect(() => {
         navigation.setOptions({
-            headerTitle: user?.name ?? "Chat"
+            headerTitle: group
         })
     }, [])
 
-    const userMessages = chats[user.id] ?? []
-    const messageIds = (userMessages?.filter((msg: any) => !msg.read) ?? [])?.map((msg: any) => msg.t) ?? []
+    const groupMessages = groupChats[group] ?? []
+    const messageIds = (groupMessages?.filter((msg: any) => !msg.read) ?? [])?.map((msg: any) => msg.t) ?? []
 
     React.useEffect(() => {
-        dispatch(readMessageAction({ id: user.id, messageIds }))
+        dispatch(readGroupMessageAction({ group, messageIds }))
     }, [dispatch, messageIds.length])
 
     return (
         <PrimaryView>
             <View style={styles.container}>
                 <StatusBar backgroundColor={"#F2F2F2"} barStyle="dark-content" />
-                <Header title={user.name} photo={user.photo} />
+                <Header title={group} photo={groupImage[group]} />
                 <View
                     style={{ flex: 1 }}>
                     <FlatList
                         inverted
                         ref={flatListRef}
-                        data={[...userMessages].reverse()}
+                        data={[...groupMessages].reverse()}
                         onContentSizeChange={() =>
                             flatListRef.current?.scrollToOffset({ animated: true, offset: 0 })
                         }
                         renderItem={({ item }) => {
-                            const byMe = item.f === id;
+                            const byMe = item.f === user.id;
                             return (
                                 <View style={byMe ? styles.myCardViewContainer : styles.cardViewContainer}>
+                                    {!byMe &&
+                                        <>
+                                            {
+                                                usersList[item.f]?.photo ?
+                                                    <Image
+                                                        source={{ uri: usersList[item.f]?.photo }}
+                                                        style={styles.userImageStyle}
+                                                    />
+                                                    :
+                                                    <EmptyImageView name={user.name} style={styles.userImageStyle} />
+                                            }
+                                        </>
+                                    }
                                     <Card disabled style={styles.cardContainer}>
+                                        <Label bold s primary title={byMe ? "You" : usersList[item.f]?.name} />
                                         <Label primary title={item.m} />
                                         {item.t &&
                                             <Label xs right primary title={moment(parseInt(item.t, 10)).format("h:mm A")} style={{ paddingLeft: moderateScale(30) }} />
                                         }
                                     </Card>
+                                    {byMe &&
+                                        <>
+                                            {
+                                                usersList[item.f]?.photo ?
+                                                    <Image
+                                                        source={{ uri: usersList[item.f]?.photo }}
+                                                        style={styles.userImageStyle}
+                                                    />
+                                                    :
+                                                    <EmptyImageView name={user.name} style={styles.userImageStyle} />
+                                            }
+                                        </>
+                                    }
                                 </View>
                             )
                         }}
                     />
                 </View>
-                <SendMessage from={id} to={user.id} token={token} value={message} setMessage={setMessage} />
+                <SendMessage from={user.id} to={group} value={message} setMessage={setMessage} />
             </View>
         </PrimaryView>
     )
