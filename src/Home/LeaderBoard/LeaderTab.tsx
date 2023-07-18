@@ -1,7 +1,6 @@
 import React from "react"
 import { StatusBar, StyleSheet } from "react-native"
 import { moderateScale } from "react-native-size-matters"
-import { useSelector } from "react-redux"
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs"
 import { IndividualRank } from "./IndividualRank"
 import { TeamRank } from "./TeamRank"
@@ -17,14 +16,6 @@ const styles = StyleSheet.create({
 const TopTab = createMaterialTopTabNavigator();
 
 export const LeaderTab = () => {
-
-    const user = useSelector((store: any) => store.home.user)
-    const usersList = useSelector((store: any) => store.home.usersList)
-
-    const id = user.id;
-    const userActivity = usersList[id] ?? {}
-    const steps = userActivity.steps ?? []
-
 
     return (
         <PrimaryView style={{ backgroundColor: '#43C6AC' }}>

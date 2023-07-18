@@ -24,7 +24,6 @@ import { ChatDetails } from "./Chat/ChatDetails";
 import { ChatTab } from "./Chat/ChatTab";
 import { storeChatsAction, storeGroupChatsAction } from "./redux/actions";
 import { Info } from "./Info";
-import { useNavigation } from "@react-navigation/native";
 import firebase from "@react-native-firebase/firestore";
 import { GroupChatDetails } from "./Chat/GroupChatDetails";
 import { store } from "../common/store";
@@ -60,7 +59,6 @@ export const HomeTabbar = () => {
             <Tab.Navigator
                 backBehavior={"initialRoute"}
                 screenOptions={{
-                    unmountOnBlur: true,
                     headerShown: false,
                     tabBarActiveTintColor: "green",
                     tabBarStyle: {
@@ -102,22 +100,12 @@ export const HomeTopTabbar = () => {
     const usersList = useSelector((store: any) => store.home.usersList ?? {})
     const user = usersList[id]
 
-    const navigation: any = useNavigation();
-
     return (
         <PrimaryView style={{ backgroundColor: '#43C6AC' }}>
             <LinearGradient colors={["#43C6AC", '#F8FFAE']} style={styles.tabsStyle}>
                 <Label bold xxl center white title={`Welcome, ${givenName ?? ""}!`} style={styles.welcomeLabelStyle} />
                 <View style={{ justifyContent: 'center', flexDirection: 'row' }}>
                     <Label bold xxl center white title={`Team ${user?.team ?? ""}`} style={styles.teamNameStyle} />
-                    {/* <Feather
-                        name="info"
-                        color="white"
-                        size={moderateScale(25)}
-                        style={styles.infoIconStyle}
-                        onPress={() => {
-                            navigation.navigate("Info")
-                        }} /> */}
                 </View>
                 <TopTab.Navigator
                     screenOptions={{
@@ -247,7 +235,6 @@ export const Home = () => {
     return (
         <Stack.Navigator key={initialRouteName} initialRouteName={initialRouteName}
             screenOptions={{
-                // presentation: "transparentModal",
                 headerTitleAlign: 'center',
                 headerBackTitleVisible: false,
                 headerTintColor: theme.colors.font.primary,

@@ -129,24 +129,6 @@ const RankView = ({ rank, userDetails }: { rank: string, userDetails: any }) => 
     )
 }
 
-const EmptyImageView = ({ name = "", style = {}, labelStyle = {} }: { name: string, style: any, labelStyle?: any }) => {
-
-    const nameSplit = name.split(" ")
-    let formattedName = ""
-    if (nameSplit.length > 0) {
-        formattedName = formattedName + nameSplit[0].charAt(0).toUpperCase()
-    }
-    if (nameSplit.length > 1) {
-        formattedName = formattedName + nameSplit[1].charAt(0).toUpperCase()
-    }
-    return (
-        <LinearGradient colors={["#200122", '#6f0000']} style={{ ...styles.emptyImageView, ...style }}>
-            <Label xl bold white center title={formattedName} style={labelStyle} />
-        </LinearGradient>
-    )
-}
-
-
 export const TeamRank = () => {
     const GOAL = 504461942
     const usersList = useSelector((store: any) => store.home.usersList ?? {})

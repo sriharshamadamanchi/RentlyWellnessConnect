@@ -42,7 +42,8 @@ export function* loginSaga(): any {
       if (Object.keys(usersList).length < 1) {
         yield call(Firestore.addUser, { id, details: { id, email, name, photo, steps: [], team } })
       } else {
-        yield call(Firestore.updateUser, { id, details: { id, email, name, photo, steps: [], team } })
+        const details = usersList[id] ?? { id, email, name, photo, steps: [], team }
+        yield call(Firestore.updateUser, { id, details })
       }
       yield put((storeUsersListAction({ usersList: { ...usersList, [id]: { id, email, name, photo, steps: [], team } } })))
       yield put(storeLoginDetailsAction({ user: userInfo?.user ?? {} }))

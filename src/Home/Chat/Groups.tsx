@@ -42,7 +42,6 @@ const styles = StyleSheet.create({
 export const Groups = () => {
 
     const navigation: any = useNavigation()
-    const { id } = useSelector((store: any) => store.home.user)
     const groupChats = useSelector((store: any) => store.home.groupChats ?? {})
 
 

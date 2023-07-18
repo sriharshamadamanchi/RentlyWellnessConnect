@@ -56,7 +56,6 @@ export const ActivityTab = () => {
             }
         }
         const index = moment(steps[i].date, "DD/MM/YYYY").format("d")
-        const label = moment(steps[i].date, "DD/MM/YYYY").format("DD ddd")
 
         data[name].steps[index] = steps[i].count
     }
