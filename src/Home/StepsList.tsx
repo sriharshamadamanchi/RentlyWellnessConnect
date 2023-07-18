@@ -117,7 +117,7 @@ export const StepsList = () => {
             <View style={styles.container}>
                 {steps.length === 0 &&
                     <View style={{ height: "80%", justifyContent: 'center', alignItems: 'center' }}>
-                        <Label xxl bold white center title={"NO ACTIVITY"} />
+                        <Label xxl bold white center title={"No History"} />
                     </View>
                 }
                 <FlatList
