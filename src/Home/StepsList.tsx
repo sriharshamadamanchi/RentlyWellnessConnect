@@ -145,7 +145,7 @@ export const StepsList = () => {
                                                     </>
                                                 )
                                             }}
-                                            keyExtractor={item => item.date}
+                                            keyExtractor={item => item.time}
                                         />
                                     </Card>
                                 }
