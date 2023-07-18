@@ -23,6 +23,14 @@
           }
         },
         {
+          "client_id": "440426391131-d8s1sdcomop9meqcreu81c5m90v6s861.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.rently.connect",
+            "certificate_hash": "fd273fe7306d02817ae4d0e7f195ccdf7ec7386a"
+          }
+        },
+        {
           "client_id": "440426391131-dncobr6c7drh5ivm48k34uqd5sthjfnn.apps.googleusercontent.com",
           "client_type": 3
         }
