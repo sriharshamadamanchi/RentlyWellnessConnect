@@ -52,65 +52,72 @@ export const ChatList = () => {
         <View style={styles.container}>
             <View style={styles.container}>
 
-                <FlatList
-                    data={keys}
-                    renderItem={({ item, index }) => {
-                        if (item === id) {
-                            return null
-                        }
-                        const user = usersList[item]
-                        const userMessages = chats[`${user.id}`] ?? []
-                        let unreadCount = 0
-                        userMessages.map((m: any) => {
-                            if (!m.read) {
-                                unreadCount++
-                            }
-                        })
-                        const lastMessage = userMessages[userMessages.length - 1] ?? {}
-
-                        return (
-                            <View style={{ flex: 0.9, marginHorizontal: moderateScale(20), flexDirection: 'row' }}>
-                                <Ripple
-                                    style={styles.cardStyle}
-                                    onPress={() => {
-                                        navigation.navigate("ChatDetails", { user })
-                                    }}>
-                                    {
-                                        user.photo ?
-                                            <Image
-                                                source={{ uri: user.photo }}
-                                                style={styles.cardImageStyle}
-                                            />
-                                            :
-                                            <EmptyImageView name={user.name} style={styles.cardImageStyle} />
+                {
+                    keys.length < 2 ?
+                        <View style={{ flex: 0.75, justifyContent: 'center' }}>
+                            <Label primary bold center title="No Users!" />
+                        </View>
+                        :
+                        <FlatList
+                            data={keys}
+                            renderItem={({ item, index }) => {
+                                if (item === id) {
+                                    return null
+                                }
+                                const user = usersList[item]
+                                const userMessages = chats[`${user.id}`] ?? []
+                                let unreadCount = 0
+                                userMessages.map((m: any) => {
+                                    if (!m.read) {
+                                        unreadCount++
                                     }
-                                    <View style={{ justifyContent: 'center' }}>
-                                        <Label bold m primary title={user.name?.charAt(0).toUpperCase() + user.name?.slice(1)} style={{ marginLeft: moderateScale(10) }} />
-                                        {
-                                            lastMessage?.m &&
-                                            <Label bold m primary title={lastMessage?.m.length > 20 ? lastMessage?.m.slice(0, 20) + "..." : lastMessage?.m} style={{ marginLeft: moderateScale(10), color: 'grey' }} />
+                                })
+                                const lastMessage = userMessages[userMessages.length - 1] ?? {}
+
+                                return (
+                                    <View style={{ flex: 0.9, marginHorizontal: moderateScale(20), flexDirection: 'row' }}>
+                                        <Ripple
+                                            style={styles.cardStyle}
+                                            onPress={() => {
+                                                navigation.navigate("ChatDetails", { user })
+                                            }}>
+                                            {
+                                                user.photo ?
+                                                    <Image
+                                                        source={{ uri: user.photo }}
+                                                        style={styles.cardImageStyle}
+                                                    />
+                                                    :
+                                                    <EmptyImageView name={user.name} style={styles.cardImageStyle} />
+                                            }
+                                            <View style={{ justifyContent: 'center' }}>
+                                                <Label bold m primary title={user.name?.charAt(0).toUpperCase() + user.name?.slice(1)} style={{ marginLeft: moderateScale(10) }} />
+                                                {
+                                                    lastMessage?.m &&
+                                                    <Label bold m primary title={lastMessage?.m.length > 20 ? lastMessage?.m.slice(0, 20) + "..." : lastMessage?.m} style={{ marginLeft: moderateScale(10), color: 'grey' }} />
+                                                }
+                                            </View>
+                                            {lastMessage.t &&
+                                                <View style={{ flex: 1, marginRight: moderateScale(20), justifyContent: 'center' }}>
+                                                    <Label bold right xs primary title={moment(parseInt(lastMessage.t, 10)).format("MM/DD/YY")} style={{}} />
+                                                    <Label bold right xs primary title={moment(parseInt(lastMessage.t, 10)).format("h:mm A")} style={{}} />
+                                                </View>
+                                            }
+
+                                        </Ripple>
+                                        {unreadCount > 0 &&
+                                            <View style={{ flex: 0.1, justifyContent: 'center', alignItems: 'center', marginHorizontal: moderateScale(10) }}>
+                                                <View style={{ backgroundColor: 'lightgreen', width: moderateScale(25), height: moderateScale(25), borderRadius: moderateScale(25), justifyContent: 'center', alignItems: 'center' }}>
+                                                    <Label bold right xs primary title={`${unreadCount}`} style={{}} />
+                                                </View>
+                                            </View>
                                         }
                                     </View>
-                                    {lastMessage.t &&
-                                        <View style={{ flex: 1, marginRight: moderateScale(20), justifyContent: 'center' }}>
-                                            <Label bold right xs primary title={moment(parseInt(lastMessage.t, 10)).format("MM/DD/YY")} style={{}} />
-                                            <Label bold right xs primary title={moment(parseInt(lastMessage.t, 10)).format("h:mm A")} style={{}} />
-                                        </View>
-                                    }
-
-                                </Ripple>
-                                {unreadCount > 0 &&
-                                    <View style={{ flex: 0.1, justifyContent: 'center', alignItems: 'center', marginHorizontal: moderateScale(10) }}>
-                                        <View style={{ backgroundColor: 'lightgreen', width: moderateScale(25), height: moderateScale(25), borderRadius: moderateScale(25), justifyContent: 'center', alignItems: 'center' }}>
-                                            <Label bold right xs primary title={`${unreadCount}`} style={{}} />
-                                        </View>
-                                    </View>
-                                }
-                            </View>
-                        )
-                    }}
-                    keyExtractor={(item) => item}
-                />
+                                )
+                            }}
+                            keyExtractor={(item) => item}
+                        />
+                }
             </View>
         </View>
     )

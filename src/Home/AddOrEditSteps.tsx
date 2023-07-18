@@ -1,6 +1,6 @@
 import moment from "moment"
 import React, { useState } from "react"
-import { Alert, Dimensions, ScrollView, StyleSheet, TextInput, View } from "react-native"
+import { Dimensions, ScrollView, StyleSheet, TextInput, View } from "react-native"
 import { Calendar } from "react-native-calendars"
 import LinearGradient from "react-native-linear-gradient"
 import { moderateScale } from "react-native-size-matters"
@@ -97,10 +97,6 @@ export const AddOrEditSteps = () => {
     const loading = useSelector((store: any) => store.loader.loading)
 
     const save = async () => {
-        if (parseInt(count, 0) > 10000) {
-            Alert.alert("Rejected", "Day Limit Exceeded")
-            return
-        }
         const formattedDate = moment(date, "YYYY-MM-DD").format("DD/MM/YYYY")
         const steps = [...(user?.steps ?? [])]
         const index = steps.findIndex((step) => step.date === formattedDate)

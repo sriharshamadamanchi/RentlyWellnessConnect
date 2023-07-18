@@ -207,18 +207,15 @@ export const TeamRank = () => {
                                     </View>
 
                                     <Divider style={{ backgroundColor: 'white', marginTop: moderateScale(10), marginBottom: moderateScale(30), alignSelf: 'center', width: Dimensions.get("window").width * 0.8 }} />
-                                    <Label white bold xl title={`GOAL: ${GOAL} Steps`} center style={{ marginBottom: moderateScale(20) }} />
+                                    <Label underLine white bold xl title={`GOAL: ${GOAL} Steps`} center style={{ marginBottom: moderateScale(20) }} />
                                 </>
                             )
                         }}
                         renderItem={({ item, index }) => {
                             return (
                                 <Card disabled style={styles.cardStyle}>
-
-                                    <EmptyImageView labelStyle={{ paddingRight: moderateScale(10), paddingBottom: moderateScale(10) }} name={item.name} style={styles.teamNameViewStyle} />
-
                                     <View style={{ flex: 0.8, justifyContent: 'center', alignItems: 'center' }}>
-                                        <Label center bold m primary title={`Team ${item.name}`} />
+                                        <Label underLine center bold primary title={`Team ${item.name}`} />
                                         <Label center bold s primary title={`Total steps: ${item.steps}`} />
                                         <Label center bold s primary title={`Remaining steps: ${GOAL - item.steps}`} />
                                     </View>
@@ -229,13 +226,13 @@ export const TeamRank = () => {
                                         <AnimatedCircularProgress
                                             size={moderateScale(100)}
                                             width={moderateScale(15)}
-                                            fill={(item.steps / GOAL) * 100000 * (2 - index + 1)}
+                                            fill={((item.steps / GOAL) * 100)}
                                             duration={3000}
                                             tintColor="cyan"
                                             style={{ alignSelf: 'center' }}
                                             onAnimationComplete={() => console.log('onAnimationComplete')}
                                             backgroundColor="black" />
-                                        <Label primary center title={`${(Math.round((item.steps / GOAL) * 100) / 100) * 100}%`} style={{ position: "absolute", top: moderateScale(40) }} />
+                                        <Label primary center title={`${((item.steps / GOAL) * 100).toFixed(1)}%`} style={{ position: "absolute", top: moderateScale(40) }} />
                                     </View>
                                 </Card>
                             )
