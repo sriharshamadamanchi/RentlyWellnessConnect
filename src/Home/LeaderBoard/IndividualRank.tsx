@@ -74,8 +74,8 @@ const styles = StyleSheet.create({
     },
     cardStyle: {
         alignSelf: 'center',
-        height: moderateScale(50),
-        borderRadius: moderateScale(50),
+        height: moderateScale(60),
+        borderRadius: moderateScale(60),
         width: moderateScale(300),
         padding: 0,
         margin: 0,
@@ -83,13 +83,13 @@ const styles = StyleSheet.create({
     },
     rankNumberViewInCard: {
         position: 'absolute',
-        right: 0,
+        right: moderateScale(5),
         justifyContent: 'center',
         alignItems: "center",
+        alignSelf: 'center',
         height: moderateScale(50),
         width: moderateScale(50),
-        borderRadius: moderateScale(50),
-        backgroundColor: 'red'
+        borderRadius: moderateScale(50)
     },
     emptyImageView: {
         alignSelf: 'center',
@@ -219,19 +219,24 @@ export const IndividualRank = () => {
                         renderItem={({ item, index }) => {
                             return (
                                 <Card disabled style={styles.cardStyle}>
-                                    {
-                                        item.photo ?
-                                            <Image
-                                                source={{ uri: item.photo }}
-                                                style={styles.cardImageStyle}
-                                            />
-                                            :
-                                            <EmptyImageView name={item.name} style={styles.cardImageStyle} />
-                                    }
+                                    <View style={{ marginLeft: moderateScale(5), justifyContent: 'center' }}>
+                                        {
+                                            item.photo ?
+                                                <Image
+                                                    source={{ uri: item.photo }}
+                                                    style={styles.cardImageStyle}
+                                                />
+                                                :
+                                                <EmptyImageView name={item.name} style={styles.cardImageStyle} />
+                                        }
+                                    </View>
 
                                     <View style={{ flex: 0.8, justifyContent: 'center', alignItems: 'center' }}>
                                         <Label center bold m primary title={item.name} />
                                         <Label center bold s primary title={`${item.totalSteps} steps`} />
+                                        {item.team &&
+                                            <Label center bold m primary title={`Team: ${item.team}`} />
+                                        }
                                     </View>
                                     <LinearGradient colors={["#200122", '#6f0000']} style={styles.rankNumberViewInCard}>
                                         <Label center bold white title={`${index + 1}`} />

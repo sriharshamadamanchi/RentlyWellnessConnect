@@ -52,7 +52,8 @@ const styles = StyleSheet.create({
         borderRadius: moderateScale(5),
         padding: moderateScale(5),
         paddingHorizontal: moderateScale(10),
-        maxWidth: "80%"
+        maxWidth: "80%",
+        marginLeft: moderateScale(5)
     },
     imageStyle: {
         width: moderateScale(30),
@@ -62,8 +63,7 @@ const styles = StyleSheet.create({
     userImageStyle: {
         width: moderateScale(30),
         height: moderateScale(30),
-        borderRadius: moderateScale(30),
-        marginRight: moderateScale(5)
+        borderRadius: moderateScale(30)
     }
 })
 

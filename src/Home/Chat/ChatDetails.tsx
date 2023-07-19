@@ -167,6 +167,7 @@ export const ChatDetails = ({ navigation, route: { params = {} } }: any) => {
                             return (
                                 <View style={byMe ? styles.myCardViewContainer : styles.cardViewContainer}>
                                     <Card disabled style={styles.cardContainer}>
+                                    <Label bold xs primary title={byMe ? "You" : user?.name} />
                                         <Label m primary title={item.m} />
                                         {item.t &&
                                             <Label xs right primary title={moment(parseInt(item.t, 10)).format("h:mm A")} style={{ paddingLeft: moderateScale(30) }} />

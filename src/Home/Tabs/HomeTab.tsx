@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
     },
     cardStyle: {
         alignSelf: 'center',
-        height: moderateScale(50),
+        height: moderateScale(60),
         borderRadius: moderateScale(50),
         width: moderateScale(300),
         padding: 0,
@@ -71,13 +71,13 @@ const styles = StyleSheet.create({
     },
     rankNumberViewInCard: {
         position: 'absolute',
-        right: 0,
+        right: moderateScale(5),
         justifyContent: 'center',
         alignItems: "center",
+        alignSelf: 'center',
         height: moderateScale(50),
         width: moderateScale(50),
-        borderRadius: moderateScale(50),
-        backgroundColor: 'red'
+        borderRadius: moderateScale(50)
     },
     chatButtonView: {
         position: 'absolute',
@@ -146,7 +146,7 @@ export const HomeTab = () => {
 
                         <View style={styles.editContainer}>
                             <View>
-                                <Label bold xxxl center white title={`${totalSteps}`} style={{width: moderateScale(150)}}/>
+                                <Label bold xxxl center white title={`${totalSteps}`} style={{ width: moderateScale(150) }} />
                                 <Label bold m center white title={"Total steps"} />
                             </View>
                             <Icon
@@ -166,15 +166,17 @@ export const HomeTab = () => {
                 </View>
                 <View style={styles.rankContainer}>
                     <Card disabled style={styles.cardStyle}>
-                        {
-                            user.photo ?
-                                <Image
-                                    source={{ uri: user.photo }}
-                                    style={styles.cardImageStyle}
-                                />
-                                :
-                                <EmptyImageView name={user.name} style={styles.cardImageStyle} />
-                        }
+                        <View style={{ marginLeft: moderateScale(5), justifyContent: 'center' }}>
+                            {
+                                user.photo ?
+                                    <Image
+                                        source={{ uri: user.photo }}
+                                        style={styles.cardImageStyle}
+                                    />
+                                    :
+                                    <EmptyImageView name={user.name} style={styles.cardImageStyle} />
+                            }
+                        </View>
                         <View style={{ flex: 0.8, justifyContent: 'center', alignItems: 'center' }}>
                             <Label center bold m primary title={"Your current rank"} />
                         </View>
