@@ -51,7 +51,8 @@ const styles = StyleSheet.create({
     cardContainer: {
         borderRadius: moderateScale(5),
         padding: moderateScale(5),
-        paddingHorizontal: moderateScale(10)
+        paddingHorizontal: moderateScale(10),
+        maxWidth: "80%"
     },
     imageStyle: {
         width: moderateScale(30),
@@ -185,8 +186,8 @@ export const GroupChatDetails = ({ navigation, route: { params = {} } }: any) =>
                                         </>
                                     }
                                     <Card disabled style={styles.cardContainer}>
-                                        <Label bold s primary title={byMe ? "You" : usersList[item.f]?.name} />
-                                        <Label primary title={item.m} />
+                                        <Label bold xs primary title={byMe ? "You" : usersList[item.f]?.name} />
+                                        <Label m primary title={item.m} />
                                         {item.t &&
                                             <Label xs right primary title={moment(parseInt(item.t, 10)).format("h:mm A")} style={{ paddingLeft: moderateScale(30) }} />
                                         }

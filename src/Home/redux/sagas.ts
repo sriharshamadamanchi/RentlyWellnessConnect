@@ -99,7 +99,15 @@ export function* fetchRemotConfigSaga(): any {
     Object.entries(data).forEach($ => {
       const [key, entry]: any = $;
       try {
-        config[key] = JSON.parse(entry.asString())
+        const parsedEntries = JSON.parse(entry.asString())
+        if(parsedEntries){
+          Object.keys(parsedEntries).map((team: string) => {
+            if(parsedEntries[team] && parsedEntries[team]?.length > 0){
+              parsedEntries[team] = parsedEntries[team].map((id: string) => id.toLowerCase())
+            }
+          })
+        }
+        config[key] = parsedEntries
       } catch (e) {
         console.log("error in parsing remote config", e)
       }

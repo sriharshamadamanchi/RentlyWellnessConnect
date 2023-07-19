@@ -50,7 +50,8 @@ const styles = StyleSheet.create({
     cardContainer: {
         borderRadius: moderateScale(5),
         padding: moderateScale(5),
-        paddingHorizontal: moderateScale(10)
+        paddingHorizontal: moderateScale(10),
+        maxWidth: "80%"
     },
     imageStyle: {
         width: moderateScale(30),

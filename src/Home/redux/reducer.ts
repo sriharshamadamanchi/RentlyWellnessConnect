@@ -58,12 +58,14 @@ export const homeReducer = createReducer(initialState)
         (state: any, action: any) => {
             const id = action.payload?.id
             const messageIds = action.payload?.messageIds ?? []
-            state.chats[id] = state.chats[id].map((message: any) => {
-                if (messageIds.includes(message.t)) {
-                    return { ...message, read: true }
-                }
-                return message;
-            })
+            if (state.chats[id] && state.chats[id].length > 0) {
+                state.chats[id] = state.chats[id].map((message: any) => {
+                    if (messageIds.includes(message.t)) {
+                        return { ...message, read: true }
+                    }
+                    return message;
+                })
+            }
         }
     )
     .handleAction(
@@ -71,12 +73,14 @@ export const homeReducer = createReducer(initialState)
         (state: any, action: any) => {
             const group = action.payload?.group
             const messageIds = action.payload?.messageIds ?? []
-            state.groupChats[group] = state.groupChats[group].map((message: any) => {
-                if (messageIds.includes(message.t)) {
-                    return { ...message, read: true }
-                }
-                return message;
-            })
+            if (state.groupChats[group] && state.groupChats[group].length > 0) {
+                state.groupChats[group] = state.groupChats[group].map((message: any) => {
+                    if (messageIds.includes(message.t)) {
+                        return { ...message, read: true }
+                    }
+                    return message;
+                })
+            }
         }
     )
     .handleAction(resetReducersAction, resetState(initialState));
