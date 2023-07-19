@@ -56,14 +56,14 @@ export const Login = () => {
 
     return (
         <View style={styles.container}>
-            <StatusBar backgroundColor={"#5EE8F9"} barStyle="dark-content" />
+            <StatusBar backgroundColor={"#A0E3A9"} barStyle="dark-content" />
             <LoadingIndicator loading={loading} />
-            <LinearGradient colors={["#B2FEFA", '#0ED2F7']} style={styles.container}>
-                <LinearGradient colors={["#B2FEFA", '#0ED2F7']} style={styles.topCircleStyle}>
-                    <Label xxl white bold center title="Welcome!" style={{ marginTop: moderateScale(300) }} />
+            <LinearGradient colors={["#43C6AC", '#F8FFAE']} style={styles.container}>
+                <LinearGradient colors={["#43C6AC", '#F8FFAE']} style={styles.topCircleStyle}>
+                    <Label xxl primary bold center title="Welcome!" style={{ marginTop: moderateScale(300) }} />
                 </LinearGradient>
 
-                <LinearGradient colors={["#B2FEFA", '#0ED2F7']} style={styles.bottomCircleStyle}>
+                <LinearGradient colors={["#43C6AC", '#F8FFAE']} style={styles.bottomCircleStyle}>
                 </LinearGradient>
                 <View style={styles.loginButtonGradientView}>
                     <Image
