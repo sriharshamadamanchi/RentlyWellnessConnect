@@ -163,7 +163,9 @@ export const Home = () => {
     }, [isLoggedIn])
 
     React.useEffect(() => {
-        SplashScreen.hide();
+        setTimeout(() => {
+            SplashScreen.hide();
+        }, 1200)
     }, []);
 
     React.useEffect(() => {

@@ -10,6 +10,7 @@ import { navigationRef } from './src/common/navigation/navigationService';
 import { theme } from './src/common/theme';
 import { ErrorBoundary } from './src/common/ErrorBoundary/ErrorBoundary';
 import { NavigationContainer } from '@react-navigation/native';
+import { Image } from 'react-native';
 
 // Gets the current screen from navigation state
 const getActiveRouteName: any = (state: any) => {
@@ -25,6 +26,7 @@ const getActiveRouteName: any = (state: any) => {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: theme.colors.background.default },
+  fallbackImageStyle: { width: "100%", height: "100%" }
 });
 
 const themeForPaper = {
@@ -35,6 +37,8 @@ const themeForPaper = {
     accent: theme.colors.background.base,
   },
 };
+
+const Fallback = () => <Image style={styles.fallbackImageStyle} source={require("./res/assets/splash.png")} />;
 
 const App = () => {
   const routeNameRef = React.useRef();
@@ -54,6 +58,7 @@ const App = () => {
             <View style={styles.container}>
               <NavigationContainer
                 ref={navigationRef}
+                fallback={<Fallback />}
                 onReady={() => {
                   const state = navigationRef?.current?.getRootState();
                 }}
