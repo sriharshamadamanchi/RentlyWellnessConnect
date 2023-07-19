@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>RentlyConnect</string>
+	<string>Rently Wellness Connect</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -27,7 +27,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.googleusercontent.apps.440426391131-8qr4d5hcnid9chgjamf2r3tqp5mib1c4</string>
+				<string>com.googleusercontent.apps.424142363398-ifs7alfa2e652gbe448mjmjl8okmljf3</string>
 			</array>
 		</dict>
 	</array>

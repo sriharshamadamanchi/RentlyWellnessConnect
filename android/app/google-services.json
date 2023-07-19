@@ -1,54 +1,37 @@
 {
   "project_info": {
-    "project_number": "440426391131",
-    "firebase_url": "https://moon-landing-a8bee-default-rtdb.firebaseio.com",
-    "project_id": "moon-landing-a8bee",
-    "storage_bucket": "moon-landing-a8bee.appspot.com"
+    "project_number": "424142363398",
+    "project_id": "rently-connect",
+    "storage_bucket": "rently-connect.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:440426391131:android:24cea2859ef16d2a7e817e",
+        "mobilesdk_app_id": "1:424142363398:android:f386fa02eb894c45415c87",
         "android_client_info": {
           "package_name": "com.rently.connect"
         }
       },
       "oauth_client": [
         {
-          "client_id": "440426391131-1165gn21e7c6j9kcoamojebhpqkqp4vg.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.rently.connect",
-            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
-          }
-        },
-        {
-          "client_id": "440426391131-d8s1sdcomop9meqcreu81c5m90v6s861.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.rently.connect",
-            "certificate_hash": "fd273fe7306d02817ae4d0e7f195ccdf7ec7386a"
-          }
-        },
-        {
-          "client_id": "440426391131-dncobr6c7drh5ivm48k34uqd5sthjfnn.apps.googleusercontent.com",
+          "client_id": "424142363398-l3dipdrk1bp76dcsaoeholmdf2ob3q8i.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDf4cZJ1QiwfgUPWrfn5Y13Qfn7XIaP5Nc"
+          "current_key": "AIzaSyCXTmoBs-FHfbOjXt8hYvE8Bm08j3hbD4Q"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "440426391131-dncobr6c7drh5ivm48k34uqd5sthjfnn.apps.googleusercontent.com",
+              "client_id": "424142363398-l3dipdrk1bp76dcsaoeholmdf2ob3q8i.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "440426391131-8qr4d5hcnid9chgjamf2r3tqp5mib1c4.apps.googleusercontent.com",
+              "client_id": "424142363398-ifs7alfa2e652gbe448mjmjl8okmljf3.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "com.rently.connect"
