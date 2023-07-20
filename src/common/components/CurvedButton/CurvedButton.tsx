@@ -156,7 +156,7 @@ export const CurvedButton = ({
           {Icon}
         </View>
           }
-          <Text style = {{ ...styles.textStyle, ...newStyle, ...textStyle }} >{title}</Text>
+          <Text maxFontSizeMultiplier={1.3} style = {{ ...styles.textStyle, ...newStyle, ...textStyle }} >{title}</Text>
         </View>
       </Ripple>
   );

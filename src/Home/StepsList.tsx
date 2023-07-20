@@ -34,6 +34,7 @@ const styles = StyleSheet.create({
         color: '#454545'
     },
     dateViewContainer: {
+        padding: moderateScale(5),
         flexDirection: 'row',
         alignSelf: 'center',
         justifyContent: 'space-evenly',
@@ -126,7 +127,7 @@ export const StepsList = () => {
                         return (
                             <View >
                                 <View style={styles.itemContainer}>
-                                    <DateView date={item.date} />
+                                <DateView date={item.date} />
                                     <InputField value={`${item.count} steps`} index={index} showDropdown={showDropdown} setShowDropDown={setShowDropDown} />
                                 </View>
                                 {showDropdown === index &&

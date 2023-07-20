@@ -146,8 +146,8 @@ export const HomeTab = () => {
 
                         <View style={styles.editContainer}>
                             <View>
-                                <Label bold xxxl center white title={`${totalSteps}`} style={{ width: moderateScale(150) }} />
-                                <Label bold m center white title={"Total steps"} />
+                                <Label maxFontSizeMultiplier={1.1} bold xxxl center white title={`${totalSteps}`} style={{ width: moderateScale(150) }} />
+                                <Label maxFontSizeMultiplier={1.1} bold m center white title={"Total steps"} />
                             </View>
                             <Icon
                                 name="edit"
@@ -159,8 +159,8 @@ export const HomeTab = () => {
                                 }} />
                         </View>
                         <View style={styles.kmView}>
-                            <Label bold xxxl center white title={`${Math.round(totalSteps * 0.0008 * 100) / 100}`} />
-                            <Label bold m center white title={"Total kilometers"} />
+                            <Label maxFontSizeMultiplier={1.1} bold xxxl center white title={`${Math.round(totalSteps * 0.0008 * 100) / 100}`} />
+                            <Label maxFontSizeMultiplier={1.1} bold m center white title={"Total kilometers"} />
                         </View>
                     </LinearGradient>
                 </View>

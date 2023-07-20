@@ -77,7 +77,6 @@ const styles = StyleSheet.create({
     },
     cardStyle: {
         alignSelf: 'center',
-        height: moderateScale(60),
         borderRadius: moderateScale(60),
         width: moderateScale(300),
         padding: 0,
@@ -115,6 +114,7 @@ const styles = StyleSheet.create({
         borderRadius: moderateScale(50),
         width: "80%",
         height: moderateScale(40),
+        paddingVertical: moderateScale(5),
         paddingHorizontal: moderateScale(10),
         marginVertical: moderateScale(5),
         fontSize: moderateScale(16),
@@ -305,7 +305,7 @@ export const IndividualRank = () => {
                                         }
                                     </View>
 
-                                    <View style={{ flex: 0.8, justifyContent: 'center', alignItems: 'center' }}>
+                                    <View style={{ flex: 0.8, padding: moderateScale(5), justifyContent: 'center', alignItems: 'center' }}>
                                         <Label center bold m primary title={item.name} />
                                         <Label center bold s primary title={`${item.totalSteps} steps`} />
                                         {item.team &&
