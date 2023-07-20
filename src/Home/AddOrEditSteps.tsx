@@ -145,7 +145,6 @@ export const AddOrEditSteps = () => {
                         <View style={{ flexDirection: 'row' }}>
                             <InputField
                                 style={{ width: moderateScale(90) }}
-                                maxLength={5}
                                 title={"ENTER STEPS"}
                                 value={count}
                                 setText={(text: string) => {
@@ -161,7 +160,6 @@ export const AddOrEditSteps = () => {
                             <Label bold white center title="(or)" style={{ marginHorizontal: moderateScale(5) }} />
                             <InputField
                                 style={{ width: moderateScale(90) }}
-                                maxLength={km.length ? km.length : 1}
                                 title={"ENTER KMS"}
                                 value={km}
                                 setText={(text: string) => {
