@@ -263,7 +263,7 @@ export const IndividualRank = () => {
         <View style={styles.container}>
             <LinearGradient colors={["#43C6AC", '#F8FFAE']} style={styles.container}>
                 <View style={styles.container}>
-
+                    <Search searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
                     <FlatList
                         data={rankingList}
                         ListHeaderComponent={() => {
@@ -288,7 +288,6 @@ export const IndividualRank = () => {
                                     </View>
 
                                     <Divider style={{ backgroundColor: 'white', marginVertical: moderateScale(10), alignSelf: 'center', width: Dimensions.get("window").width * 0.8 }} />
-                                    <Search searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
                                 </>
                             )
                         }}

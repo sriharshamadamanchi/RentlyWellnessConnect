@@ -83,7 +83,6 @@ const Search = ({ searchQuery, setSearchQuery }: { searchQuery: string, setSearc
                     onChangeText={(text: string) => {
                         setSearchQuery(text)
                     }}
-                    autoFocus
                 />
                 <Ionicons
                     disabled
