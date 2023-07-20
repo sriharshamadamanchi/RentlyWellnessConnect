@@ -182,7 +182,7 @@ export const GroupChatDetails = ({ navigation, route: { params = {} } }: any) =>
                                                         style={styles.userImageStyle}
                                                     />
                                                     :
-                                                    <EmptyImageView name={user.name} style={styles.userImageStyle} />
+                                                    <EmptyImageView name={usersList[item.f]?.name} style={styles.userImageStyle} />
                                             }
                                         </>
                                     }
