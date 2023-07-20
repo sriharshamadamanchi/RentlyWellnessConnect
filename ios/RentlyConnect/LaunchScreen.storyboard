@@ -17,7 +17,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="redraw" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Splash" translatesAutoresizingMaskIntoConstraints="NO" id="qnX-sh-eOj">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="redraw" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="splash" translatesAutoresizingMaskIntoConstraints="NO" id="qnX-sh-eOj">
                                 <rect key="frame" x="0.0" y="-9" width="375" height="676"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </imageView>
@@ -32,7 +32,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="Splash" width="562.5" height="1218"/>
+        <image name="splash" width="1125" height="2436"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

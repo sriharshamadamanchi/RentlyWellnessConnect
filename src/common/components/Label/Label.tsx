@@ -32,7 +32,8 @@ interface labelPopsType {
   ellipsizeMode?: string,
   numberOfLines?: number,
   testID?: string,
-  accessibilityLabel?: string
+  accessibilityLabel?: string,
+  maxFontSizeMultiplier?: number
 }
 export const Label = ({
   title,
@@ -64,6 +65,7 @@ export const Label = ({
   numberOfLines=1,
   testID,
   accessibilityLabel,
+  maxFontSizeMultiplier=1.3
 }: labelPopsType) => {
   // Default style
   const newStyle: any = {
@@ -102,7 +104,7 @@ export const Label = ({
   xl5 && (newStyle.fontSize = theme.fontSizes.xl5);
 
   return (
-    <Text testID = {testID} accessibilityLabel = {accessibilityLabel} numberOfLines = {(ellipsizeMode === undefined) ? undefined : numberOfLines} style = {{ ...newStyle, ...style, textDecorationLine: underLine ? "underline" : "none" }} >
+    <Text testID = {testID} accessibilityLabel = {accessibilityLabel} maxFontSizeMultiplier={maxFontSizeMultiplier} numberOfLines = {(ellipsizeMode === undefined) ? undefined : numberOfLines} style = {{ ...newStyle, ...style, textDecorationLine: underLine ? "underline" : "none" }} >
       {title}
     </Text>
   );

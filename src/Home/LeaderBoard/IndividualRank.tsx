@@ -1,10 +1,13 @@
 import React from "react"
-import { Dimensions, FlatList, Image } from "react-native"
+import { Dimensions, FlatList, Image, TextInput } from "react-native"
 import { StyleSheet, View } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import { moderateScale } from "react-native-size-matters"
 import { useSelector } from "react-redux"
 import { Card, Divider, Label } from "../../common/components"
+import { KeyboardAvoidingView } from "react-native"
+import { Platform } from "react-native"
+import Ionicons from 'react-native-vector-icons/Ionicons'
 
 const styles = StyleSheet.create({
     container: {
@@ -74,7 +77,6 @@ const styles = StyleSheet.create({
     },
     cardStyle: {
         alignSelf: 'center',
-        height: moderateScale(60),
         borderRadius: moderateScale(60),
         width: moderateScale(300),
         padding: 0,
@@ -95,7 +97,30 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'lightgrey',
+        backgroundColor: 'lightgrey'
+    },
+    inputContainer: {
+        alignSelf: 'center',
+        alignItems: "center",
+        flexDirection: 'row',
+        marginVertical: moderateScale(20),
+        width: "75%",
+        height: moderateScale(45),
+        borderRadius: moderateScale(50),
+        backgroundColor: "#FFFFFF"
+    },
+    textInputStyle: {
+        backgroundColor: '#FFFFFF',
+        borderRadius: moderateScale(50),
+        width: "80%",
+        height: moderateScale(40),
+        paddingVertical: moderateScale(5),
+        paddingHorizontal: moderateScale(10),
+        marginVertical: moderateScale(5),
+        fontSize: moderateScale(16),
+        fontWeight: "400",
+        marginHorizontal: moderateScale(10),
+        color: '#454545',
     }
 })
 
@@ -158,11 +183,40 @@ export const EmptyImageView = ({ name = "", style = {} }: { name: string, style:
     )
 }
 
+const Search = ({ searchQuery, setSearchQuery }: { searchQuery: string, setSearchQuery: any }) => {
+
+    return (
+        <KeyboardAvoidingView
+            keyboardVerticalOffset={Platform.select({ ios: moderateScale(50), android: 0 })}
+            behavior={Platform.OS === "ios" ? "padding" : "height"} >
+            <View style={styles.inputContainer}>
+                <TextInput
+                    placeholder="Search..."
+                    placeholderTextColor={"grey"}
+                    value={searchQuery}
+                    selectionColor="#000000"
+                    autoCapitalize="none"
+                    style={styles.textInputStyle}
+                    onChangeText={(text: string) => {
+                        setSearchQuery(text)
+                    }}
+                />
+                <Ionicons
+                    disabled
+                    name={"search"}
+                    color="#000000"
+                    style={{ position: 'absolute', right: 0, padding: moderateScale(10) }}
+                    size={moderateScale(30)} />
+            </View>
+        </KeyboardAvoidingView>
+    )
+}
 
 export const IndividualRank = () => {
 
     const user = useSelector((store: any) => store.home.user)
     const usersList = useSelector((store: any) => store.home.usersList ?? {})
+    const [searchQuery, setSearchQuery] = React.useState("")
     const keys = Object.keys(usersList)
 
     const rankingList: any = []
@@ -188,6 +242,22 @@ export const IndividualRank = () => {
     } else {
         myRank = myRank + 1
     }
+
+    const [filteredRanks, setFilteredRanks]: any = React.useState([])
+
+    React.useEffect(() => {
+
+        const filter: any = []
+        Object.keys(usersList).map((id: any) => {
+            const name = (usersList[id]?.name ?? "").toLowerCase()
+            if (name.includes(searchQuery.toLowerCase())) {
+                filter.push(id)
+            }
+        })
+
+        setFilteredRanks(filter)
+
+    }, [searchQuery])
 
     return (
         <View style={styles.container}>
@@ -218,10 +288,14 @@ export const IndividualRank = () => {
                                     </View>
 
                                     <Divider style={{ backgroundColor: 'white', marginVertical: moderateScale(10), alignSelf: 'center', width: Dimensions.get("window").width * 0.8 }} />
+                                    <Search searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
                                 </>
                             )
                         }}
                         renderItem={({ item, index }) => {
+                            if (!(filteredRanks.includes(item.id))) {
+                                return null
+                            }
                             return (
                                 <Card disabled style={styles.cardStyle}>
                                     <View style={{ marginLeft: moderateScale(5), justifyContent: 'center' }}>
@@ -236,7 +310,7 @@ export const IndividualRank = () => {
                                         }
                                     </View>
 
-                                    <View style={{ flex: 0.8, justifyContent: 'center', alignItems: 'center' }}>
+                                    <View style={{ flex: 0.8, padding: moderateScale(5), justifyContent: 'center', alignItems: 'center' }}>
                                         <Label center bold m primary title={item.name} />
                                         <Label center bold s primary title={`${item.totalSteps} steps`} />
                                         {item.team &&

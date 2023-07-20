@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
     },
     cardStyle: {
         alignSelf: 'center',
-        width: "90%",
+        width: "100%",
         marginVertical: moderateScale(10),
         flexDirection: 'row'
     },
@@ -62,12 +62,13 @@ export const Groups = () => {
                         })
 
                         return (
-                            <View style={{ flex: 0.9, marginHorizontal: moderateScale(20), flexDirection: 'row' }}>
+                            <View style={{ marginHorizontal: moderateScale(20), flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                                 <Ripple
                                     style={styles.cardStyle}
                                     onPress={() => {
                                         navigation.navigate("GroupChatDetails", { group: item })
                                     }}>
+                                    <View style={{ width: "15%", marginHorizontal: moderateScale(5), alignSelf: 'center', }}>
                                     {
                                         groupImage[item] ?
                                             <Image
@@ -77,28 +78,32 @@ export const Groups = () => {
                                             :
                                             <EmptyImageView name={item} style={styles.cardImageStyle} />
                                     }
-                                    <View style={{ justifyContent: 'center' }}>
+                                     </View>
+                                     <View style={{ width: "55%", justifyContent: 'center' }}>
                                         <Label bold m primary title={item} style={{ marginLeft: moderateScale(10) }} />
                                         {
                                             lastMessage?.m &&
                                             <Label bold m primary title={lastMessage?.m.length > 20 ? lastMessage?.m.slice(0, 20) + "..." : lastMessage?.m} style={{ marginLeft: moderateScale(10), color: 'grey' }} />
                                         }
                                     </View>
+                                    <View style={{ width: "20%" }}>
                                     {lastMessage.t &&
-                                        <View style={{ flex: 1, marginRight: moderateScale(20), justifyContent: 'center' }}>
+                                        <View style={{ flex: 1, justifyContent: 'center' }}>
                                             <Label bold right xs primary title={moment(parseInt(lastMessage.t, 10)).format("MM/DD/YY")} style={{}} />
                                             <Label bold right xs primary title={moment(parseInt(lastMessage.t, 10)).format("h:mm A")} style={{}} />
                                         </View>
                                     }
-
-                                </Ripple>
-                                {unreadCount > 0 &&
+                                 </View>
+                                 <View style={{ width:'10%', alignSelf: 'center'}}>
+                                 {unreadCount > 0 &&
                                     <View style={{ flex: 0.1, justifyContent: 'center', alignItems: 'center', marginHorizontal: moderateScale(10) }}>
                                         <View style={{ backgroundColor: 'lightgreen', width: moderateScale(25), height: moderateScale(25), borderRadius: moderateScale(25), justifyContent: 'center', alignItems: 'center' }}>
                                             <Label bold right xs primary title={`${unreadCount}`} style={{}} />
                                         </View>
                                     </View>
                                 }
+                                      </View>
+                                </Ripple>
                             </View>
                         )
                     }}

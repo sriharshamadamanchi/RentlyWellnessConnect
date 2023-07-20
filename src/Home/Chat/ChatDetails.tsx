@@ -73,11 +73,13 @@ const SendMessage = ({ from, to, token, value, setMessage }: { from: string, to:
                 <TextInput
                     placeholder="Type..."
                     placeholderTextColor={"grey"}
+                    selectionColor="#000000"
                     value={value}
                     style={styles.textInputStyle}
                     onChangeText={(text: string) => {
                         setMessage(text)
                     }}
+                    autoFocus
                 />
                 <Ionicons
                     name={"send"}

@@ -79,6 +79,7 @@ const SendMessage = ({ from, to, value, setMessage }: { from: string, to: string
                 <TextInput
                     placeholder="Type..."
                     placeholderTextColor={"grey"}
+                    selectionColor="#000000"
                     value={value}
                     style={styles.textInputStyle}
                     onChangeText={(text: string) => {
