@@ -189,7 +189,7 @@ export const TeamRank = () => {
                                     </View>
 
                                     <Divider style={{ backgroundColor: 'white', marginTop: moderateScale(10), marginBottom: moderateScale(30), alignSelf: 'center', width: Dimensions.get("window").width * 0.8 }} />
-                                    <Label underLine white bold xl title={`GOAL: ${GOAL} Steps`} center style={{ marginBottom: moderateScale(20) }} />
+                                    <Label bold xl title={`GOAL: ${GOAL} Steps`} center style={{ marginBottom: moderateScale(20)}} white />
                                 </>
                             )
                         }}

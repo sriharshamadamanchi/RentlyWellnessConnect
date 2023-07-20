@@ -67,9 +67,9 @@ const DateView = ({ date }: { date: string }) => {
     return (
         <LinearGradient colors={["#000000", '#434343']} style={styles.dateViewContainer}>
             <Label xl bold white center title={date_n} />
-            <Label white center title={day} />
-            <View style={styles.horizontalLineStyle} />
             <Label white center title={month} />
+            <View style={styles.horizontalLineStyle} />
+            <Label white center title={day} />
         </LinearGradient>
 
     )

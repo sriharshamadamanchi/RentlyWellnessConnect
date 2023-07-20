@@ -131,11 +131,9 @@ export const AddOrEditSteps = () => {
                 <View style={styles.container}>
 
                     <View style={styles.inputContainer}>
-                        <InputField
-                            title={`STEP COUNT ON ${moment(date, "YYYY-MM-DD").format("DD ddd, MMM").toUpperCase()}`}
-                            value={`${stepDetails?.count ?? "0"}`}
-                            editable={false}
-                            style={{ opacity: 0.75 }} />
+                        <Label bold title={`STEPS COUNT ON ${moment(date, "YYYY-MM-DD").format("DD MMM, ddd").toUpperCase()}`} white/>
+                        <Label bold title={`${stepDetails?.count ?? "0"}`}  style={{fontSize:moderateScale(30), alignSelf:'center', color:'white'}}/>
+                        
                         <DropDown
                             title="TYPE"
                             data={data}
@@ -179,7 +177,7 @@ export const AddOrEditSteps = () => {
                         </View>
                         <InputField
                             title={"DATE"}
-                            value={moment(date, "YYYY-MM-DD").format("DD ddd, MMM")}
+                            value={moment(date, "YYYY-MM-DD").format("DD MMM, ddd")}
                             setText={setDate}
                             editable={false}
                             style={{ opacity: 0.75 }} />
@@ -196,6 +194,7 @@ export const AddOrEditSteps = () => {
                         onDayPress={day => {
                             setDate(day.dateString)
                         }}
+                        hideArrows
                     />
                 </View>
 
