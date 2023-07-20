@@ -198,7 +198,7 @@ const Search = ({ searchQuery, setSearchQuery }: { searchQuery: string, setSearc
                     autoCapitalize="none"
                     style={styles.textInputStyle}
                     onChangeText={(text: string) => {
-                        setSearchQuery(text)
+                        setSearchQuery(text.trim())
                     }}
                 />
                 <Ionicons
