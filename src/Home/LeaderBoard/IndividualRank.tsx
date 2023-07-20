@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#FFFFFF'
+        backgroundColor: 'lightgrey',
     }
 })
 
@@ -145,10 +145,15 @@ export const EmptyImageView = ({ name = "", style = {} }: { name: string, style:
         formattedName = formattedName + nameSplit[1].charAt(0).toUpperCase()
     }
     return (
-        <View style={{ ...styles.emptyImageView, ...style }}>
-            <Image
+        <View style={[styles.emptyImageView, style]}>
+            <Label title={name.charAt(0)} bold style={{transform:[
+                {
+                    scale: style.width/31.45714285714286
+                }
+            ], color: 'white'}}/>
+            {/* <Image
                 style={style}
-                source={require("../../../res/assets/grey-person-icon.png")} />
+                source={require("../../../res/assets/grey-person-icon.png")} /> */}
         </View>
     )
 }
