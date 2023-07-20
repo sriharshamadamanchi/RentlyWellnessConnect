@@ -14,6 +14,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "424142363398-b5vlq0cs2oopqcbjj5fa6mk2erjn5p4t.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.rently.connect",
+            "certificate_hash": "fd273fe7306d02817ae4d0e7f195ccdf7ec7386a"
+          }
+        },
+        {
+          "client_id": "424142363398-vc28osccm3allld5hcml588k608qnhfk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.rently.connect",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
           "client_id": "424142363398-l3dipdrk1bp76dcsaoeholmdf2ob3q8i.apps.googleusercontent.com",
           "client_type": 3
         }
