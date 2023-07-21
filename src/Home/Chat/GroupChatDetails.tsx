@@ -82,6 +82,7 @@ const SendMessage = ({ from, to, value, setMessage }: { from: string, to: string
                     selectionColor="#000000"
                     value={value}
                     style={styles.textInputStyle}
+                    maxFontSizeMultiplier={1.2}
                     onChangeText={(text: string) => {
                         setMessage(text)
                     }}

@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React from "react"
 import { FlatList, Image, Keyboard } from "react-native"
 import { StyleSheet, View } from "react-native"
 import { moderateScale } from "react-native-size-matters"
@@ -79,6 +79,7 @@ const Search = ({ searchQuery, setSearchQuery }: { searchQuery: string, setSearc
           value={searchQuery}
           selectionColor="#000000"
           autoCapitalize="none"
+          maxFontSizeMultiplier={1.2}
           style={styles.textInputStyle}
           onChangeText={(text: string) => {
             setSearchQuery(text.trim())
@@ -108,8 +109,6 @@ export const ChatList = () => {
 
   const chats = useSelector((store: any) => store.home.chats ?? {})
   const [searchQuery, setSearchQuery] = React.useState("")
-
-  const [textHeight, setTextHeight]: any = useState(Number.MAX_SAFE_INTEGER);
 
   React.useEffect(() => {
 
@@ -172,13 +171,7 @@ export const ChatList = () => {
                         }
                       </View>
                       <View style={[{ width: "55%", justifyContent: 'center' }]}>
-                        <Label
-                          onLayout={(event: any) => {
-                            if (event.nativeEvent.layout.height < textHeight)
-                              setTextHeight(event.nativeEvent.layout.height);
-
-
-                          }} numberOfLines={1} bold m primary title={user.name?.charAt(0).toUpperCase() + user.name?.slice(1)} style={{ marginLeft: moderateScale(10), maxHeight: textHeight }} />
+                        <Label ellipsizeMode="end" numberOfLines={1} bold m primary title={user.name?.charAt(0).toUpperCase() + user.name?.slice(1)} style={{ marginLeft: moderateScale(10) }} />
                         {
                           lastMessage?.m &&
                           <Label ellipsizeMode="end" numberOfLines={1} bold m primary title={lastMessage?.m} style={{ marginLeft: moderateScale(10), color: 'grey' }} />

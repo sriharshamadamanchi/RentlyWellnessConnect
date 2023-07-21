@@ -63,8 +63,8 @@ const styles = StyleSheet.create({
 const DetailsView = ({ title, value }: { title: string, value: string }) => {
     return (
         <View style={styles.detailsContainer}>
-            <Label bold primary title={title} style={{ marginBottom: moderateScale(5) }} />
-            <Label underLine bold white title={value} />
+            <Label center bold primary title={title} style={{ marginBottom: moderateScale(5) }} />
+            <Label center underLine bold white title={value} />
         </View>
     )
 }

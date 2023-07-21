@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
         width: moderateScale(36)
     },
     welcomeLabelStyle: {
-        marginVertical: moderateScale(20)
+        margin: moderateScale(20)
     },
     teamNameStyle: {
         marginBottom: moderateScale(20)
@@ -62,12 +62,13 @@ export const HomeTabbar = () => {
                     headerShown: false,
                     tabBarActiveTintColor: "green",
                     tabBarStyle: {
-                        height: Platform.OS === 'android' ? moderateScale(60) : moderateScale(90),
+                        height: Platform.OS === 'android' ? moderateScale(65) : moderateScale(90),
                         paddingTop: moderateScale(5)
                     },
-                    tabBarLabelStyle: {
-                        fontFamily: theme.fonts.bold,
-                        paddingBottom: moderateScale(10)
+                    tabBarLabel: ({ color, children }) => {
+                        return (
+                            <Label s bold title={children} style={{ color, paddingBottom: moderateScale(10) }} />
+                        )
                     }
                 }}>
                 <Tab.Screen
@@ -117,10 +118,10 @@ export const HomeTopTabbar = () => {
                             borderBottomWidth: moderateScale(2),
                             borderBottomColor: "#0f9b0f"
                         },
-                        tabBarStyle: {
-                        },
-                        tabBarLabelStyle: {
-                            fontWeight: 'bold'
+                        tabBarLabel: ({ color, children }) => {
+                            return (
+                                <Label m bold title={children} style={{ color: color }} />
+                            )
                         }
                     }}
                 >
@@ -128,7 +129,7 @@ export const HomeTopTabbar = () => {
                         name={"HOME"}
                         children={() => <HomeTab />} />
                     <TopTab.Screen
-                        name={"Activity"}
+                        name={"ACTIVITY"}
                         children={() => <ActivityTab />} />
                 </TopTab.Navigator>
             </LinearGradient>

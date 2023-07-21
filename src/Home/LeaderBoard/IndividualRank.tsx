@@ -196,6 +196,7 @@ const Search = ({ searchQuery, setSearchQuery }: { searchQuery: string, setSearc
                     value={searchQuery}
                     selectionColor="#000000"
                     autoCapitalize="none"
+                    maxFontSizeMultiplier={1.2}
                     style={styles.textInputStyle}
                     onChangeText={(text: string) => {
                         setSearchQuery(text.trim())

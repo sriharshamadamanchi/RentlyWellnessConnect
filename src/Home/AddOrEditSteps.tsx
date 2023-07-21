@@ -62,6 +62,7 @@ const InputField = ({ title, value, setText, keyboardType = "default", editable 
                 placeholder="0"
                 placeholderTextColor={"grey"}
                 keyboardType={keyboardType}
+                maxFontSizeMultiplier={1.2}
                 editable={editable}
                 value={value}
                 style={{ ...styles.textInputStyle, ...style }}
@@ -131,9 +132,11 @@ export const AddOrEditSteps = () => {
                 <View style={styles.container}>
 
                     <View style={styles.inputContainer}>
-                        <Label bold title={`STEPS COUNT ON ${moment(date, "YYYY-MM-DD").format("DD MMM, ddd").toUpperCase()}`} white/>
-                        <Label bold title={`${stepDetails?.count ?? "0"}`}  style={{fontSize:moderateScale(30), alignSelf:'center', color:'white'}}/>
-                        
+                        <View style={{ width: moderateScale(225) }}>
+                            <Label center bold title={`STEPS COUNT ON ${moment(date, "YYYY-MM-DD").format("DD MMM, ddd").toUpperCase()}`} white />
+                            <Label center bold title={`${stepDetails?.count ?? "0"}`} style={{ fontSize: moderateScale(30), alignSelf: 'center', color: 'white' }} />
+                        </View>
+
                         <DropDown
                             title="TYPE"
                             data={data}
@@ -183,8 +186,6 @@ export const AddOrEditSteps = () => {
 
                     <Calendar
                         style={styles.calendarStyle}
-                
-                        minDate={moment().subtract(3, "days").format("YYYY-MM-DD")}
                         maxDate={moment().format("YYYY-MM-DD")}
                         markedDates={{
                             [date]: { selected: true, disableTouchEvent: true, selectedColor: 'red' }

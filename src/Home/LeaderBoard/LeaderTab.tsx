@@ -33,16 +33,18 @@ export const LeaderTab = () => {
                             borderBottomWidth: moderateScale(2),
                             borderBottomColor: "#0f9b0f"
                         },
-                        tabBarLabelStyle: {
-                            fontWeight: 'bold'
+                        tabBarLabel: ({color, children}) => {
+                            return(
+                                <Label m bold title={children} style={{color: color}}/>
+                            )
                         }
                     }}
                 >
                     <TopTab.Screen
-                        name={"Individual"}
+                        name={"INDIVIDUAL"}
                         children={() => <IndividualRank />} />
                     <TopTab.Screen
-                        name={"Team"}
+                        name={"TEAM"}
                         children={() => <TeamRank />} />
                 </TopTab.Navigator>
             </LinearGradient>
