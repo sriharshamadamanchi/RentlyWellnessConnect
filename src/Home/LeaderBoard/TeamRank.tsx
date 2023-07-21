@@ -194,12 +194,14 @@ export const TeamRank = () => {
                             )
                         }}
                         renderItem={({ item, index }) => {
+                            let percent = ((item.steps / GOAL) * 100);
+                            if(percent > 100) percent = 100;
                             return (
                                 <Card disabled style={styles.cardStyle}>
                                     <View style={{ flex: 0.8, justifyContent: 'center', alignItems: 'center' }}>
                                         <Label underLine center bold primary title={`Team ${item.name}`} />
                                         <Label center bold s primary title={`Total steps: ${item.steps}`} />
-                                        <Label center bold s primary title={`Remaining steps: ${GOAL - item.steps}`} />
+                                        <Label center bold s primary title={`Remaining steps: ${(GOAL - item.steps<0)?0:GOAL - item.steps}`} />
                                     </View>
                                     <LinearGradient colors={["#200122", '#6f0000']} style={styles.rankNumberViewInCard}>
                                         <Label center bold white title={`${index + 1}`} style={{ paddingLeft: moderateScale(10), paddingBottom: moderateScale(10) }} />
@@ -214,7 +216,7 @@ export const TeamRank = () => {
                                             style={{ alignSelf: 'center' }}
                                             onAnimationComplete={() => console.log('onAnimationComplete')}
                                             backgroundColor="black" />
-                                        <Label primary center title={`${((item.steps / GOAL) * 100).toFixed(1)}%`} style={{ position: "absolute", top: moderateScale(40) }} />
+                                        <Label primary center title={`${percent.toFixed(1)}%`} style={{ position: "absolute", top: moderateScale(40) }} />
                                     </View>
                                 </Card>
                             )
