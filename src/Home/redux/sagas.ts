@@ -1,11 +1,13 @@
 import { call, put, takeLatest } from "redux-saga/effects";
 import { getActionType } from "../../common/store/typeSafe";
-import { clearLoginDetailsAction, fetchRemoteConfigAction, loginAction, logoutAction, sendMessageAction, storeLoginDetailsAction, storeRemoteConfigAction, storeUsersListAction } from "./actions";
+import { clearLoginDetailsAction, fetchRemoteConfigAction, loginAction, logoutAction, sendMessageAction, storeLoginDetailsAction, storeRemoteConfigAction, storeUsersListAction, onlineAction, storeOnlineAction } from "./actions";
 import { failedLoadingAction, startLoadingAction, successLoadingAction } from "../../common/loaderRedux/actions";
 import { GoogleSignin, statusCodes } from "@react-native-google-signin/google-signin";
 import { Alert } from "react-native";
 import { Firestore } from "../Firestore";
 import remoteConfig from '@react-native-firebase/remote-config';
+import NetInfo from '@react-native-community/netinfo';
+import { store } from '../../common/store/index';
 
 export function* loginSaga(): any {
   try {
@@ -119,9 +121,41 @@ export function* fetchRemotConfigSaga(): any {
   }
 }
 
+export function* onlineSaga(): any {
+  let online = true;
+  try {
+
+    NetInfo.addEventListener(({ isInternetReachable, isConnected }: any) => {
+
+      const isNetworkConnected = (isInternetReachable === null) ? Boolean(isConnected) : Boolean(isInternetReachable && isConnected);
+
+      console.log("NetInfo Listener, isNetworkConnected:", isNetworkConnected);
+
+      store.dispatch(storeOnlineAction({ online: isNetworkConnected }));
+    });
+
+    const { isInternetReachable, isConnected } = yield call(NetInfo.fetch);
+
+    const isNetworkConnected = (isInternetReachable === null) ? Boolean(isConnected) : Boolean(isInternetReachable && isConnected);
+
+    console.log("NetInfo Listener, isNetworkConnected:", isNetworkConnected);
+
+    online = isNetworkConnected;
+    
+    yield put(storeOnlineAction({ online }));
+
+  } catch (error: any) {
+    yield put(storeOnlineAction({ online }));
+    console.log("error in onlineSaga", error);
+
+  }
+}
+
+
 export const homeSagas: any = [
   takeLatest(getActionType(loginAction), loginSaga),
   takeLatest(getActionType(logoutAction), logoutSaga),
   takeLatest(getActionType(sendMessageAction), sendMessageSaga),
   takeLatest(getActionType(fetchRemoteConfigAction), fetchRemotConfigSaga),
+  takeLatest(getActionType(onlineAction), onlineSaga),
 ];

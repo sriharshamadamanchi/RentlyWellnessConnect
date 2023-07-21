@@ -3,7 +3,7 @@ import { FlatList, Image } from "react-native"
 import { StyleSheet, View } from "react-native"
 import { moderateScale } from "react-native-size-matters"
 import { useSelector } from "react-redux"
-import { Label, Ripple } from "../../common/components"
+import { Label, Ripple, PrimaryView } from "../../common/components"
 import { useNavigation } from "@react-navigation/native"
 import moment from "moment"
 import { groupImage, teams } from "../../common/constants"
@@ -46,6 +46,7 @@ export const Groups = () => {
 
 
     return (
+        <PrimaryView>
         <View style={styles.container}>
             <View style={styles.container}>
 
@@ -111,5 +112,6 @@ export const Groups = () => {
                 />
             </View>
         </View>
+        </PrimaryView>
     )
 }

@@ -1,5 +1,5 @@
 import { createReducer, resetState } from '../../common/store/typeSafe';
-import { clearLoginDetailsAction, readGroupMessageAction, readMessageAction, resetReducersAction, storeChatsAction, storeGroupChatsAction, storeLoginDetailsAction, storeRemoteConfigAction, storeUsersListAction } from './actions';
+import { clearLoginDetailsAction, readGroupMessageAction, readMessageAction, resetReducersAction, storeChatsAction, storeGroupChatsAction, storeLoginDetailsAction, storeRemoteConfigAction, storeUsersListAction, storeOnlineAction } from './actions';
 
 const initialState = {
     isLoggedIn: false,
@@ -81,6 +81,12 @@ export const homeReducer = createReducer(initialState)
                     return message;
                 })
             }
+        }
+    )
+    .handleAction(
+        storeOnlineAction,
+        (state: any, action: any) => {
+            state.online = action.payload.online;
         }
     )
     .handleAction(resetReducersAction, resetState(initialState));
