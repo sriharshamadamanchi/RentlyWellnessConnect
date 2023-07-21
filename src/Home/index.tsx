@@ -22,7 +22,7 @@ import SplashScreen from "react-native-splash-screen";
 import { ChatList } from "./Chat/ChatList";
 import { ChatDetails } from "./Chat/ChatDetails";
 import { ChatTab } from "./Chat/ChatTab";
-import { storeChatsAction, storeGroupChatsAction } from "./redux/actions";
+import { storeChatsAction, storeGroupChatsAction, onlineAction } from "./redux/actions";
 import { Info } from "./Info";
 import firebase from "@react-native-firebase/firestore";
 import { GroupChatDetails } from "./Chat/GroupChatDetails";
@@ -233,6 +233,10 @@ export const Home = () => {
         return () => subscriber();
 
     }, [id])
+
+    React.useEffect(() => {
+        dispatch(onlineAction())
+    }, [])
 
     return (
         <Stack.Navigator key={initialRouteName} initialRouteName={initialRouteName}

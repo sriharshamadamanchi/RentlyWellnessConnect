@@ -24,4 +24,8 @@ export const readMessageAction = (payload: any): any => action('src/Home/redux/r
 
 export const readGroupMessageAction = (payload: any): any => action('src/Home/redux/readGroupMessageAction', payload);
 
+export const onlineAction = (): any => action('src/Home/redux/onlineAction');
+
+export const storeOnlineAction = (payload: any): any => action('src/Home/redux/storeOnlineAction', payload);
+
 export const resetReducersAction = (): any => action('src/Home/redux/resetReducersAction');

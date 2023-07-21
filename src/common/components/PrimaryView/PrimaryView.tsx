@@ -1,4 +1,5 @@
 import { SafeAreaView, StyleSheet } from "react-native"
+import { OfflineBanner } from './OfflineBanner'
 
 const styles = StyleSheet.create({
     container: {
@@ -9,6 +10,7 @@ const styles = StyleSheet.create({
 export const PrimaryView = ({ children, style = {} }: any) => {
     return (
         <SafeAreaView style={{ ...styles.container, ...style }}>
+            <OfflineBanner/>
             {children}
         </SafeAreaView>
     )
