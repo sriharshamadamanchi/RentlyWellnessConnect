@@ -67,7 +67,7 @@ export const Label = ({
   numberOfLines=1,
   testID,
   accessibilityLabel,
-  maxFontSizeMultiplier=1.3
+  maxFontSizeMultiplier=1.1
 }: labelPopsType) => {
   // Default style
   const newStyle: any = {
