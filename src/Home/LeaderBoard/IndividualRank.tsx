@@ -175,7 +175,7 @@ export const EmptyImageView = ({ name = "", style = {} }: { name: string, style:
                 {
                     scale: style.width/31.45714285714286
                 }
-            ], color: 'white'}}/>
+            ], color: 'white', marginBottom: 5}}/>
             {/* <Image
                 style={style}
                 source={require("../../../res/assets/grey-person-icon.png")} /> */}

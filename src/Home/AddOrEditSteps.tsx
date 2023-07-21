@@ -185,7 +185,7 @@ export const AddOrEditSteps = () => {
 
                     <Calendar
                         style={styles.calendarStyle}
-                        enableSwipeMonths
+                
                         minDate={moment().subtract(3, "days").format("YYYY-MM-DD")}
                         maxDate={moment().format("YYYY-MM-DD")}
                         markedDates={{
@@ -195,6 +195,7 @@ export const AddOrEditSteps = () => {
                             setDate(day.dateString)
                         }}
                         hideArrows
+                        disableMonthChange
                     />
                 </View>
 
