@@ -1,5 +1,5 @@
 import React from "react"
-import { Dimensions, FlatList, Image, TextInput } from "react-native"
+import { Dimensions, FlatList, Image, Keyboard, TextInput } from "react-native"
 import { StyleSheet, View } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import { moderateScale } from "react-native-size-matters"
@@ -202,11 +202,13 @@ const Search = ({ searchQuery, setSearchQuery }: { searchQuery: string, setSearc
                     }}
                 />
                 <Ionicons
-                    disabled
                     name={"search"}
                     color="#000000"
                     style={{ position: 'absolute', right: 0, padding: moderateScale(10) }}
-                    size={moderateScale(30)} />
+                    size={moderateScale(30)} 
+                    onPress={() => {
+                        Keyboard.dismiss()
+                    }}/>
             </View>
         </KeyboardAvoidingView>
     )

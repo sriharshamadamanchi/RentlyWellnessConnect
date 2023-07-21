@@ -1,5 +1,5 @@
 import React from "react"
-import { FlatList, Image } from "react-native"
+import { FlatList, Image, Keyboard } from "react-native"
 import { StyleSheet, View } from "react-native"
 import { moderateScale } from "react-native-size-matters"
 import { useSelector } from "react-redux"
@@ -85,11 +85,13 @@ const Search = ({ searchQuery, setSearchQuery }: { searchQuery: string, setSearc
                     }}
                 />
                 <Ionicons
-                    disabled
                     name={"search"}
                     color="#000000"
                     style={{ position: 'absolute', right: 0, padding: moderateScale(10) }}
-                    size={moderateScale(30)} />
+                    size={moderateScale(30)} 
+                    onPress = {() => {
+                      Keyboard.dismiss()
+                    }}/>
             </View>
         </KeyboardAvoidingView>
     )
@@ -169,7 +171,7 @@ export const ChatList = () => {
                                         }
                                       </View>
                                       <View style={{ width: "55%", justifyContent: 'center' }}>
-                                        <Label bold m primary title={user.name?.charAt(0).toUpperCase() + user.name?.slice(1)} style={{ marginLeft: moderateScale(10) }} />
+                                        <Label ellipsizeMode="end" numberOfLines={1} bold m primary title={user.name?.charAt(0).toUpperCase() + user.name?.slice(1)} style={{ marginLeft: moderateScale(10) }} />
                                         {
                                           lastMessage?.m &&
                                           <Label bold m primary title={lastMessage?.m.length > 20 ? lastMessage?.m.slice(0, 20) + "..." : lastMessage?.m} style={{ marginLeft: moderateScale(10), color: 'grey' }} />

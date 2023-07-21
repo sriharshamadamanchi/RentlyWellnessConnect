@@ -199,7 +199,7 @@ export const TeamRank = () => {
                                     <View style={{ flex: 0.8, justifyContent: 'center', alignItems: 'center' }}>
                                         <Label underLine center bold primary title={`Team ${item.name}`} />
                                         <Label center bold s primary title={`Total steps: ${item.steps}`} />
-                                        <Label center bold s primary title={`Remaining steps: ${GOAL - item.steps}`} />
+                                        <Label center bold s primary title={`Remaining steps: ${(GOAL - item.steps) > 0 ? (GOAL - item.steps) : 0 }`} />
                                     </View>
                                     <LinearGradient colors={["#200122", '#6f0000']} style={styles.rankNumberViewInCard}>
                                         <Label center bold white title={`${index + 1}`} style={{ paddingLeft: moderateScale(10), paddingBottom: moderateScale(10) }} />
