@@ -5,6 +5,7 @@ import { theme } from '../../theme';
 
 interface labelPopsType {
   title: string,
+  onLayout?: any,
   center?: boolean,
   right?: boolean,
   white?: boolean,
@@ -36,6 +37,7 @@ interface labelPopsType {
   maxFontSizeMultiplier?: number
 }
 export const Label = ({
+  onLayout,
   title,
   center,
   right,
@@ -104,7 +106,7 @@ export const Label = ({
   xl5 && (newStyle.fontSize = theme.fontSizes.xl5);
 
   return (
-    <Text testID = {testID} accessibilityLabel = {accessibilityLabel} maxFontSizeMultiplier={maxFontSizeMultiplier} numberOfLines = {(ellipsizeMode === undefined) ? undefined : numberOfLines} style = {{ ...newStyle, ...style, textDecorationLine: underLine ? "underline" : "none" }} >
+    <Text onLayout={onLayout} testID = {testID} accessibilityLabel = {accessibilityLabel} maxFontSizeMultiplier={maxFontSizeMultiplier} numberOfLines = {(ellipsizeMode === undefined) ? undefined : numberOfLines} style = {{ ...newStyle, ...style, textDecorationLine: underLine ? "underline" : "none" }} >
       {title}
     </Text>
   );

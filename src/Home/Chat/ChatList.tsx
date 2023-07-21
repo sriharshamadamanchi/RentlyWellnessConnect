@@ -1,4 +1,4 @@
-import React from "react"
+import React, {useState} from "react"
 import { FlatList, Image } from "react-native"
 import { StyleSheet, View } from "react-native"
 import { moderateScale } from "react-native-size-matters"
@@ -108,6 +108,8 @@ export const ChatList = () => {
     const chats = useSelector((store: any) => store.home.chats ?? {})
     const [searchQuery, setSearchQuery] = React.useState("")
 
+    const [textHeight, setTextHeight]: any = useState(Number.MAX_SAFE_INTEGER);
+
     React.useEffect(() => {
 
         const filter: any = {}
@@ -119,7 +121,6 @@ export const ChatList = () => {
         })
 
         setFilteredChats(filter)
-
     }, [searchQuery])
 
     return (
@@ -169,11 +170,17 @@ export const ChatList = () => {
                                             <EmptyImageView name={user.name} style={styles.cardImageStyle} />
                                         }
                                       </View>
-                                      <View style={{ width: "55%", justifyContent: 'center' }}>
-                                        <Label bold m primary title={user.name?.charAt(0).toUpperCase() + user.name?.slice(1)} style={{ marginLeft: moderateScale(10) }} />
+                                      <View style={[{ width: "55%", justifyContent: 'center' }]}>
+                                        <Label 
+                                          onLayout={(event: any) => {
+                                            if(event.nativeEvent.layout.height<textHeight)
+                                              setTextHeight(event.nativeEvent.layout.height);
+
+                                            
+                                          }} numberOfLines={1} bold m primary title={user.name?.charAt(0).toUpperCase() + user.name?.slice(1)} style={{ marginLeft: moderateScale(10), maxHeight: textHeight }} />
                                         {
                                           lastMessage?.m &&
-                                          <Label bold m primary title={lastMessage?.m.length > 20 ? lastMessage?.m.slice(0, 20) + "..." : lastMessage?.m} style={{ marginLeft: moderateScale(10), color: 'grey' }} />
+                                          <Label numberOfLines={1}  bold m primary title={lastMessage?.m.length > 20 ? lastMessage?.m.slice(0, 20) + "..." : lastMessage?.m} style={{ marginLeft: moderateScale(10), color: 'grey', maxHeight: textHeight }} />
                                         }
                                       </View>
                                       <View style={{ width: "20%" }}>
