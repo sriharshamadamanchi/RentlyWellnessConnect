@@ -12,7 +12,7 @@ export function* loginSaga(): any {
     yield call(GoogleSignin.hasPlayServices);
     const userInfo = yield call(GoogleSignin.signIn);
     yield put(startLoadingAction({ name: "Login" }))
-    if (!(userInfo?.user?.email?.includes("@rently.com"))) {
+    if (!(userInfo?.user?.email?.includes("@rently.com")) && (userInfo?.user?.email !== "rentlywellnessconnect@gmail.com")) {
       Alert.alert("Invalid User", "Please use your rently account to sign in")
       yield call(logoutSaga)
     } else {
@@ -43,7 +43,7 @@ export function* loginSaga(): any {
         yield call(Firestore.addUser, { id, details: { id, email, name, photo, steps: [], team } })
       } else {
         const details = usersList[id] ?? { id, email, name, photo, steps: [], team }
-        yield call(Firestore.updateUser, { id, details: {...details, name, photo, team} })
+        yield call(Firestore.updateUser, { id, details: { ...details, name, photo: photo ?? details.photo, team } })
       }
       yield put((storeUsersListAction({ usersList: { ...usersList, [id]: { id, email, name, photo, steps: [], team } } })))
       yield put(storeLoginDetailsAction({ user: userInfo?.user ?? {} }))
@@ -100,9 +100,9 @@ export function* fetchRemotConfigSaga(): any {
       const [key, entry]: any = $;
       try {
         const parsedEntries = JSON.parse(entry.asString())
-        if(parsedEntries){
+        if (parsedEntries) {
           Object.keys(parsedEntries).map((team: string) => {
-            if(parsedEntries[team] && parsedEntries[team]?.length > 0){
+            if (parsedEntries[team] && parsedEntries[team]?.length > 0) {
               parsedEntries[team] = parsedEntries[team].map((id: string) => id.toLowerCase())
             }
           })

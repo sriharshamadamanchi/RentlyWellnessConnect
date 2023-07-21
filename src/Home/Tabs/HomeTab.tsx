@@ -146,7 +146,7 @@ export const HomeTab = () => {
 
                         <View style={styles.editContainer}>
                             <View>
-                                <Label maxFontSizeMultiplier={1.1} bold xxxl center white title={`${totalSteps}`} style={{ width: moderateScale(150) }} />
+                                <Label ellipsizeMode="end" numberOfLines={1} maxFontSizeMultiplier={1.1} bold xxxl center white title={`${totalSteps}`} style={{ width: moderateScale(150) }} />
                                 <Label maxFontSizeMultiplier={1.1} bold m center white title={"Total steps"} />
                             </View>
                             <Icon

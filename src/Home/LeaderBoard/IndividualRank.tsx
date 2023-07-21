@@ -1,5 +1,5 @@
 import React from "react"
-import { Dimensions, FlatList, Image, TextInput } from "react-native"
+import { Dimensions, FlatList, Image, Keyboard, TextInput } from "react-native"
 import { StyleSheet, View } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import { moderateScale } from "react-native-size-matters"
@@ -198,15 +198,17 @@ const Search = ({ searchQuery, setSearchQuery }: { searchQuery: string, setSearc
                     autoCapitalize="none"
                     style={styles.textInputStyle}
                     onChangeText={(text: string) => {
-                        setSearchQuery(text)
+                        setSearchQuery(text.trim())
                     }}
                 />
                 <Ionicons
-                    disabled
                     name={"search"}
                     color="#000000"
                     style={{ position: 'absolute', right: 0, padding: moderateScale(10) }}
-                    size={moderateScale(30)} />
+                    size={moderateScale(30)} 
+                    onPress={() => {
+                        Keyboard.dismiss()
+                    }}/>
             </View>
         </KeyboardAvoidingView>
     )
@@ -263,7 +265,7 @@ export const IndividualRank = () => {
         <View style={styles.container}>
             <LinearGradient colors={["#43C6AC", '#F8FFAE']} style={styles.container}>
                 <View style={styles.container}>
-
+                    <Search searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
                     <FlatList
                         data={rankingList}
                         ListHeaderComponent={() => {
@@ -288,7 +290,6 @@ export const IndividualRank = () => {
                                     </View>
 
                                     <Divider style={{ backgroundColor: 'white', marginVertical: moderateScale(10), alignSelf: 'center', width: Dimensions.get("window").width * 0.8 }} />
-                                    <Search searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
                                 </>
                             )
                         }}

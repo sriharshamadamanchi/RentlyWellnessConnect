@@ -1,5 +1,5 @@
 import React, {useState} from "react"
-import { FlatList, Image } from "react-native"
+import { FlatList, Image, Keyboard } from "react-native"
 import { StyleSheet, View } from "react-native"
 import { moderateScale } from "react-native-size-matters"
 import { useSelector } from "react-redux"
@@ -81,16 +81,17 @@ const Search = ({ searchQuery, setSearchQuery }: { searchQuery: string, setSearc
                     autoCapitalize="none"
                     style={styles.textInputStyle}
                     onChangeText={(text: string) => {
-                        setSearchQuery(text)
+                      setSearchQuery(text.trim())
                     }}
-                    autoFocus
                 />
                 <Ionicons
-                    disabled
                     name={"search"}
                     color="#000000"
                     style={{ position: 'absolute', right: 0, padding: moderateScale(10) }}
-                    size={moderateScale(30)} />
+                    size={moderateScale(30)} 
+                    onPress = {() => {
+                      Keyboard.dismiss()
+                    }}/>
             </View>
         </KeyboardAvoidingView>
     )
