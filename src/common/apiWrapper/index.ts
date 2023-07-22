@@ -3,12 +3,9 @@ import axios from 'axios';
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 
-export const fcmAxios = axios.create({
-    baseURL: "https://fcm.googleapis.com/fcm",
-    timeout: 10000,
-    headers: {
-        Authorization: "Bearer AAAAZot1Zls:APA91bEl3oudWWjNKq-Z-eGXJE2fFVF7KmC4gbi2dt_jcB2-JoBNEx9MzRcQz_iUTKfmygm6FHavv3cAGcdRkHB1DTEEAz9Eiq1ljY2C6oGniBd3CXT-ETZBYf5Tkzjc7dgRzH61weHw"
-    }
+export const mainAxios = axios.create({
+    baseURL: "",
+    timeout: 10000
 });
 
 const requestInterceptor = {
@@ -30,7 +27,7 @@ const requestInterceptor = {
     }
 };
 
-fcmAxios.interceptors.request.use(requestInterceptor.onSuccess, requestInterceptor.onError);
+mainAxios.interceptors.request.use(requestInterceptor.onSuccess, requestInterceptor.onError);
 
 const responseInterceptor = {
     onSuccess: (response: any): any => {
@@ -58,4 +55,4 @@ const responseInterceptor = {
     }
 };
 
-fcmAxios.interceptors.response.use(responseInterceptor.onSuccess, responseInterceptor.onError);
+mainAxios.interceptors.response.use(responseInterceptor.onSuccess, responseInterceptor.onError);
