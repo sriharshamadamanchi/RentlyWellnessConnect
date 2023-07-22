@@ -23,7 +23,7 @@ export function* loginSaga(action: { payload: { email: string, password: string 
     const rangerTeam = moon_landing_teams.Ranger ?? [];
 
     const usersList = yield call(Firestore.getUsersList)
-    const id = email.replace(".com", "#com")
+    const id = email.replace(/\./g, "#")
     const { displayName: name, photoURL: photo } = userInfo ?? {}
     let team = "-"
     lunaTeam.map((emailId: string) => {

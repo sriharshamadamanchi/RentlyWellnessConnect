@@ -170,31 +170,35 @@ export const Home = () => {
 
     React.useEffect(() => {
         const subscriber = firebase().collection("users").doc(id).onSnapshot((snapshot) => {
-            const data = snapshot.data() ?? {}
-            const keys = Object.keys(data) ?? []
-            const chats: any = {}
-            keys.map((key) => {
-                const userChats = store.getState().home.chats ?? {}
-                const persistedChats = userChats[key] ?? []
-                const readMessages: any = {}
-                persistedChats.map((m: any) => {
-                    if (m.read) {
-                        readMessages[m.t] = true
-                    }
+            try {
+                const data = snapshot.data() ?? {}
+                const keys = Object.keys(data) ?? []
+                const chats: any = {}
+                keys.map((key) => {
+                    const userChats = store.getState().home.chats ?? {}
+                    const persistedChats = userChats[key] ?? []
+                    const readMessages: any = {}
+                    persistedChats.map((m: any) => {
+                        if (m.read) {
+                            readMessages[m.t] = true
+                        }
+                    })
+                    const chat = data[key] ?? "[]"
+                    chats[key] = JSON.parse(chat)
+                    chats[key] = chats[key].map((message: any) => {
+                        if (readMessages[message.t]) {
+                            return { ...message, read: true }
+                        }
+                        return message;
+                    })
                 })
-                const chat = data[key] ?? "[]"
-                chats[key] = JSON.parse(chat)
-                chats[key] = chats[key].map((message: any) => {
-                    if (readMessages[message.t]) {
-                        return { ...message, read: true }
-                    }
-                    return message;
-                })
-            })
 
-            console.log("snapshot updated!!")
+                console.log("snapshot updated!!")
 
-            dispatch(storeChatsAction({ chats }))
+                dispatch(storeChatsAction({ chats }))
+            } catch (err) {
+                console.log("error in user chat", err)
+            }
         })
 
         return () => subscriber();
@@ -203,31 +207,35 @@ export const Home = () => {
 
     React.useEffect(() => {
         const subscriber = firebase().collection("users").doc("groupChats").onSnapshot((snapshot) => {
-            const data = snapshot.data() ?? {}
-            const keys = Object.keys(data) ?? []
-            const chats: any = {}
-            keys.map((key) => {
-                const userChats = store.getState().home.groupChats ?? {}
-                const persistedChats = userChats[key] ?? []
-                const readMessages: any = {}
-                persistedChats.map((m: any) => {
-                    if (m.read) {
-                        readMessages[m.t] = true
-                    }
+            try {
+                const data = snapshot.data() ?? {}
+                const keys = Object.keys(data) ?? []
+                const chats: any = {}
+                keys.map((key) => {
+                    const userChats = store.getState().home.groupChats ?? {}
+                    const persistedChats = userChats[key] ?? []
+                    const readMessages: any = {}
+                    persistedChats.map((m: any) => {
+                        if (m.read) {
+                            readMessages[m.t] = true
+                        }
+                    })
+                    const chat = data[key] ?? "[]"
+                    chats[key] = JSON.parse(chat)
+                    chats[key] = chats[key].map((message: any) => {
+                        if (readMessages[message.t]) {
+                            return { ...message, read: true }
+                        }
+                        return message;
+                    })
                 })
-                const chat = data[key] ?? "[]"
-                chats[key] = JSON.parse(chat)
-                chats[key] = chats[key].map((message: any) => {
-                    if (readMessages[message.t]) {
-                        return { ...message, read: true }
-                    }
-                    return message;
-                })
-            })
 
-            console.log("snapshot updated!!")
+                console.log("snapshot updated!!")
 
-            dispatch(storeGroupChatsAction({ chats }))
+                dispatch(storeGroupChatsAction({ chats }))
+            } catch (err) {
+                console.log("error in group chat", err)
+            }
         })
 
         return () => subscriber();
