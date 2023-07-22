@@ -67,7 +67,7 @@ export const Register = () => {
             <KeyboardAvoidingView style={styles.mainContainer}
                 keyboardVerticalOffset={Platform.select({ ios: moderateScale(100), android: 0 })}
                 behavior={Platform.OS === "ios" ? "padding" : "height"}>
-                <ScrollView keyboardShouldPersistTaps="handled" style={styles.mainContainer}>
+                <ScrollView automaticallyAdjustKeyboardInsets={Platform.OS === 'android'} keyboardShouldPersistTaps="handled" style={styles.mainContainer}>
                     <View style={styles.container}>
                         <InputField
                             maxLength={30}

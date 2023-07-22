@@ -1,5 +1,5 @@
 import React from "react"
-import { Alert, ScrollView, StyleSheet, View } from "react-native"
+import { Alert, Keyboard, ScrollView, StyleSheet, View } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import { AnchorButton, GradientButton, InputField, Label } from "../common/components"
 import { moderateScale } from "react-native-size-matters"
@@ -96,6 +96,7 @@ export const Login = () => {
                                 bold
                                 buttonStyle={styles.loginButtonStyle}
                                 onPress={() => {
+                                    Keyboard.dismiss()
                                     if (email.trim() === "") {
                                         Alert.alert("Alert", "Email can't be blank")
                                         return

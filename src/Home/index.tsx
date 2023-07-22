@@ -62,6 +62,7 @@ export const HomeTabbar = () => {
                 backBehavior={"initialRoute"}
                 screenOptions={{
                     headerShown: false,
+                    tabBarHideOnKeyboard: Platform.OS === "android",
                     tabBarActiveTintColor: "green",
                     tabBarStyle: {
                         height: Platform.OS === 'android' ? moderateScale(65) : moderateScale(90),

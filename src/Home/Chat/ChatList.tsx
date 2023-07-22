@@ -83,7 +83,7 @@ const Search = ({ searchQuery, setSearchQuery }: { searchQuery: string, setSearc
           maxFontSizeMultiplier={1.2}
           style={styles.textInputStyle}
           onChangeText={(text: string) => {
-            setSearchQuery(text.trim())
+            setSearchQuery(text)
           }}
         />
         <Ionicons

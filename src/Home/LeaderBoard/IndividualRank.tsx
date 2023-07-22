@@ -264,7 +264,7 @@ export const IndividualRank = () => {
             <LinearGradient colors={["#43C6AC", '#F8FFAE']} style={styles.container}>
                 <View style={styles.container}>
                     <Search searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-                    {searchQuery.trim() && filteredRanks.length === 0 &&
+                    {searchQuery && filteredRanks.length === 0 &&
                         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                             <Label xl bold white title="No Users Found!!" />
                         </View>
@@ -272,7 +272,7 @@ export const IndividualRank = () => {
                     <FlatList
                         data={rankingList}
                         ListHeaderComponent={() => {
-                            if (searchQuery.trim()) {
+                            if (searchQuery) {
                                 return null
                             }
                             return (
