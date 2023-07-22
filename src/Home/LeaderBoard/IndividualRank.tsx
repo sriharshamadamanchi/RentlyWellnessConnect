@@ -196,14 +196,14 @@ const Search = ({ searchQuery, setSearchQuery }: { searchQuery: string, setSearc
                     maxFontSizeMultiplier={1.2}
                     style={styles.textInputStyle}
                     onChangeText={(text: string) => {
-                        setSearchQuery(text.trim())
+                        setSearchQuery(text)
                     }}
                 />
                 <Ionicons
                     name={"search"}
                     color="#000000"
                     style={{ position: 'absolute', right: 0, padding: moderateScale(10) }}
-                    size={moderateScale(30)}
+                    size={moderateScale(20)}
                     onPress={() => {
                         Keyboard.dismiss()
                     }} />
@@ -264,9 +264,17 @@ export const IndividualRank = () => {
             <LinearGradient colors={["#43C6AC", '#F8FFAE']} style={styles.container}>
                 <View style={styles.container}>
                     <Search searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+                    {searchQuery.trim() && filteredRanks.length === 0 &&
+                        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                            <Label xl bold white title="No Users Found!!" />
+                        </View>
+                    }
                     <FlatList
                         data={rankingList}
                         ListHeaderComponent={() => {
+                            if (searchQuery.trim()) {
+                                return null
+                            }
                             return (
                                 <>
                                     <View style={styles.rankSuperContainer}>

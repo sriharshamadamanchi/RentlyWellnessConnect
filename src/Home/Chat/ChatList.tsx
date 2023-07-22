@@ -90,7 +90,7 @@ const Search = ({ searchQuery, setSearchQuery }: { searchQuery: string, setSearc
           name={"search"}
           color="#000000"
           style={{ position: 'absolute', right: 0, padding: moderateScale(10) }}
-          size={moderateScale(30)}
+          size={moderateScale(20)}
           onPress={() => {
             Keyboard.dismiss()
           }} />
