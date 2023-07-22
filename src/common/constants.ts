@@ -34,3 +34,6 @@ export const colors: any = {
     "Y": "#9BCE24",
     "Z": "#8C0A1B"
 }
+
+export const eyeIcon = "eye"
+export const eyeWithLineIcon = "eye-with-line"

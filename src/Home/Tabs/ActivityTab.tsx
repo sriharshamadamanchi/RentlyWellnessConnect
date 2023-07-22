@@ -16,7 +16,8 @@ const styles = StyleSheet.create({
     buttonGradientView: {
         alignItems: 'center',
         justifyContent: 'flex-end',
-        margin: moderateScale(30)
+        marginTop: moderateScale(10),
+        marginBottom: moderateScale(30)
     },
     buttonGradientStyle: {
         width: moderateScale(200),

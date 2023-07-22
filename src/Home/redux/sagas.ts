@@ -167,6 +167,8 @@ export function* logoutSaga(action: { payload: { deleteAccount: boolean } }): an
     yield put(clearLoginDetailsAction())
     yield put(successLoadingAction({ name: "Logout", msg: "" }))
   } catch (error: any) {
+    console.log("error in logoutSaga", error)
+    yield put(clearLoginDetailsAction())
     yield put(failedLoadingAction({ name: "Logout", msg: "" }))
   }
 }

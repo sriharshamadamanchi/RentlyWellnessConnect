@@ -1,6 +1,6 @@
 import moment from "moment"
 import React, { useState } from "react"
-import { Alert, Dimensions, ScrollView, StyleSheet, TextInput, View } from "react-native"
+import { Alert, Dimensions, KeyboardAvoidingView, ScrollView, StyleSheet, TextInput, View } from "react-native"
 import { Calendar } from "react-native-calendars"
 import LinearGradient from "react-native-linear-gradient"
 import { moderateScale } from "react-native-size-matters"
@@ -9,6 +9,7 @@ import { CurvedButton, Label } from "../common/components"
 import { LoadingIndicator } from "../common/components/LoadingIndicator/LoadingIndicator"
 import { Firestore } from "./Firestore"
 import { DropDown } from "../common/components/DropDown/DropDown"
+import { Platform } from "react-native"
 
 const styles = StyleSheet.create({
     container: {
@@ -133,94 +134,98 @@ export const AddOrEditSteps = () => {
     return (
         <LinearGradient colors={["#43C6AC", '#F8FFAE']} style={styles.container}>
             <LoadingIndicator loading={loading} />
-            <ScrollView style={styles.container}>
-                <View style={styles.container}>
+            <KeyboardAvoidingView style={styles.container}
+                keyboardVerticalOffset={Platform.select({ ios: moderateScale(100), android: 0 })}
+                behavior={Platform.OS === "ios" ? "padding" : "height"}>
+                <ScrollView keyboardShouldPersistTaps="handled" style={styles.container}>
+                    <View style={styles.container}>
 
-                    <View style={styles.inputContainer}>
-                        <View style={{ width: moderateScale(225) }}>
-                            <Label center bold title={`STEPS COUNT ON ${moment(date, "YYYY-MM-DD").format("DD MMM, ddd").toUpperCase()}`} white />
-                            <Label center bold title={`${stepDetails?.count ?? "0"}`} style={{ fontSize: moderateScale(30), alignSelf: 'center', color: 'white' }} />
+                        <View style={styles.inputContainer}>
+                            <View style={{ width: moderateScale(225) }}>
+                                <Label center bold title={`STEPS COUNT ON ${moment(date, "YYYY-MM-DD").format("DD MMM, ddd").toUpperCase()}`} white />
+                                <Label center bold title={`${stepDetails?.count ?? "0"}`} style={{ fontSize: moderateScale(30), alignSelf: 'center', color: 'white' }} />
+                            </View>
+
+                            <DropDown
+                                title="TYPE"
+                                data={data}
+                                value={pedoType}
+                                onChange={({ value }) => {
+                                    setPedoType(value)
+                                }}
+                            />
+                            <InputField
+                                maxLength={10}
+                                style={{ width: moderateScale(225) }}
+                                title={"ENTER STEPS"}
+                                value={count}
+                                setText={(text: string) => {
+                                    setCount(text)
+                                    if (/^\d+$/.test(text)) {
+                                        setKm(`${Math.round((parseInt(text, 10) * 100) / 1313) / 100}`)
+                                    }
+                                    if (text === "") {
+                                        setKm("")
+                                    }
+                                }}
+                                keyboardType="numeric" />
+                            <Label bold primary center title="(or)" style={{ marginHorizontal: moderateScale(5) }} />
+                            <InputField
+                                maxLength={10}
+                                style={{ width: moderateScale(225) }}
+                                title={"ENTER KILOMETERS"}
+                                value={km}
+                                setText={(text: string) => {
+                                    setKm(text)
+                                    if (/^\d+(\.\d+)?$/.test(text)) {
+                                        setCount(`${parseInt(`${1313 * parseFloat(text)}`, 10)}`)
+                                    }
+                                    if (text === "") {
+                                        setCount("")
+                                    }
+                                }}
+                                keyboardType="numeric" />
+                            <InputField
+                                title={"DATE"}
+                                value={moment(date, "YYYY-MM-DD").format("DD MMM, ddd")}
+                                setText={setDate}
+                                editable={false}
+                                style={{ opacity: 0.75 }} />
                         </View>
 
-                        <DropDown
-                            title="TYPE"
-                            data={data}
-                            value={pedoType}
-                            onChange={({ value }) => {
-                                setPedoType(value)
+                        <Calendar
+                            style={styles.calendarStyle}
+                            minDate={moment().subtract(3, "days").format("YYYY-MM-DD")}
+                            maxDate={moment().format("YYYY-MM-DD")}
+                            markedDates={{
+                                [date]: { selected: true, disableTouchEvent: true, selectedColor: 'red' }
                             }}
+                            onDayPress={day => {
+                                setDate(day.dateString)
+                            }}
+                            hideArrows
+                            disableMonthChange
                         />
-                        <InputField
-                            maxLength={10}
-                            style={{ width: moderateScale(225) }}
-                            title={"ENTER STEPS"}
-                            value={count}
-                            setText={(text: string) => {
-                                setCount(text)
-                                if (/^\d+$/.test(text)) {
-                                    setKm(`${Math.round((parseInt(text, 10) * 100) / 1313) / 100}`)
-                                }
-                                if (text === "") {
-                                    setKm("")
-                                }
-                            }}
-                            keyboardType="numeric" />
-                        <Label bold primary center title="(or)" style={{ marginHorizontal: moderateScale(5) }} />
-                        <InputField
-                            maxLength={10}
-                            style={{ width: moderateScale(225) }}
-                            title={"ENTER KILOMETERS"}
-                            value={km}
-                            setText={(text: string) => {
-                                setKm(text)
-                                if (/^\d+(\.\d+)?$/.test(text)) {
-                                    setCount(`${parseInt(`${1313 * parseFloat(text)}`, 10)}`)
-                                }
-                                if (text === "") {
-                                    setCount("")
-                                }
-                            }}
-                            keyboardType="numeric" />
-                        <InputField
-                            title={"DATE"}
-                            value={moment(date, "YYYY-MM-DD").format("DD MMM, ddd")}
-                            setText={setDate}
-                            editable={false}
-                            style={{ opacity: 0.75 }} />
                     </View>
 
-                    <Calendar
-                        style={styles.calendarStyle}
-                        minDate={moment().subtract(3, "days").format("YYYY-MM-DD")}
-                        maxDate={moment().format("YYYY-MM-DD")}
-                        markedDates={{
-                            [date]: { selected: true, disableTouchEvent: true, selectedColor: 'red' }
-                        }}
-                        onDayPress={day => {
-                            setDate(day.dateString)
-                        }}
-                        hideArrows
-                        disableMonthChange
-                    />
-                </View>
+                    <View style={styles.saveButtonGradientView}>
+                        <LinearGradient
+                            colors={['#bdc3c7', '#2c3e50']}
+                            style={styles.saveButtonGradientStyle}>
+                            <CurvedButton
+                                disableButton={loading || !(/^\d+$/.test(count))}
+                                title="SAVE"
+                                bold
+                                buttonStyle={{ flex: 1, width: "100%", alignSelf: "center", backgroundColor: "transparent" }}
+                                onPress={() => {
+                                    save()
+                                }}
+                            />
+                        </LinearGradient>
+                    </View>
 
-                <View style={styles.saveButtonGradientView}>
-                    <LinearGradient
-                        colors={['#bdc3c7', '#2c3e50']}
-                        style={styles.saveButtonGradientStyle}>
-                        <CurvedButton
-                            disableButton={loading || !(/^\d+$/.test(count))}
-                            title="SAVE"
-                            bold
-                            buttonStyle={{ flex: 1, width: "100%", alignSelf: "center", backgroundColor: "transparent" }}
-                            onPress={() => {
-                                save()
-                            }}
-                        />
-                    </LinearGradient>
-                </View>
-
-            </ScrollView>
+                </ScrollView>
+            </KeyboardAvoidingView>
         </LinearGradient>
     )
 }

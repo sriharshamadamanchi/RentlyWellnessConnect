@@ -1,5 +1,5 @@
 import React from "react"
-import { Alert, Image, StatusBar, StyleSheet, View } from "react-native"
+import { Alert, Image, ScrollView, StatusBar, StyleSheet, View } from "react-native"
 import { CurvedButton, Label, PrimaryView } from "../../common/components"
 import LinearGradient from "react-native-linear-gradient"
 import { moderateScale } from "react-native-size-matters"
@@ -19,12 +19,12 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'flex-end',
-        marginBottom: moderateScale(30)
+        marginVertical: moderateScale(30)
     },
     logoutButtonGradientStyle: {
         width: moderateScale(200),
         height: moderateScale(50),
-        marginVertical: moderateScale(10),
+        marginVertical: moderateScale(15),
         borderRadius: moderateScale(10)
     },
     topCircleStyle: {
@@ -82,7 +82,7 @@ export const AccountTab = () => {
     return (
         <PrimaryView style={{ flex: 1, backgroundColor: '#9FE3AD' }}>
             <StatusBar backgroundColor={"#43C6AC"} barStyle="dark-content" />
-            <View style={styles.container}>
+            <ScrollView style={styles.container}>
                 <LoadingIndicator loading={loading} />
                 <LinearGradient colors={["#43C6AC", '#F8FFAE']} style={styles.container}>
                     <LinearGradient colors={["#43C6AC", '#F8FFAE']} style={styles.topCircleStyle}>
@@ -154,7 +154,7 @@ export const AccountTab = () => {
                     </View>
                     <Label m bold white center title={`Version ${version}`} style={{ marginBottom: moderateScale(10) }} />
                 </LinearGradient>
-            </View>
+            </ScrollView>
         </PrimaryView>
     )
 }
