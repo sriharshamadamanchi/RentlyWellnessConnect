@@ -1,78 +1,172 @@
 import { call, put, takeLatest } from "redux-saga/effects";
 import { getActionType } from "../../common/store/typeSafe";
-import { clearLoginDetailsAction, fetchRemoteConfigAction, loginAction, logoutAction, sendMessageAction, storeLoginDetailsAction, storeRemoteConfigAction, storeUsersListAction } from "./actions";
+import { clearLoginDetailsAction, fetchRemoteConfigAction, forgotPasswordAction, loginAction, logoutAction, registerAction, sendMessageAction, storeLoginDetailsAction, storeRemoteConfigAction, storeUsersListAction } from "./actions";
 import { failedLoadingAction, startLoadingAction, successLoadingAction } from "../../common/loaderRedux/actions";
-import { GoogleSignin, statusCodes } from "@react-native-google-signin/google-signin";
-import { Alert } from "react-native";
 import { Firestore } from "../Firestore";
 import remoteConfig from '@react-native-firebase/remote-config';
+import auth from '@react-native-firebase/auth';
+import { Alert } from "react-native";
 
-export function* loginSaga(): any {
+export function* loginSaga(action: { payload: { email: string, password: string } }): any {
+  const { email, password } = action.payload
   try {
-    yield call(GoogleSignin.hasPlayServices);
-    const userInfo = yield call(GoogleSignin.signIn);
     yield put(startLoadingAction({ name: "Login" }))
-    if (!(userInfo?.user?.email?.includes("@rently.com")) && (userInfo?.user?.email !== "rentlywellnessconnect@gmail.com")) {
-      Alert.alert("Invalid User", "Please use your rently account to sign in")
-      yield call(logoutSaga)
-    } else {
-      const { moon_landing_teams = {} } = yield call(fetchRemotConfigSaga)
-      const lunaTeam = moon_landing_teams.Luna ?? [];
-      const apolloTeam = moon_landing_teams.Apollo ?? [];
-      const rangerTeam = moon_landing_teams.Ranger ?? [];
-
-      const usersList = yield call(Firestore.getUsersList)
-      const { id, email, name, photo } = userInfo?.user ?? {}
-      let team = "-"
-      lunaTeam.map((emailId: string) => {
-        if (emailId === email) {
-          team = "Luna"
-        }
-      })
-      apolloTeam.map((emailId: string) => {
-        if (emailId === email) {
-          team = "Apollo"
-        }
-      })
-      rangerTeam.map((emailId: string) => {
-        if (emailId === email) {
-          team = "Ranger"
-        }
-      })
-      if (Object.keys(usersList).length < 1) {
-        yield call(Firestore.addUser, { id, details: { id, email, name, photo, steps: [], team } })
-      } else {
-        const details = usersList[id] ?? { id, email, name, photo, steps: [], team }
-        yield call(Firestore.updateUser, { id, details: { ...details, name, photo: photo ?? details.photo, team } })
-      }
-      yield put((storeUsersListAction({ usersList: { ...usersList, [id]: { id, email, name, photo, steps: [], team } } })))
-      yield put(storeLoginDetailsAction({ user: userInfo?.user ?? {} }))
+    yield call([auth(), auth().signInWithEmailAndPassword], email, password)
+    const userInfo = auth().currentUser
+    console.log("userInfo", userInfo)
+    if (!userInfo?.emailVerified) {
+      throw { message: "Email is not verified" }
     }
+    const { moon_landing_teams = {} } = yield call(fetchRemotConfigSaga)
+    const lunaTeam = moon_landing_teams.Luna ?? [];
+    const apolloTeam = moon_landing_teams.Apollo ?? [];
+    const rangerTeam = moon_landing_teams.Ranger ?? [];
+
+    const usersList = yield call(Firestore.getUsersList)
+    const id = email.replace(".com", "#com")
+    const { displayName: name, photoURL: photo } = userInfo ?? {}
+    let team = "-"
+    lunaTeam.map((emailId: string) => {
+      if (emailId === email) {
+        team = "Luna"
+      }
+    })
+    apolloTeam.map((emailId: string) => {
+      if (emailId === email) {
+        team = "Apollo"
+      }
+    })
+    rangerTeam.map((emailId: string) => {
+      if (emailId === email) {
+        team = "Ranger"
+      }
+    })
+    if (Object.keys(usersList).length < 1) {
+      yield call(Firestore.addUser, { id, details: { id, email, name, photo, steps: [], team } })
+    } else {
+      const details = usersList[id] ?? { id, email, name, photo, steps: [], team }
+      yield call(Firestore.updateUser, { id, details: { ...details, name, photo: photo ?? details.photo, team } })
+    }
+    yield put((storeUsersListAction({ usersList: { ...usersList, [id]: { id, email, name, photo, steps: [], team } } })))
+    yield put(storeLoginDetailsAction({ user: { id, email, name: userInfo?.displayName, photo: userInfo?.photoURL } }))
     yield put(successLoadingAction({ name: "Login", msg: "" }))
   } catch (error: any) {
-    console.log("error in loginSaga", error)
-    let msg = ""
-    if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-      msg = "Sign in cancelled"
-    } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-      msg = "Play services not available"
+    console.log("error in loginSaga", error.message)
+    if (error.code === "auth/user-not-found") {
+      Alert.alert("User not found", "There is no user record corresponding to this identifier. The user may have been deleted.")
+    } else if (error.code === "auth/wrong-password") {
+      Alert.alert("Invalid password", "The password is invalid or the user does not have a password.")
+    } else if (error.code === "auth/invalid-email") {
+      Alert.alert("Alert", "Invalid email")
+    } else if (error.message === "Email is not verified") {
+      Alert.alert('Email is not verified', 'Do you want to get verification link ?', [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+        {
+          text: 'Yes', onPress: async () => {
+            try {
+              await auth().currentUser?.sendEmailVerification()
+              Alert.alert("Success", "A verification link has been sent to your email acount. Please verify your email to continue")
+            } catch (err: any) {
+              if (err.code === "auth/too-many-requests") {
+                Alert.alert("Too many requests", "We have blocked all requests from this device due to unusual activity. Try again later.")
+              }
+            }
+          }
+        },
+      ]);
     }
-    if (msg != "") {
-      Alert.alert("Alert", msg)
-    }
-    yield put(failedLoadingAction({ name: "Login", msg }))
+    yield put(failedLoadingAction({ name: "Login", msg: "" }))
   }
 }
 
-export function* logoutSaga(): any {
+const updateProfile = ({ displayName }: { displayName: string }) => new Promise(async (resolve, reject) => {
+  await auth().currentUser?.updateProfile({ displayName })
+  await auth().currentUser?.sendEmailVerification()
+  resolve(true)
+})
+
+export function* registerSaga(action: { payload: { name: string, email: string, password: string } }): any {
+  const { name, email, password } = action.payload
+  try {
+    yield put(startLoadingAction({ name: "Register" }))
+    yield call(checkAppAccessSaga, { email })
+    yield call([auth(), auth().createUserWithEmailAndPassword], email, password)
+    yield call(updateProfile, { displayName: name })
+    yield put(successLoadingAction({ name: "Register", msg: "" }))
+    Alert.alert("Verification Pending", "A verification link has been sent to your email acount. Please verify your email to continue")
+  } catch (error: any) {
+    console.log("error in registerSaga", error.message)
+    if (error.code === "auth/email-already-in-use") {
+      Alert.alert("Alert", "Email is already in use")
+    } else if (error.message) {
+      Alert.alert("Alert", error.message)
+    }
+    yield put(failedLoadingAction({ name: "Register", msg: "" }))
+  }
+}
+
+export function* checkAppAccessSaga(payload: { email: string }): any {
+  const { email } = payload
+  const { moon_landing_teams = {} } = yield call(fetchRemotConfigSaga)
+  const lunaTeam = moon_landing_teams.Luna ?? [];
+  const apolloTeam = moon_landing_teams.Apollo ?? [];
+  const rangerTeam = moon_landing_teams.Ranger ?? [];
+  const users = [...lunaTeam, ...apolloTeam, ...rangerTeam];
+  if (!(users.includes(email))) {
+    throw { message: "You dont have access to this app. Please contact your admin for support." }
+  }
+}
+
+export function* forgotPasswordSaga(action: { payload: { email: string } }): any {
+  const { email } = action.payload
+  try {
+    yield put(startLoadingAction({ name: "ForgotPassword" }))
+    yield call([auth(), auth().sendPasswordResetEmail], email)
+    Alert.alert("Success", "A reset link has been sent to your email acount.")
+    yield put(successLoadingAction({ name: "ForgotPassword", msg: "" }))
+  } catch (error: any) {
+    console.log("error in forgotPasswordSaga", error.message)
+    if (error.code === "auth/user-not-found") {
+      Alert.alert("User not found", "There is no user record corresponding to this identifier. The user may have been deleted.")
+    } else if (error.code === "auth/too-many-requests") {
+      Alert.alert("Too many requests", "We have blocked all requests from this device due to unusual activity. Try again later.")
+    } else if (error.message) {
+      Alert.alert("Alert", error.message)
+    }
+    yield put(failedLoadingAction({ name: "ForgotPassword", msg: "" }))
+  }
+}
+
+const deleteUserAccount = () => new Promise(async (resolve, reject) => {
+  try {
+    await auth().currentUser?.delete()
+    resolve(true)
+  } catch (err: any) {
+    if (err.code === "auth/requires-recent-login") {
+      Alert.alert("Requires recent login", "This operation is sensitive and requires recent authentication. Log in again before retrying this request.")
+    }
+    reject(err)
+  }
+})
+
+
+export function* logoutSaga(action: { payload: { deleteAccount: boolean } }): any {
+  const { deleteAccount = false } = action?.payload ?? {}
   try {
     yield put(startLoadingAction({ name: "Logout" }))
-    yield call(GoogleSignin.revokeAccess);
-    yield call(GoogleSignin.signOut);
+    if (deleteAccount) {
+      yield call(deleteUserAccount)
+      Alert.alert("Success", "Your account has been deleted successfully!!")
+    } else {
+      yield call([auth(), auth().signOut])
+    }
     yield put(clearLoginDetailsAction())
     yield put(successLoadingAction({ name: "Logout", msg: "" }))
   } catch (error: any) {
-    yield put(clearLoginDetailsAction())
     yield put(failedLoadingAction({ name: "Logout", msg: "" }))
   }
 }
@@ -121,6 +215,8 @@ export function* fetchRemotConfigSaga(): any {
 
 export const homeSagas: any = [
   takeLatest(getActionType(loginAction), loginSaga),
+  takeLatest(getActionType(registerAction), registerSaga),
+  takeLatest(getActionType(forgotPasswordAction), forgotPasswordSaga),
   takeLatest(getActionType(logoutAction), logoutSaga),
   takeLatest(getActionType(sendMessageAction), sendMessageSaga),
   takeLatest(getActionType(fetchRemoteConfigAction), fetchRemotConfigSaga),

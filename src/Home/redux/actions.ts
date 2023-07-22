@@ -1,8 +1,12 @@
 import { action } from "../../common/store/typeSafe";
 
-export const loginAction = (): any => action('src/Home/redux/loginAction');
+export const loginAction = (payload: any): any => action('src/Home/redux/loginAction', payload);
 
-export const logoutAction = (): any => action('src/Home/redux/logoutAction');
+export const registerAction = (payload: any): any => action('src/Home/redux/registerAction', payload);
+
+export const forgotPasswordAction = (payload: any): any => action('src/Home/redux/forgotPasswordAction', payload);
+
+export const logoutAction = (payload?: any): any => action('src/Home/redux/logoutAction', payload);
 
 export const storeLoginDetailsAction = (payload: any): any => action('src/Home/redux/storeLoginDetailsAction', payload);
 

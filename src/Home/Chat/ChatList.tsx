@@ -11,6 +11,7 @@ import { KeyboardAvoidingView } from "react-native"
 import { Platform } from "react-native"
 import { TextInput } from "react-native"
 import Ionicons from 'react-native-vector-icons/Ionicons'
+import { theme } from "../../common/theme"
 
 const styles = StyleSheet.create({
   container: {
@@ -167,7 +168,7 @@ export const ChatList = () => {
                               style={styles.cardImageStyle}
                             />
                             :
-                            <EmptyImageView name={user.name} style={styles.cardImageStyle} />
+                            <EmptyImageView name={user.name} style={styles.cardImageStyle} labelStyle={{ fontSize: theme.fontSizes.xxl }} />
                         }
                       </View>
                       <View style={[{ width: "55%", justifyContent: 'center' }]}>

@@ -1,6 +1,6 @@
 import moment from "moment"
 import React, { useState } from "react"
-import { Dimensions, ScrollView, StyleSheet, TextInput, View } from "react-native"
+import { Alert, Dimensions, ScrollView, StyleSheet, TextInput, View } from "react-native"
 import { Calendar } from "react-native-calendars"
 import LinearGradient from "react-native-linear-gradient"
 import { moderateScale } from "react-native-size-matters"
@@ -97,7 +97,14 @@ export const AddOrEditSteps = () => {
     const [date, setDate] = useState(moment().format("YYYY-MM-DD"))
     const loading = useSelector((store: any) => store.loader.loading)
 
+    const stepDetails = user?.steps?.find((step: any) => step.date === moment(date, "YYYY-MM-DD").format("DD/MM/YYYY"))
+
     const save = async () => {
+        const totalSteps = parseInt((stepDetails?.count ?? 0), 10) + parseInt(count, 10)
+        if (totalSteps > 25000) {
+            Alert.alert("Alert", "Limit exceeded")
+            return
+        }
         const formattedDate = moment(date, "YYYY-MM-DD").format("DD/MM/YYYY")
         const steps = [...(user?.steps ?? [])]
         const index = steps.findIndex((step) => step.date === formattedDate)
@@ -123,8 +130,6 @@ export const AddOrEditSteps = () => {
         setDate(moment().format("YYYY-MM-DD"))
     }
 
-    const stepDetails = user?.steps?.find((step: any) => step.date === moment(date, "YYYY-MM-DD").format("DD/MM/YYYY"))
-
     return (
         <LinearGradient colors={["#43C6AC", '#F8FFAE']} style={styles.container}>
             <LoadingIndicator loading={loading} />
@@ -145,37 +150,37 @@ export const AddOrEditSteps = () => {
                                 setPedoType(value)
                             }}
                         />
-                        <View style={{ flexDirection: 'row' }}>
-                            <InputField
-                                style={{ width: moderateScale(90) }}
-                                title={"ENTER STEPS"}
-                                value={count}
-                                setText={(text: string) => {
-                                    setCount(text)
-                                    if (/^\d+$/.test(text)) {
-                                        setKm(`${Math.round((parseInt(text, 10) * 100) / 1313) / 100}`)
-                                    }
-                                    if (text === "") {
-                                        setKm("")
-                                    }
-                                }}
-                                keyboardType="numeric" />
-                            <Label bold white center title="(or)" style={{ marginHorizontal: moderateScale(5) }} />
-                            <InputField
-                                style={{ width: moderateScale(90) }}
-                                title={"ENTER KMS"}
-                                value={km}
-                                setText={(text: string) => {
-                                    setKm(text)
-                                    if (/^\d+(\.\d+)?$/.test(text)) {
-                                        setCount(`${parseInt(`${1313 * parseFloat(text)}`, 10)}`)
-                                    }
-                                    if (text === "") {
-                                        setCount("")
-                                    }
-                                }}
-                                keyboardType="numeric" />
-                        </View>
+                        <InputField
+                            maxLength={10}
+                            style={{ width: moderateScale(225) }}
+                            title={"ENTER STEPS"}
+                            value={count}
+                            setText={(text: string) => {
+                                setCount(text)
+                                if (/^\d+$/.test(text)) {
+                                    setKm(`${Math.round((parseInt(text, 10) * 100) / 1313) / 100}`)
+                                }
+                                if (text === "") {
+                                    setKm("")
+                                }
+                            }}
+                            keyboardType="numeric" />
+                        <Label bold primary center title="(or)" style={{ marginHorizontal: moderateScale(5) }} />
+                        <InputField
+                            maxLength={10}
+                            style={{ width: moderateScale(225) }}
+                            title={"ENTER KILOMETERS"}
+                            value={km}
+                            setText={(text: string) => {
+                                setKm(text)
+                                if (/^\d+(\.\d+)?$/.test(text)) {
+                                    setCount(`${parseInt(`${1313 * parseFloat(text)}`, 10)}`)
+                                }
+                                if (text === "") {
+                                    setCount("")
+                                }
+                            }}
+                            keyboardType="numeric" />
                         <InputField
                             title={"DATE"}
                             value={moment(date, "YYYY-MM-DD").format("DD MMM, ddd")}
@@ -186,6 +191,7 @@ export const AddOrEditSteps = () => {
 
                     <Calendar
                         style={styles.calendarStyle}
+                        minDate={moment().subtract(3, "days").format("YYYY-MM-DD")}
                         maxDate={moment().format("YYYY-MM-DD")}
                         markedDates={{
                             [date]: { selected: true, disableTouchEvent: true, selectedColor: 'red' }

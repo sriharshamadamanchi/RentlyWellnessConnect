@@ -1,5 +1,5 @@
 import React from "react"
-import { Image, StatusBar, StyleSheet, View } from "react-native"
+import { Alert, Image, StatusBar, StyleSheet, View } from "react-native"
 import { CurvedButton, Label, PrimaryView } from "../../common/components"
 import LinearGradient from "react-native-linear-gradient"
 import { moderateScale } from "react-native-size-matters"
@@ -8,6 +8,8 @@ import { logoutAction } from "../redux/actions"
 import { LoadingIndicator } from "../../common/components/LoadingIndicator/LoadingIndicator"
 import { loaderSelector } from "../../common/loaderRedux/selectors"
 import { EmptyImageView } from "../LeaderBoard/IndividualRank"
+import { theme } from "../../common/theme"
+import { version } from "../../../package.json"
 
 const styles = StyleSheet.create({
     container: {
@@ -17,11 +19,12 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'flex-end',
-        marginBottom: moderateScale(50)
+        marginBottom: moderateScale(30)
     },
     logoutButtonGradientStyle: {
         width: moderateScale(200),
         height: moderateScale(50),
+        marginVertical: moderateScale(10),
         borderRadius: moderateScale(10)
     },
     topCircleStyle: {
@@ -92,7 +95,7 @@ export const AccountTab = () => {
                                     style={styles.imageStyle}
                                 />
                                 :
-                                <EmptyImageView name={user.name} style={styles.imageStyle} />
+                                <EmptyImageView name={user.name} style={styles.imageStyle} labelStyle={{ fontSize: theme.fontSizes.xl5 }} />
                         }
                     </View>
                     <LinearGradient colors={["#43C6AC", '#F8FFAE']} style={styles.bottomCircleStyle}>
@@ -106,15 +109,50 @@ export const AccountTab = () => {
                             colors={['#bdc3c7', '#2c3e50']}
                             style={styles.logoutButtonGradientStyle}>
                             <CurvedButton
+                                title="DELETE ACCOUNT"
+                                bold
+                                buttonStyle={{ flex: 1, width: "100%", alignSelf: "center", backgroundColor: "transparent" }}
+                                onPress={() => {
+                                    Alert.alert('Delete Account', 'Are you sure you want to delete account ?', [
+                                        {
+                                            text: 'Cancel',
+                                            onPress: () => console.log('Cancel Pressed'),
+                                            style: 'cancel',
+                                        },
+                                        {
+                                            text: 'Yes', onPress: async () => {
+                                                dispatch(logoutAction({ deleteAccount: true }))
+                                            }
+                                        },
+                                    ]);
+                                }}
+                            />
+                        </LinearGradient>
+                        <LinearGradient
+                            colors={['#bdc3c7', '#2c3e50']}
+                            style={styles.logoutButtonGradientStyle}>
+                            <CurvedButton
                                 title="LOGOUT"
                                 bold
                                 buttonStyle={{ flex: 1, width: "100%", alignSelf: "center", backgroundColor: "transparent" }}
                                 onPress={() => {
-                                    dispatch(logoutAction())
+                                    Alert.alert('Logout', 'Are you sure you want to logout ?', [
+                                        {
+                                            text: 'Cancel',
+                                            onPress: () => console.log('Cancel Pressed'),
+                                            style: 'cancel',
+                                        },
+                                        {
+                                            text: 'Yes', onPress: async () => {
+                                                dispatch(logoutAction())
+                                            }
+                                        },
+                                    ]);
                                 }}
                             />
                         </LinearGradient>
                     </View>
+                    <Label m bold white center title={`Version ${version}`} style={{ marginBottom: moderateScale(10) }} />
                 </LinearGradient>
             </View>
         </PrimaryView>

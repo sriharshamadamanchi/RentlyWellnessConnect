@@ -69,7 +69,7 @@ export const ActivityTab = () => {
 
                     {
                         keys.length === 0 &&
-                        <View style={{ flex: 3, justifyContent: 'center' }}>
+                        <View style={{ position: 'absolute', top: moderateScale(150), right: 0, bottom: 0, left: 0 }}>
                             <Label xxl center white bold title={"No Activity"} />
                         </View>
 

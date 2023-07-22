@@ -7,8 +7,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
 import { AccountTab } from "./Tabs/AccountTab";
 import { useDispatch, useSelector } from "react-redux";
-import { Login } from "./Login";
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { Welcome } from "../Authentication/Welcome";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { HomeTab } from "./Tabs/HomeTab";
 import { ActivityTab } from "./Tabs/ActivityTab";
@@ -27,6 +26,9 @@ import { Info } from "./Info";
 import firebase from "@react-native-firebase/firestore";
 import { GroupChatDetails } from "./Chat/GroupChatDetails";
 import { store } from "../common/store";
+import { Login } from "../Authentication/Login";
+import { Register } from "../Authentication/Register";
+import { ForgotPassword } from "../Authentication/ForgotPassword";
 
 const Tab = createBottomTabNavigator();
 
@@ -97,14 +99,14 @@ export const HomeTabbar = () => {
 const TopTab = createMaterialTopTabNavigator();
 
 export const HomeTopTabbar = () => {
-    const { givenName, id } = useSelector((store: any) => store.home.user)
+    const { name, id } = useSelector((store: any) => store.home.user)
     const usersList = useSelector((store: any) => store.home.usersList ?? {})
     const user = usersList[id]
 
     return (
         <PrimaryView style={{ backgroundColor: '#43C6AC' }}>
             <LinearGradient colors={["#43C6AC", '#F8FFAE']} style={styles.tabsStyle}>
-                <Label bold xxl center white title={`Welcome, ${givenName ?? ""}!`} style={styles.welcomeLabelStyle} />
+                <Label bold xxl center white title={`Welcome, ${name ?? ""}`} style={styles.welcomeLabelStyle} />
                 <View style={{ justifyContent: 'center', flexDirection: 'row' }}>
                     <Label bold xxl center white title={`Team ${user?.team ?? ""}`} style={styles.teamNameStyle} />
                 </View>
@@ -145,17 +147,13 @@ export const Home = () => {
     const { id } = useSelector((store: any) => store.home.user)
 
     const isLoggedIn = useSelector((store: any) => store.home.isLoggedIn)
-    let initialRouteName = "Login"
+    let initialRouteName = "Welcome"
 
     React.useEffect(() => {
         if (isLoggedIn) {
             initialRouteName = "HomeTabbar"
         }
     }, [isLoggedIn])
-
-    React.useEffect(() => {
-        GoogleSignin.configure()
-    }, [])
 
     React.useEffect(() => {
         if (isLoggedIn) {
@@ -319,13 +317,36 @@ export const Home = () => {
                         />
                     </>
                     :
-                    <Stack.Screen
-                        options={{
-                            headerShown: false
-                        }}
-                        name="Login"
-                        component={Login}
-                    />
+                    <>
+                        <Stack.Screen
+                            options={{
+                                headerShown: false
+                            }}
+                            name="Welcome"
+                            component={Welcome}
+                        />
+                        <Stack.Screen
+                            options={{
+                                title: "Login"
+                            }}
+                            name="Login"
+                            component={Login}
+                        />
+                        <Stack.Screen
+                            options={{
+                                title: "Register"
+                            }}
+                            name="Register"
+                            component={Register}
+                        />
+                        <Stack.Screen
+                            options={{
+                                title: "Forgot Password"
+                            }}
+                            name="ForgotPassword"
+                            component={ForgotPassword}
+                        />
+                    </>
             }
         </Stack.Navigator>
     )
