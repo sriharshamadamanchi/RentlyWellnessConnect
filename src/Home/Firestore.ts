@@ -38,22 +38,6 @@ const updateUser: any = async ({ id, details }: { id: string, details: detailsTy
     }
 }
 
-const storeFCMToken = async ({ id, token }: { id: string, token: string }) => {
-    if (!id || !token) {
-        return
-    }
-    const path = `${id}.token`
-
-    try {
-        await firestore().collection('users').doc('activity')
-            .update({
-                [path]: token
-            })
-    } catch (err) {
-        console.log("Error in storeFCMToken", err)
-    }
-}
-
 const getUsersList = async () => {
     try {
         const rawUsersList: any = (await firestore().collection('users').doc('activity').get()).data()
@@ -154,7 +138,6 @@ export const Firestore = {
     addUser,
     updateUser,
     getUsersList,
-    storeFCMToken,
     sendMessage,
     sendGroupMessage
 }

@@ -8,6 +8,8 @@ import { Card, Divider, Label } from "../../common/components"
 import { KeyboardAvoidingView } from "react-native"
 import { Platform } from "react-native"
 import Ionicons from 'react-native-vector-icons/Ionicons'
+import { colors } from "../../common/constants"
+import { theme } from "../../common/theme"
 
 const styles = StyleSheet.create({
     container: {
@@ -138,6 +140,8 @@ const RankView = ({ rank, userDetails }: { rank: string, userDetails: any }) => 
         imageStyle = styles.cardImageStyle
     }
 
+    const fontSize = rank === "1" ? theme.fontSizes.xxxl34 : theme.fontSizes.xxl
+
     return (
         <View style={styles.rankMainContainer}>
             <View style={{ ...styles.rankContainer, ...style }}>
@@ -148,18 +152,18 @@ const RankView = ({ rank, userDetails }: { rank: string, userDetails: any }) => 
                             style={rank === "1" ? styles.imageStyle : styles.smallImageStyle}
                         />
                         :
-                        <EmptyImageView name={userDetails.name} style={imageStyle} />
+                        <EmptyImageView name={userDetails.name} style={imageStyle} labelStyle={{ fontSize }} />
                 }
             </View>
             <View style={{ ...styles.rankView, ...style }}>
                 <Label s bold primary center title={rank} />
             </View>
-            <Label s bold white center title={userDetails.name} style={{ width: moderateScale(100), bottom: moderateScale(12) }} />
+            <Label s bold primary center title={userDetails.name} style={{ width: moderateScale(100), bottom: moderateScale(12) }} />
         </View>
     )
 }
 
-export const EmptyImageView = ({ name = "", style = {} }: { name: string, style: any }) => {
+export const EmptyImageView = ({ name = "", style = {}, labelStyle = {} }: { name: string, style: any, labelStyle: any }) => {
 
     const nameSplit = name.split(" ")
     let formattedName = ""
@@ -170,15 +174,8 @@ export const EmptyImageView = ({ name = "", style = {} }: { name: string, style:
         formattedName = formattedName + nameSplit[1].charAt(0).toUpperCase()
     }
     return (
-        <View style={[styles.emptyImageView, style]}>
-            <Label title={name.charAt(0)} bold style={{transform:[
-                {
-                    scale: style.width/31.45714285714286
-                }
-            ], color: 'white', marginBottom: 5}}/>
-            {/* <Image
-                style={style}
-                source={require("../../../res/assets/grey-person-icon.png")} /> */}
+        <View style={[styles.emptyImageView, style, { backgroundColor: colors[name.charAt(0).toUpperCase()] }]}>
+            <Label white center title={name.charAt(0).toUpperCase()} bold style={{ ...labelStyle, marginBottom: moderateScale(Platform.OS === "android" ? 3 : 0) }} />
         </View>
     )
 }
@@ -199,17 +196,17 @@ const Search = ({ searchQuery, setSearchQuery }: { searchQuery: string, setSearc
                     maxFontSizeMultiplier={1.2}
                     style={styles.textInputStyle}
                     onChangeText={(text: string) => {
-                        setSearchQuery(text.trim())
+                        setSearchQuery(text)
                     }}
                 />
                 <Ionicons
                     name={"search"}
                     color="#000000"
                     style={{ position: 'absolute', right: 0, padding: moderateScale(10) }}
-                    size={moderateScale(30)} 
+                    size={moderateScale(20)}
                     onPress={() => {
                         Keyboard.dismiss()
-                    }}/>
+                    }} />
             </View>
         </KeyboardAvoidingView>
     )
@@ -267,9 +264,17 @@ export const IndividualRank = () => {
             <LinearGradient colors={["#43C6AC", '#F8FFAE']} style={styles.container}>
                 <View style={styles.container}>
                     <Search searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+                    {searchQuery && filteredRanks.length === 0 &&
+                        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                            <Label xl bold white title="No Users Found!!" />
+                        </View>
+                    }
                     <FlatList
                         data={rankingList}
                         ListHeaderComponent={() => {
+                            if (searchQuery) {
+                                return null
+                            }
                             return (
                                 <>
                                     <View style={styles.rankSuperContainer}>
@@ -308,7 +313,7 @@ export const IndividualRank = () => {
                                                     style={styles.cardImageStyle}
                                                 />
                                                 :
-                                                <EmptyImageView name={item.name} style={styles.cardImageStyle} />
+                                                <EmptyImageView name={item.name} style={styles.cardImageStyle} labelStyle={{ fontSize: theme.fontSizes.xxl }} />
                                         }
                                     </View>
 

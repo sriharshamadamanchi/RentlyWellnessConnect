@@ -4,3 +4,6 @@ export { CurvedButton } from './CurvedButton/CurvedButton';
 export { Ripple } from './Ripple/Ripple';
 export { Card } from './Card/Card';
 export { PrimaryView } from './PrimaryView/PrimaryView';
+export { InputField } from './InputField/InputField';
+export { GradientButton } from './GradientButton/GradientButton';
+export { AnchorButton } from './AnchorButton/AnchorButton';

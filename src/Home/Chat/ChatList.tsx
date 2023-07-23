@@ -11,6 +11,7 @@ import { KeyboardAvoidingView } from "react-native"
 import { Platform } from "react-native"
 import { TextInput } from "react-native"
 import Ionicons from 'react-native-vector-icons/Ionicons'
+import { theme } from "../../common/theme"
 
 const styles = StyleSheet.create({
   container: {
@@ -82,14 +83,14 @@ const Search = ({ searchQuery, setSearchQuery }: { searchQuery: string, setSearc
           maxFontSizeMultiplier={1.2}
           style={styles.textInputStyle}
           onChangeText={(text: string) => {
-            setSearchQuery(text.trim())
+            setSearchQuery(text)
           }}
         />
         <Ionicons
           name={"search"}
           color="#000000"
           style={{ position: 'absolute', right: 0, padding: moderateScale(10) }}
-          size={moderateScale(30)}
+          size={moderateScale(20)}
           onPress={() => {
             Keyboard.dismiss()
           }} />
@@ -167,7 +168,7 @@ export const ChatList = () => {
                               style={styles.cardImageStyle}
                             />
                             :
-                            <EmptyImageView name={user.name} style={styles.cardImageStyle} />
+                            <EmptyImageView name={user.name} style={styles.cardImageStyle} labelStyle={{ fontSize: theme.fontSizes.xxl }} />
                         }
                       </View>
                       <View style={[{ width: "55%", justifyContent: 'center' }]}>

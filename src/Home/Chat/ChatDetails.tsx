@@ -12,6 +12,7 @@ import { EmptyImageView } from "../LeaderBoard/IndividualRank"
 import { StatusBar } from "react-native"
 import { Platform } from "react-native"
 import { KeyboardAvoidingView } from "react-native"
+import { theme } from "../../common/theme"
 
 const styles = StyleSheet.create({
     container: {
@@ -119,7 +120,7 @@ const Header = ({ title, photo }: { title: string, photo: string }) => {
                             style={styles.imageStyle}
                         />
                         :
-                        <EmptyImageView name={title} style={styles.imageStyle} />
+                        <EmptyImageView name={title} style={styles.imageStyle} labelStyle={{ fontSize: theme.fontSizes.l }} />
                 }
             </View>
             <Label xl bold primary title={title} style={{ width: moderateScale(250) }} />
@@ -170,7 +171,7 @@ export const ChatDetails = ({ navigation, route: { params = {} } }: any) => {
                             return (
                                 <View style={byMe ? styles.myCardViewContainer : styles.cardViewContainer}>
                                     <Card disabled style={styles.cardContainer}>
-                                    <Label bold xs primary title={byMe ? "You" : user?.name} />
+                                        <Label bold xs primary title={byMe ? "You" : user?.name} />
                                         <Label m primary title={item.m} />
                                         {item.t &&
                                             <Label xs right primary title={moment(parseInt(item.t, 10)).format("h:mm A")} style={{ paddingLeft: moderateScale(30) }} />

@@ -16,7 +16,8 @@ const styles = StyleSheet.create({
     buttonGradientView: {
         alignItems: 'center',
         justifyContent: 'flex-end',
-        margin: moderateScale(30)
+        marginTop: moderateScale(10),
+        marginBottom: moderateScale(30)
     },
     buttonGradientStyle: {
         width: moderateScale(200),
@@ -69,7 +70,7 @@ export const ActivityTab = () => {
 
                     {
                         keys.length === 0 &&
-                        <View style={{ flex: 3, justifyContent: 'center' }}>
+                        <View style={{ position: 'absolute', top: moderateScale(150), right: 0, bottom: 0, left: 0 }}>
                             <Label xxl center white bold title={"No Activity"} />
                         </View>
 
