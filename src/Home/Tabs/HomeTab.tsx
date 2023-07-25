@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
 export const HomeTab = () => {
     const navigation: any = useNavigation()
 
-    const user = useSelector((store: any) => store.home.user)
+    const user = useSelector((store: any) => store.home.user) ?? {}
     const usersList = useSelector((store: any) => store.home.usersList ?? {})
     const keys = Object.keys(usersList)
 

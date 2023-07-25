@@ -100,9 +100,9 @@ export const HomeTabbar = () => {
 const TopTab = createMaterialTopTabNavigator();
 
 export const HomeTopTabbar = () => {
-    const { name, id } = useSelector((store: any) => store.home.user)
+    const { name, id } = useSelector((store: any) => store.home.user) ?? {}
     const usersList = useSelector((store: any) => store.home.usersList ?? {})
-    const user = usersList[id]
+    const user = usersList[id] ?? {}
 
     return (
         <PrimaryView style={{ backgroundColor: '#43C6AC' }}>
@@ -145,7 +145,7 @@ const Stack = createStackNavigator();
 export const Home = () => {
 
     const dispatch = useDispatch()
-    const { id } = useSelector((store: any) => store.home.user)
+    const { id } = useSelector((store: any) => store.home.user) ?? {}
 
     const isLoggedIn = useSelector((store: any) => store.home.isLoggedIn)
     let initialRouteName = "Welcome"
@@ -182,7 +182,7 @@ export const Home = () => {
                     const keys = Object.keys(data) ?? []
                     const chats: any = {}
                     keys.map((key) => {
-                        const userChats = store.getState().home.chats ?? {}
+                        const userChats = store.getState().home?.chats ?? {}
                         const persistedChats = userChats[key] ?? []
                         const readMessages: any = {}
                         persistedChats.map((m: any) => {
@@ -218,7 +218,7 @@ export const Home = () => {
                     const keys = Object.keys(data) ?? []
                     const chats: any = {}
                     keys.map((key) => {
-                        const userChats = store.getState().home.groupChats ?? {}
+                        const userChats = store.getState().home?.groupChats ?? {}
                         const persistedChats = userChats[key] ?? []
                         const readMessages: any = {}
                         persistedChats.map((m: any) => {

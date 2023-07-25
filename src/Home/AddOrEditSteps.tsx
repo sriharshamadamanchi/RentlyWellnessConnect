@@ -102,7 +102,7 @@ export const AddOrEditSteps = () => {
 
     const save = async () => {
         const totalSteps = parseInt((stepDetails?.count ?? 0), 10) + parseInt(count, 10)
-        if (totalSteps > 25000) {
+        if (totalSteps > 50000) {
             Alert.alert("Alert", "Limit exceeded")
             return
         }

@@ -102,7 +102,7 @@ const Search = ({ searchQuery, setSearchQuery }: { searchQuery: string, setSearc
 export const ChatList = () => {
 
   const navigation: any = useNavigation()
-  const { id } = useSelector((store: any) => store.home.user)
+  const { id } = useSelector((store: any) => store.home.user) ?? {}
 
   const usersList = useSelector((store: any) => store.home.usersList ?? {})
   const [filteredChats, setFilteredChats] = React.useState(usersList)
@@ -142,7 +142,7 @@ export const ChatList = () => {
                 if (item === id) {
                   return null
                 }
-                const user = filteredChats[item]
+                const user = filteredChats[item] ?? {}
                 const userMessages = chats[`${user.id}`] ?? []
                 let unreadCount = 0
                 userMessages.map((m: any) => {

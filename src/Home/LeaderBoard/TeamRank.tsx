@@ -139,7 +139,7 @@ export const TeamRank = () => {
     })
 
     for (let i = 0; i < keys.length; i++) {
-        const userDetails = usersList[keys[i]]
+        const userDetails = usersList[keys[i]] ?? {}
         let totalSteps = 0;
         const steps = userDetails?.steps ?? []
         for (let j = 0; j < steps.length; j++) {
@@ -194,7 +194,7 @@ export const TeamRank = () => {
                             )
                         }}
                         renderItem={({ item, index }) => {
-                            let percent = ((item.steps / GOAL) * 100);
+                            let percent = (((item?.steps ?? 0) / GOAL) * 100);
                             if(percent > 100) percent = 100;
                             return (
                                 <Card disabled style={styles.cardStyle}>
@@ -210,7 +210,7 @@ export const TeamRank = () => {
                                         <AnimatedCircularProgress
                                             size={moderateScale(100)}
                                             width={moderateScale(15)}
-                                            fill={((item.steps / GOAL) * 100)}
+                                            fill={(((item?.steps ?? 0) / GOAL) * 100)}
                                             duration={3000}
                                             tintColor="cyan"
                                             style={{ alignSelf: 'center' }}

@@ -101,7 +101,7 @@ const SendMessage = ({ from, to, token, value, setMessage }: { from: string, to:
     )
 }
 
-const Header = ({ title, photo }: { title: string, photo: string }) => {
+const Header = ({ title = "", photo }: { title: string, photo: string }) => {
     const navigation = useNavigation()
 
     return (
@@ -133,8 +133,8 @@ export const ChatDetails = ({ navigation, route: { params = {} } }: any) => {
     const dispatch = useDispatch();
     const user = params.user ?? {}
     const token = user.token
-    const { id } = useSelector((store: any) => store.home.user)
-    const chats = useSelector((store: any) => store.home.chats ?? {})
+    const { id } = useSelector((store: any) => store.home.user) ?? {}
+    const chats = useSelector((store: any) => store.home.chats) ?? {}
 
     const flatListRef: any = React.useRef(null);
     const [message, setMessage] = React.useState("")

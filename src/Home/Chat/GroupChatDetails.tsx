@@ -106,7 +106,7 @@ const SendMessage = ({ from, to, value, setMessage }: { from: string, to: string
     )
 }
 
-const Header = ({ title, photo }: { title: string, photo: any }) => {
+const Header = ({ title = "", photo }: { title: string, photo: any }) => {
     const navigation = useNavigation()
 
     return (

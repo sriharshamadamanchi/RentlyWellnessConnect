@@ -25,7 +25,15 @@ export function* loginSaga(action: { payload: { email: string, password: string 
 
     const usersList = yield call(Firestore.getUsersList)
     const id = email.replace(/\./g, "#")
-    const { displayName: name, photoURL: photo } = userInfo ?? {}
+    const { displayName, photoURL: photo } = userInfo ?? {}
+    let name = displayName
+    if (!name) {
+      name = ""
+      const splitEmail = email?.split("@") ?? []
+      if (splitEmail.length !== 0) {
+        name = splitEmail[0]?.split(".")?.map(word => word?.charAt(0)?.toUpperCase() + word?.slice(1))?.join(' ') ?? ""
+      }
+    }
     let team = "-"
     lunaTeam.map((emailId: string) => {
       if (emailId === email) {
@@ -46,10 +54,10 @@ export function* loginSaga(action: { payload: { email: string, password: string 
       yield call(Firestore.addUser, { id, details: { id, email, name, photo, steps: [], team } })
     } else {
       const details = usersList[id] ?? { id, email, name, photo, steps: [], team }
-      yield call(Firestore.updateUser, { id, details: { ...details, name, photo: photo ?? details.photo, team } })
+      yield call(Firestore.updateUser, { id, details: { ...details, name: details?.name ?? name, photo: photo ?? details.photo, team } })
     }
-    yield put((storeUsersListAction({ usersList: { ...usersList, [id]: { id, email, name, photo, steps: [], team } } })))
-    yield put(storeLoginDetailsAction({ user: { id, email, name: userInfo?.displayName, photo: userInfo?.photoURL } }))
+    yield put((storeUsersListAction({ usersList: { ...usersList, [id]: { id, email, name: userInfo?.displayName ?? name, photo, steps: [], team } } })))
+    yield put(storeLoginDetailsAction({ user: { id, email, name: userInfo?.displayName ?? name, photo: userInfo?.photoURL } }))
     yield put(successLoadingAction({ name: "Login", msg: "" }))
   } catch (error: any) {
     console.log("error in loginSaga", error.message)

@@ -165,17 +165,17 @@ const RankView = ({ rank, userDetails }: { rank: string, userDetails: any }) => 
 
 export const EmptyImageView = ({ name = "", style = {}, labelStyle = {} }: { name: string, style: any, labelStyle: any }) => {
 
-    const nameSplit = name.split(" ")
+    const nameSplit = name?.split(" ") ?? []
     let formattedName = ""
     if (nameSplit.length > 0) {
-        formattedName = formattedName + nameSplit[0].charAt(0).toUpperCase()
+        formattedName = formattedName + nameSplit[0]?.charAt(0)?.toUpperCase()
     }
     if (nameSplit.length > 1) {
-        formattedName = formattedName + nameSplit[1].charAt(0).toUpperCase()
+        formattedName = formattedName + nameSplit[1]?.charAt(0)?.toUpperCase()
     }
     return (
-        <View style={[styles.emptyImageView, style, { backgroundColor: colors[name.charAt(0).toUpperCase()] }]}>
-            <Label white center title={name.charAt(0).toUpperCase()} bold style={{ ...labelStyle, marginBottom: moderateScale(Platform.OS === "android" ? 3 : 0) }} />
+        <View style={[styles.emptyImageView, style, { backgroundColor: colors[name?.charAt(0)?.toUpperCase()] }]}>
+            <Label white center title={name?.charAt(0)?.toUpperCase() ?? ""} bold style={{ ...labelStyle, marginBottom: moderateScale(Platform.OS === "android" ? 3 : 0) }} />
         </View>
     )
 }
@@ -214,7 +214,7 @@ const Search = ({ searchQuery, setSearchQuery }: { searchQuery: string, setSearc
 
 export const IndividualRank = () => {
 
-    const user = useSelector((store: any) => store.home.user)
+    const user = useSelector((store: any) => store.home.user) ?? {}
     const usersList = useSelector((store: any) => store.home.usersList ?? {})
     const [searchQuery, setSearchQuery] = React.useState("")
     const keys = Object.keys(usersList)
@@ -222,7 +222,7 @@ export const IndividualRank = () => {
     const rankingList: any = []
 
     for (let i = 0; i < keys.length; i++) {
-        const userDetails = usersList[keys[i]]
+        const userDetails = usersList[keys[i]] ?? {}
         let totalSteps = 0;
         const steps = userDetails?.steps ?? []
         for (let j = 0; j < steps.length; j++) {
