@@ -1,5 +1,5 @@
 import React from "react"
-import { StyleSheet, View } from "react-native"
+import { ScrollView, StyleSheet, View } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import { useSelector } from "react-redux"
 import { Chart } from "../Chart"
@@ -16,6 +16,7 @@ const styles = StyleSheet.create({
     buttonGradientView: {
         alignItems: 'center',
         justifyContent: 'flex-end',
+        marginTop: moderateScale(10),
         marginBottom: moderateScale(30)
     },
     buttonGradientStyle: {
@@ -63,19 +64,19 @@ export const ActivityTab = () => {
     const keys = Object.keys(data)
 
     return (
-        <View style={styles.container}>
-            <LinearGradient colors={["#43C6AC", '#F8FFAE']} style={styles.container}>
+        <LinearGradient colors={["#43C6AC", '#F8FFAE']} style={styles.container}>
+            <ScrollView style={styles.container}>
                 <View style={styles.container}>
 
                     {
                         keys.length === 0 &&
-                        <View style={{ flex: 3, justifyContent: 'center' }}>
+                        <View style={{ position: 'absolute', top: moderateScale(150), right: 0, bottom: 0, left: 0 }}>
                             <Label xxl center white bold title={"No Activity"} />
                         </View>
 
                     }
 
-                    <Swiper loop={false} showsPagination={true} activeDotColor={"red"}>
+                    <Swiper style={{ maxHeight: moderateScale(400) }} loop={false} showsPagination={true} activeDotColor={"green"}>
 
                         {keys.map((label, index) => {
                             return (
@@ -102,8 +103,7 @@ export const ActivityTab = () => {
                         />
                     </LinearGradient>
                 </View>
-
-            </LinearGradient>
-        </View>
+            </ScrollView>
+        </LinearGradient>
     )
 }

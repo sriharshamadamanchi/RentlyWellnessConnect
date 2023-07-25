@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React from "react"
 import { FlatList, Image, Keyboard } from "react-native"
 import { StyleSheet, View } from "react-native"
 import { moderateScale } from "react-native-size-matters"
@@ -11,6 +11,7 @@ import { KeyboardAvoidingView } from "react-native"
 import { Platform } from "react-native"
 import { TextInput } from "react-native"
 import Ionicons from 'react-native-vector-icons/Ionicons'
+import { theme } from "../../common/theme"
 
 const styles = StyleSheet.create({
   container: {
@@ -79,16 +80,17 @@ const Search = ({ searchQuery, setSearchQuery }: { searchQuery: string, setSearc
           value={searchQuery}
           selectionColor="#000000"
           autoCapitalize="none"
+          maxFontSizeMultiplier={1.2}
           style={styles.textInputStyle}
           onChangeText={(text: string) => {
-            setSearchQuery(text.trim())
+            setSearchQuery(text)
           }}
         />
         <Ionicons
           name={"search"}
           color="#000000"
           style={{ position: 'absolute', right: 0, padding: moderateScale(10) }}
-          size={moderateScale(30)}
+          size={moderateScale(20)}
           onPress={() => {
             Keyboard.dismiss()
           }} />
@@ -100,7 +102,7 @@ const Search = ({ searchQuery, setSearchQuery }: { searchQuery: string, setSearc
 export const ChatList = () => {
 
   const navigation: any = useNavigation()
-  const { id } = useSelector((store: any) => store.home.user)
+  const { id } = useSelector((store: any) => store.home.user) ?? {}
 
   const usersList = useSelector((store: any) => store.home.usersList ?? {})
   const [filteredChats, setFilteredChats] = React.useState(usersList)
@@ -108,8 +110,6 @@ export const ChatList = () => {
 
   const chats = useSelector((store: any) => store.home.chats ?? {})
   const [searchQuery, setSearchQuery] = React.useState("")
-
-  const [textHeight, setTextHeight]: any = useState(Number.MAX_SAFE_INTEGER);
 
   React.useEffect(() => {
 
@@ -143,7 +143,7 @@ export const ChatList = () => {
                 if (item === id) {
                   return null
                 }
-                const user = filteredChats[item]
+                const user = filteredChats[item] ?? {}
                 const userMessages = chats[`${user.id}`] ?? []
                 let unreadCount = 0
                 userMessages.map((m: any) => {
@@ -169,17 +169,11 @@ export const ChatList = () => {
                               style={styles.cardImageStyle}
                             />
                             :
-                            <EmptyImageView name={user.name} style={styles.cardImageStyle} />
+                            <EmptyImageView name={user.name} style={styles.cardImageStyle} labelStyle={{ fontSize: theme.fontSizes.xxl }} />
                         }
                       </View>
                       <View style={[{ width: "55%", justifyContent: 'center' }]}>
-                        <Label
-                          onLayout={(event: any) => {
-                            if (event.nativeEvent.layout.height < textHeight)
-                              setTextHeight(event.nativeEvent.layout.height);
-
-
-                          }} numberOfLines={1} bold m primary title={user.name?.charAt(0).toUpperCase() + user.name?.slice(1)} style={{ marginLeft: moderateScale(10), maxHeight: textHeight }} />
+                        <Label ellipsizeMode="end" numberOfLines={1} bold m primary title={user.name?.charAt(0).toUpperCase() + user.name?.slice(1)} style={{ marginLeft: moderateScale(10) }} />
                         {
                           lastMessage?.m &&
                           <Label ellipsizeMode="end" numberOfLines={1} bold m primary title={lastMessage?.m} style={{ marginLeft: moderateScale(10), color: 'grey' }} />

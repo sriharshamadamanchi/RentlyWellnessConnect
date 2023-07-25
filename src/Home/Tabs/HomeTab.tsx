@@ -10,6 +10,7 @@ import EntypoIcon from 'react-native-vector-icons/Entypo'
 import { useNavigation } from "@react-navigation/native"
 import { Image } from "react-native"
 import { EmptyImageView } from "../LeaderBoard/IndividualRank"
+import { theme } from "../../common/theme"
 
 const styles = StyleSheet.create({
     container: {
@@ -96,7 +97,7 @@ const styles = StyleSheet.create({
 export const HomeTab = () => {
     const navigation: any = useNavigation()
 
-    const user = useSelector((store: any) => store.home.user)
+    const user = useSelector((store: any) => store.home.user) ?? {}
     const usersList = useSelector((store: any) => store.home.usersList ?? {})
     const keys = Object.keys(usersList)
 
@@ -174,7 +175,7 @@ export const HomeTab = () => {
                                         style={styles.cardImageStyle}
                                     />
                                     :
-                                    <EmptyImageView name={user.name} style={styles.cardImageStyle} />
+                                    <EmptyImageView name={user.name} style={styles.cardImageStyle} labelStyle={{ fontSize: theme.fontSizes.xxl }} />
                             }
                         </View>
                         <View style={{ flex: 0.8, justifyContent: 'center', alignItems: 'center' }}>

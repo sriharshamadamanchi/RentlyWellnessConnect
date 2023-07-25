@@ -18,8 +18,8 @@ const styles = StyleSheet.create({
         color: '#454545'
     },
     selectedTextStyle:{
-        fontSize: moderateScale(18),
-        fontWeight: "600",
+        fontSize: moderateScale(16),
+        fontWeight: "500",
         color: '#454545'
     },
     itemTextStyle:{

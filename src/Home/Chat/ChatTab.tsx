@@ -6,6 +6,7 @@ import LinearGradient from "react-native-linear-gradient"
 import { ChatList } from "./ChatList"
 import { Groups } from "./Groups"
 import { StatusBar } from "react-native"
+import { Label } from "../../common/components"
 
 const styles = StyleSheet.create({
     container: {
@@ -30,13 +31,15 @@ export const ChatTab = () => {
                         borderBottomWidth: moderateScale(2),
                         borderBottomColor: "#0f9b0f"
                     },
-                    tabBarLabelStyle: {
-                        fontWeight: 'bold'
+                    tabBarLabel: ({color, children}) => {
+                        return(
+                            <Label m bold title={children} style={{color: color}}/>
+                        )
                     }
                 }}
             >
                 <TopTab.Screen
-                    name={"Chats"}
+                    name={"CHATS"}
                     children={() => <ChatList />} />
                 <TopTab.Screen
                     name={"Groups"}

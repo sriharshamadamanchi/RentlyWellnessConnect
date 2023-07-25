@@ -24,7 +24,7 @@ export const Chart = ({ type, data, labels = [] }: { type: string, data: any, la
                     ]
                 }}
                 width={Dimensions.get("window").width * 0.95}
-                height={moderateScale(320)}
+                height={moderateScale(300)}
                 yAxisLabel=""
                 yAxisSuffix=""
                 xLabelsOffset={moderateScale(25)}
@@ -43,7 +43,7 @@ export const Chart = ({ type, data, labels = [] }: { type: string, data: any, la
                         translateY: moderateScale(3)
                     },
                     style: {
-                        borderRadius: 16
+                        borderRadius: moderateScale(16)
                     },
                     propsForDots: {
                         r: "6",

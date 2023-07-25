@@ -8,6 +8,7 @@ import { useNavigation } from "@react-navigation/native"
 import moment from "moment"
 import { groupImage, teams } from "../../common/constants"
 import { EmptyImageView } from "../LeaderBoard/IndividualRank"
+import { theme } from "../../common/theme"
 
 const styles = StyleSheet.create({
     container: {
@@ -77,7 +78,7 @@ export const Groups = () => {
                                                     style={styles.cardImageStyle}
                                                 />
                                                 :
-                                                <EmptyImageView name={item} style={styles.cardImageStyle} />
+                                                <EmptyImageView name={item} style={styles.cardImageStyle} labelStyle={{ fontSize: theme.fontSizes.xxl }} />
                                         }
                                     </View>
                                     <View style={{ width: "55%", justifyContent: 'center' }}>

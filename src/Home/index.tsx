@@ -7,8 +7,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
 import { AccountTab } from "./Tabs/AccountTab";
 import { useDispatch, useSelector } from "react-redux";
-import { Login } from "./Login";
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { Welcome } from "../Authentication/Welcome";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { HomeTab } from "./Tabs/HomeTab";
 import { ActivityTab } from "./Tabs/ActivityTab";
@@ -22,11 +21,14 @@ import SplashScreen from "react-native-splash-screen";
 import { ChatList } from "./Chat/ChatList";
 import { ChatDetails } from "./Chat/ChatDetails";
 import { ChatTab } from "./Chat/ChatTab";
-import { storeChatsAction, storeGroupChatsAction, onlineAction } from "./redux/actions";
+import { reloadUserAction, storeChatsAction, storeGroupChatsAction, onlineAction } from "./redux/actions";
 import { Info } from "./Info";
 import firebase from "@react-native-firebase/firestore";
 import { GroupChatDetails } from "./Chat/GroupChatDetails";
 import { store } from "../common/store";
+import { Login } from "../Authentication/Login";
+import { Register } from "../Authentication/Register";
+import { ForgotPassword } from "../Authentication/ForgotPassword";
 
 const Tab = createBottomTabNavigator();
 
@@ -40,7 +42,7 @@ const styles = StyleSheet.create({
         width: moderateScale(36)
     },
     welcomeLabelStyle: {
-        marginVertical: moderateScale(20)
+        margin: moderateScale(20)
     },
     teamNameStyle: {
         marginBottom: moderateScale(20)
@@ -60,14 +62,16 @@ export const HomeTabbar = () => {
                 backBehavior={"initialRoute"}
                 screenOptions={{
                     headerShown: false,
+                    tabBarHideOnKeyboard: Platform.OS === "android",
                     tabBarActiveTintColor: "green",
                     tabBarStyle: {
-                        height: Platform.OS === 'android' ? moderateScale(60) : moderateScale(90),
+                        height: Platform.OS === 'android' ? moderateScale(65) : moderateScale(90),
                         paddingTop: moderateScale(5)
                     },
-                    tabBarLabelStyle: {
-                        fontFamily: theme.fonts.bold,
-                        paddingBottom: moderateScale(10)
+                    tabBarLabel: ({ color, children }) => {
+                        return (
+                            <Label s bold title={children} style={{ color, paddingBottom: moderateScale(10) }} />
+                        )
                     }
                 }}>
                 <Tab.Screen
@@ -96,14 +100,14 @@ export const HomeTabbar = () => {
 const TopTab = createMaterialTopTabNavigator();
 
 export const HomeTopTabbar = () => {
-    const { givenName, id } = useSelector((store: any) => store.home.user)
+    const { name, id } = useSelector((store: any) => store.home.user) ?? {}
     const usersList = useSelector((store: any) => store.home.usersList ?? {})
-    const user = usersList[id]
+    const user = usersList[id] ?? {}
 
     return (
         <PrimaryView style={{ backgroundColor: '#43C6AC' }}>
             <LinearGradient colors={["#43C6AC", '#F8FFAE']} style={styles.tabsStyle}>
-                <Label bold xxl center white title={`Welcome, ${givenName ?? ""}!`} style={styles.welcomeLabelStyle} />
+                <Label bold xxl center white title={`Welcome, ${name ?? ""}`} style={styles.welcomeLabelStyle} />
                 <View style={{ justifyContent: 'center', flexDirection: 'row' }}>
                     <Label bold xxl center white title={`Team ${user?.team ?? ""}`} style={styles.teamNameStyle} />
                 </View>
@@ -117,10 +121,10 @@ export const HomeTopTabbar = () => {
                             borderBottomWidth: moderateScale(2),
                             borderBottomColor: "#0f9b0f"
                         },
-                        tabBarStyle: {
-                        },
-                        tabBarLabelStyle: {
-                            fontWeight: 'bold'
+                        tabBarLabel: ({ color, children }) => {
+                            return (
+                                <Label m bold title={children} style={{ color: color }} />
+                            )
                         }
                     }}
                 >
@@ -128,7 +132,7 @@ export const HomeTopTabbar = () => {
                         name={"HOME"}
                         children={() => <HomeTab />} />
                     <TopTab.Screen
-                        name={"Activity"}
+                        name={"ACTIVITY"}
                         children={() => <ActivityTab />} />
                 </TopTab.Navigator>
             </LinearGradient>
@@ -141,20 +145,22 @@ const Stack = createStackNavigator();
 export const Home = () => {
 
     const dispatch = useDispatch()
-    const { id } = useSelector((store: any) => store.home.user)
+    const { id } = useSelector((store: any) => store.home.user) ?? {}
 
     const isLoggedIn = useSelector((store: any) => store.home.isLoggedIn)
-    let initialRouteName = "Login"
+    let initialRouteName = "Welcome"
+
+    React.useEffect(() => {
+        if (isLoggedIn) {
+            dispatch(reloadUserAction())
+        }
+    }, [isLoggedIn]);
 
     React.useEffect(() => {
         if (isLoggedIn) {
             initialRouteName = "HomeTabbar"
         }
     }, [isLoggedIn])
-
-    React.useEffect(() => {
-        GoogleSignin.configure()
-    }, [])
 
     React.useEffect(() => {
         if (isLoggedIn) {
@@ -169,70 +175,76 @@ export const Home = () => {
     }, []);
 
     React.useEffect(() => {
-        const subscriber = firebase().collection("users").doc(id).onSnapshot((snapshot) => {
-            const data = snapshot.data() ?? {}
-            const keys = Object.keys(data) ?? []
-            const chats: any = {}
-            keys.map((key) => {
-                const userChats = store.getState().home.chats ?? {}
-                const persistedChats = userChats[key] ?? []
-                const readMessages: any = {}
-                persistedChats.map((m: any) => {
-                    if (m.read) {
-                        readMessages[m.t] = true
-                    }
-                })
-                const chat = data[key] ?? "[]"
-                chats[key] = JSON.parse(chat)
-                chats[key] = chats[key].map((message: any) => {
-                    if (readMessages[message.t]) {
-                        return { ...message, read: true }
-                    }
-                    return message;
-                })
+        if (isLoggedIn) {
+            firebase().collection("users").doc(id).onSnapshot((snapshot) => {
+                try {
+                    const data = snapshot.data() ?? {}
+                    const keys = Object.keys(data) ?? []
+                    const chats: any = {}
+                    keys.map((key) => {
+                        const userChats = store.getState().home?.chats ?? {}
+                        const persistedChats = userChats[key] ?? []
+                        const readMessages: any = {}
+                        persistedChats.map((m: any) => {
+                            if (m.read) {
+                                readMessages[m.t] = true
+                            }
+                        })
+                        const chat = data[key] ?? "[]"
+                        chats[key] = JSON.parse(chat)
+                        chats[key] = chats[key].map((message: any) => {
+                            if (readMessages[message.t]) {
+                                return { ...message, read: true }
+                            }
+                            return message;
+                        })
+                    })
+
+                    console.log("snapshot updated!!")
+
+                    dispatch(storeChatsAction({ chats }))
+                } catch (err) {
+                    console.log("error in user chat", err)
+                }
             })
-
-            console.log("snapshot updated!!")
-
-            dispatch(storeChatsAction({ chats }))
-        })
-
-        return () => subscriber();
-
-    }, [id])
+        }
+    }, [id, isLoggedIn])
 
     React.useEffect(() => {
-        const subscriber = firebase().collection("users").doc("groupChats").onSnapshot((snapshot) => {
-            const data = snapshot.data() ?? {}
-            const keys = Object.keys(data) ?? []
-            const chats: any = {}
-            keys.map((key) => {
-                const userChats = store.getState().home.groupChats ?? {}
-                const persistedChats = userChats[key] ?? []
-                const readMessages: any = {}
-                persistedChats.map((m: any) => {
-                    if (m.read) {
-                        readMessages[m.t] = true
-                    }
-                })
-                const chat = data[key] ?? "[]"
-                chats[key] = JSON.parse(chat)
-                chats[key] = chats[key].map((message: any) => {
-                    if (readMessages[message.t]) {
-                        return { ...message, read: true }
-                    }
-                    return message;
-                })
+        if (isLoggedIn) {
+            firebase().collection("users").doc("groupChats").onSnapshot((snapshot) => {
+                try {
+                    const data = snapshot.data() ?? {}
+                    const keys = Object.keys(data) ?? []
+                    const chats: any = {}
+                    keys.map((key) => {
+                        const userChats = store.getState().home?.groupChats ?? {}
+                        const persistedChats = userChats[key] ?? []
+                        const readMessages: any = {}
+                        persistedChats.map((m: any) => {
+                            if (m.read) {
+                                readMessages[m.t] = true
+                            }
+                        })
+                        const chat = data[key] ?? "[]"
+                        chats[key] = JSON.parse(chat)
+                        chats[key] = chats[key].map((message: any) => {
+                            if (readMessages[message.t]) {
+                                return { ...message, read: true }
+                            }
+                            return message;
+                        })
+                    })
+
+                    console.log("snapshot updated!!")
+
+                    dispatch(storeGroupChatsAction({ chats }))
+                } catch (err) {
+                    console.log("error in group chat", err)
+                }
             })
-
-            console.log("snapshot updated!!")
-
-            dispatch(storeGroupChatsAction({ chats }))
-        })
-
-        return () => subscriber();
-
-    }, [id])
+        }
+    }, [id, isLoggedIn])
 
     React.useEffect(() => {
         dispatch(onlineAction())
@@ -322,13 +334,36 @@ export const Home = () => {
                         />
                     </>
                     :
-                    <Stack.Screen
-                        options={{
-                            headerShown: false
-                        }}
-                        name="Login"
-                        component={Login}
-                    />
+                    <>
+                        <Stack.Screen
+                            options={{
+                                headerShown: false
+                            }}
+                            name="Welcome"
+                            component={Welcome}
+                        />
+                        <Stack.Screen
+                            options={{
+                                title: "Login"
+                            }}
+                            name="Login"
+                            component={Login}
+                        />
+                        <Stack.Screen
+                            options={{
+                                title: "Register"
+                            }}
+                            name="Register"
+                            component={Register}
+                        />
+                        <Stack.Screen
+                            options={{
+                                title: "Forgot Password"
+                            }}
+                            name="ForgotPassword"
+                            component={ForgotPassword}
+                        />
+                    </>
             }
         </Stack.Navigator>
     )

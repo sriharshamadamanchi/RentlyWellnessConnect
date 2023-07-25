@@ -11,6 +11,7 @@ import { useNavigation } from "@react-navigation/native"
 import { EmptyImageView } from "../LeaderBoard/IndividualRank"
 import { StatusBar } from "react-native"
 import { groupImage } from "../../common/constants"
+import { theme } from "../../common/theme"
 
 const styles = StyleSheet.create({
     container: {
@@ -82,6 +83,7 @@ const SendMessage = ({ from, to, value, setMessage }: { from: string, to: string
                     selectionColor="#000000"
                     value={value}
                     style={styles.textInputStyle}
+                    maxFontSizeMultiplier={1.2}
                     onChangeText={(text: string) => {
                         setMessage(text)
                     }}
@@ -104,7 +106,7 @@ const SendMessage = ({ from, to, value, setMessage }: { from: string, to: string
     )
 }
 
-const Header = ({ title, photo }: { title: string, photo: any }) => {
+const Header = ({ title = "", photo }: { title: string, photo: any }) => {
     const navigation = useNavigation()
 
     return (
@@ -123,7 +125,7 @@ const Header = ({ title, photo }: { title: string, photo: any }) => {
                             style={styles.imageStyle}
                         />
                         :
-                        <EmptyImageView name={title} style={styles.imageStyle} />
+                        <EmptyImageView name={title} style={styles.imageStyle} labelStyle={{ fontSize: theme.fontSizes.l }} />
                 }
             </View>
             <Label xl bold primary title={title} style={{ width: moderateScale(250) }} />
@@ -182,7 +184,7 @@ export const GroupChatDetails = ({ navigation, route: { params = {} } }: any) =>
                                                         style={styles.userImageStyle}
                                                     />
                                                     :
-                                                    <EmptyImageView name={usersList[item.f]?.name} style={styles.userImageStyle} />
+                                                    <EmptyImageView name={usersList[item.f]?.name} style={styles.userImageStyle} labelStyle={{ fontSize: theme.fontSizes.l }} />
                                             }
                                         </>
                                     }
@@ -202,7 +204,7 @@ export const GroupChatDetails = ({ navigation, route: { params = {} } }: any) =>
                                                         style={styles.userImageStyle}
                                                     />
                                                     :
-                                                    <EmptyImageView name={user.name} style={styles.userImageStyle} />
+                                                    <EmptyImageView name={user.name} style={styles.userImageStyle} labelStyle={{ fontSize: theme.fontSizes.l }} />
                                             }
                                         </>
                                     }

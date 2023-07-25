@@ -4,6 +4,7 @@ import { moderateScale } from "react-native-size-matters"
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs"
 import { StepsList } from "./StepsList"
 import { AddOrEditSteps } from "./AddOrEditSteps"
+import { Label } from "../common/components"
 
 const styles = StyleSheet.create({
     container: {
@@ -28,16 +29,18 @@ export const Details = () => {
                         borderBottomWidth: moderateScale(2),
                         borderBottomColor: "#0f9b0f"
                     },
-                    tabBarLabelStyle: {
-                        fontWeight: 'bold'
+                    tabBarLabel: ({color, children}) => {
+                        return(
+                            <Label m bold title={children} style={{color: color}}/>
+                        )
                     }
                 }}
             >
                 <TopTab.Screen
-                    name={"Add"}
+                    name={"ADD"}
                     children={() => <AddOrEditSteps />} />
                 <TopTab.Screen
-                    name={"History"}
+                    name={"HISTORY"}
                     children={() => <StepsList />} />
             </TopTab.Navigator>
         </>

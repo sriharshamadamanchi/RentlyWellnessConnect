@@ -124,7 +124,7 @@ const RankView = ({ rank, userDetails }: { rank: string, userDetails: any }) => 
             <View style={{ ...styles.rankView, ...style }}>
                 <Label s bold primary center title={rank} />
             </View>
-            <Label s bold white center title={`Team ${userDetails.name}`} style={{ width: moderateScale(100), bottom: moderateScale(12) }} />
+            <Label s bold primary center title={`Team ${userDetails.name}`} style={{ width: moderateScale(100), bottom: moderateScale(12) }} />
         </View>
     )
 }
@@ -139,7 +139,7 @@ export const TeamRank = () => {
     })
 
     for (let i = 0; i < keys.length; i++) {
-        const userDetails = usersList[keys[i]]
+        const userDetails = usersList[keys[i]] ?? {}
         let totalSteps = 0;
         const steps = userDetails?.steps ?? []
         for (let j = 0; j < steps.length; j++) {
@@ -189,12 +189,12 @@ export const TeamRank = () => {
                                     </View>
 
                                     <Divider style={{ backgroundColor: 'white', marginTop: moderateScale(10), marginBottom: moderateScale(30), alignSelf: 'center', width: Dimensions.get("window").width * 0.8 }} />
-                                    <Label bold xl title={`GOAL: ${GOAL} Steps`} center style={{ marginBottom: moderateScale(20)}} white />
+                                    <Label bold xl title={`GOAL: ${GOAL} Steps`} center style={{ marginBottom: moderateScale(20)}} primary />
                                 </>
                             )
                         }}
                         renderItem={({ item, index }) => {
-                            let percent = ((item.steps / GOAL) * 100);
+                            let percent = (((item?.steps ?? 0) / GOAL) * 100);
                             if(percent > 100) percent = 100;
                             return (
                                 <Card disabled style={styles.cardStyle}>
@@ -206,11 +206,11 @@ export const TeamRank = () => {
                                     <LinearGradient colors={["#200122", '#6f0000']} style={styles.rankNumberViewInCard}>
                                         <Label center bold white title={`${index + 1}`} style={{ paddingLeft: moderateScale(10), paddingBottom: moderateScale(10) }} />
                                     </LinearGradient>
-                                    <View style={{ alignSelf: 'center', width: moderateScale(100) }}>
+                                    <View style={{ alignSelf: 'center', width: moderateScale(120) }}>
                                         <AnimatedCircularProgress
                                             size={moderateScale(100)}
                                             width={moderateScale(15)}
-                                            fill={((item.steps / GOAL) * 100)}
+                                            fill={(((item?.steps ?? 0) / GOAL) * 100)}
                                             duration={3000}
                                             tintColor="cyan"
                                             style={{ alignSelf: 'center' }}
