@@ -192,7 +192,7 @@ export const GroupChatDetails = ({ navigation, route: { params = {} } }: any) =>
                                         <Label bold xs primary title={byMe ? "You" : usersList[item.f]?.name} />
                                         <Label m primary title={item.m} />
                                         {item.t &&
-                                            <Label xs right primary title={moment(parseInt(item.t, 10)).format("h:mm A")} style={{ paddingLeft: moderateScale(30) }} />
+                                            <Label xs right primary title={moment(parseInt(item.t, 10)).format("MMM DD hh:mm A")} style={{ paddingLeft: moderateScale(30) }} />
                                         }
                                     </Card>
                                     {byMe &&
