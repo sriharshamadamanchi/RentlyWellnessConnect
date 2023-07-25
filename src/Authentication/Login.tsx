@@ -38,13 +38,20 @@ const styles = StyleSheet.create({
     }
 })
 
-export const Login = () => {
+export const Login = ({ route: { params = {} } }: any) => {
     const [email, setEmail] = React.useState("")
     const [password, setPassword] = React.useState("")
     const navigation: any = useNavigation();
     const dispatch = useDispatch()
     const { loading }: any = useSelector(loaderSelector("Login"))
     const [showPassword, setShowPassword] = React.useState(eyeIcon)
+
+    React.useEffect(() => {
+        if (params.email && params.password) {
+            setEmail(params.email)
+            setPassword(params.password)
+        }
+    }, [])
 
     return (
         <LinearGradient colors={["#43C6AC", '#F8FFAE']} style={styles.mainContainer}>

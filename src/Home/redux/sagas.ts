@@ -1,11 +1,12 @@
 import { call, put, takeLatest } from "redux-saga/effects";
 import { getActionType } from "../../common/store/typeSafe";
-import { clearLoginDetailsAction, fetchRemoteConfigAction, forgotPasswordAction, loginAction, logoutAction, registerAction, sendMessageAction, storeLoginDetailsAction, storeRemoteConfigAction, storeUsersListAction } from "./actions";
+import { clearLoginDetailsAction, fetchRemoteConfigAction, forgotPasswordAction, loginAction, logoutAction, registerAction, reloadUserAction, sendMessageAction, storeLoginDetailsAction, storeRemoteConfigAction, storeUsersListAction } from "./actions";
 import { failedLoadingAction, startLoadingAction, successLoadingAction } from "../../common/loaderRedux/actions";
 import { Firestore } from "../Firestore";
 import remoteConfig from '@react-native-firebase/remote-config';
 import auth from '@react-native-firebase/auth';
 import { Alert } from "react-native";
+import { navigate } from "../../common/navigation/navigationService";
 
 export function* loginSaga(action: { payload: { email: string, password: string } }): any {
   const { email, password } = action.payload
@@ -98,6 +99,8 @@ export function* registerSaga(action: { payload: { name: string, email: string, 
     yield call(updateProfile, { displayName: name })
     yield put(successLoadingAction({ name: "Register", msg: "" }))
     Alert.alert("Verification Pending", "A verification link has been sent to your email acount. Please verify your email to continue")
+    navigate("Welcome")
+    navigate("Login", { email, password })
   } catch (error: any) {
     console.log("error in registerSaga", error.message)
     if (error.code === "auth/email-already-in-use") {
@@ -168,7 +171,9 @@ export function* logoutSaga(action: { payload: { deleteAccount: boolean } }): an
     yield put(successLoadingAction({ name: "Logout", msg: "" }))
   } catch (error: any) {
     console.log("error in logoutSaga", error)
-    yield put(clearLoginDetailsAction())
+    if (!deleteAccount) {
+      yield put(clearLoginDetailsAction())
+    }
     yield put(failedLoadingAction({ name: "Logout", msg: "" }))
   }
 }
@@ -215,6 +220,36 @@ export function* fetchRemotConfigSaga(): any {
   }
 }
 
+const validateUser = () => new Promise(async (resolve, reject) => {
+  if (auth().currentUser) {
+    try {
+      await auth().currentUser?.reload()
+    } catch (err: any) {
+      if (err.code === "auth/user-not-found") {
+        reject({ title: "User not found", message: "There is no user record corresponding to this identifier. The user may have been deleted." })
+      }
+    }
+  }
+  if (!(auth().currentUser)) {
+    reject({ title: "Session expired", message: "Please login again" })
+  }
+  resolve(true)
+})
+
+export function* reloadUserSaga(action: { payload: any }): any {
+  try {
+    yield call(validateUser)
+  } catch (error: any) {
+    if (error?.title && error?.message) {
+      Alert.alert(error.title, error.message)
+      yield put(logoutAction())
+    } else if (error?.message) {
+      Alert.alert("Alert", error.message)
+    }
+    console.log("error in reloadUserSaga", error)
+  }
+}
+
 export const homeSagas: any = [
   takeLatest(getActionType(loginAction), loginSaga),
   takeLatest(getActionType(registerAction), registerSaga),
@@ -222,4 +257,5 @@ export const homeSagas: any = [
   takeLatest(getActionType(logoutAction), logoutSaga),
   takeLatest(getActionType(sendMessageAction), sendMessageSaga),
   takeLatest(getActionType(fetchRemoteConfigAction), fetchRemotConfigSaga),
+  takeLatest(getActionType(reloadUserAction), reloadUserSaga)
 ];

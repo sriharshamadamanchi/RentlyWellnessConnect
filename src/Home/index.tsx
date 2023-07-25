@@ -21,7 +21,7 @@ import SplashScreen from "react-native-splash-screen";
 import { ChatList } from "./Chat/ChatList";
 import { ChatDetails } from "./Chat/ChatDetails";
 import { ChatTab } from "./Chat/ChatTab";
-import { storeChatsAction, storeGroupChatsAction } from "./redux/actions";
+import { reloadUserAction, storeChatsAction, storeGroupChatsAction } from "./redux/actions";
 import { Info } from "./Info";
 import firebase from "@react-native-firebase/firestore";
 import { GroupChatDetails } from "./Chat/GroupChatDetails";
@@ -152,6 +152,12 @@ export const Home = () => {
 
     React.useEffect(() => {
         if (isLoggedIn) {
+            dispatch(reloadUserAction())
+        }
+    }, [isLoggedIn]);
+
+    React.useEffect(() => {
+        if (isLoggedIn) {
             initialRouteName = "HomeTabbar"
         }
     }, [isLoggedIn])
@@ -169,78 +175,76 @@ export const Home = () => {
     }, []);
 
     React.useEffect(() => {
-        const subscriber = firebase().collection("users").doc(id).onSnapshot((snapshot) => {
-            try {
-                const data = snapshot.data() ?? {}
-                const keys = Object.keys(data) ?? []
-                const chats: any = {}
-                keys.map((key) => {
-                    const userChats = store.getState().home.chats ?? {}
-                    const persistedChats = userChats[key] ?? []
-                    const readMessages: any = {}
-                    persistedChats.map((m: any) => {
-                        if (m.read) {
-                            readMessages[m.t] = true
-                        }
+        if (isLoggedIn) {
+            firebase().collection("users").doc(id).onSnapshot((snapshot) => {
+                try {
+                    const data = snapshot.data() ?? {}
+                    const keys = Object.keys(data) ?? []
+                    const chats: any = {}
+                    keys.map((key) => {
+                        const userChats = store.getState().home.chats ?? {}
+                        const persistedChats = userChats[key] ?? []
+                        const readMessages: any = {}
+                        persistedChats.map((m: any) => {
+                            if (m.read) {
+                                readMessages[m.t] = true
+                            }
+                        })
+                        const chat = data[key] ?? "[]"
+                        chats[key] = JSON.parse(chat)
+                        chats[key] = chats[key].map((message: any) => {
+                            if (readMessages[message.t]) {
+                                return { ...message, read: true }
+                            }
+                            return message;
+                        })
                     })
-                    const chat = data[key] ?? "[]"
-                    chats[key] = JSON.parse(chat)
-                    chats[key] = chats[key].map((message: any) => {
-                        if (readMessages[message.t]) {
-                            return { ...message, read: true }
-                        }
-                        return message;
-                    })
-                })
 
-                console.log("snapshot updated!!")
+                    console.log("snapshot updated!!")
 
-                dispatch(storeChatsAction({ chats }))
-            } catch (err) {
-                console.log("error in user chat", err)
-            }
-        })
-
-        return () => subscriber();
-
-    }, [id])
+                    dispatch(storeChatsAction({ chats }))
+                } catch (err) {
+                    console.log("error in user chat", err)
+                }
+            })
+        }
+    }, [id, isLoggedIn])
 
     React.useEffect(() => {
-        const subscriber = firebase().collection("users").doc("groupChats").onSnapshot((snapshot) => {
-            try {
-                const data = snapshot.data() ?? {}
-                const keys = Object.keys(data) ?? []
-                const chats: any = {}
-                keys.map((key) => {
-                    const userChats = store.getState().home.groupChats ?? {}
-                    const persistedChats = userChats[key] ?? []
-                    const readMessages: any = {}
-                    persistedChats.map((m: any) => {
-                        if (m.read) {
-                            readMessages[m.t] = true
-                        }
+        if (isLoggedIn) {
+            firebase().collection("users").doc("groupChats").onSnapshot((snapshot) => {
+                try {
+                    const data = snapshot.data() ?? {}
+                    const keys = Object.keys(data) ?? []
+                    const chats: any = {}
+                    keys.map((key) => {
+                        const userChats = store.getState().home.groupChats ?? {}
+                        const persistedChats = userChats[key] ?? []
+                        const readMessages: any = {}
+                        persistedChats.map((m: any) => {
+                            if (m.read) {
+                                readMessages[m.t] = true
+                            }
+                        })
+                        const chat = data[key] ?? "[]"
+                        chats[key] = JSON.parse(chat)
+                        chats[key] = chats[key].map((message: any) => {
+                            if (readMessages[message.t]) {
+                                return { ...message, read: true }
+                            }
+                            return message;
+                        })
                     })
-                    const chat = data[key] ?? "[]"
-                    chats[key] = JSON.parse(chat)
-                    chats[key] = chats[key].map((message: any) => {
-                        if (readMessages[message.t]) {
-                            return { ...message, read: true }
-                        }
-                        return message;
-                    })
-                })
 
-                console.log("snapshot updated!!")
+                    console.log("snapshot updated!!")
 
-                dispatch(storeGroupChatsAction({ chats }))
-            } catch (err) {
-                console.log("error in group chat", err)
-            }
-        })
-
-        return () => subscriber();
-
-    }, [id])
+                    dispatch(storeGroupChatsAction({ chats }))
+                } catch (err) {
+                    console.log("error in group chat", err)
+                }
+            })
+        }
+    }, [id, isLoggedIn])
 
     return (
         <Stack.Navigator key={initialRouteName} initialRouteName={initialRouteName}
