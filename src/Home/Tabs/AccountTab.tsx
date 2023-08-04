@@ -1,6 +1,6 @@
 import React from "react"
 import { Alert, Image, ScrollView, StatusBar, StyleSheet, View } from "react-native"
-import { CurvedButton, Label, PrimaryView } from "../../common/components"
+import { GradientButton, Label, PrimaryView } from "../../common/components"
 import LinearGradient from "react-native-linear-gradient"
 import { moderateScale } from "react-native-size-matters"
 import { useDispatch, useSelector } from "react-redux"
@@ -10,10 +10,12 @@ import { loaderSelector } from "../../common/loaderRedux/selectors"
 import { EmptyImageView } from "../LeaderBoard/IndividualRank"
 import { theme } from "../../common/theme"
 import { version } from "../../../package.json"
+import { useNavigation } from "@react-navigation/native"
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1
+        flex: 1,
+        paddingVertical: moderateScale(10)
     },
     logoutButtonGradientView: {
         flex: 1,
@@ -75,19 +77,18 @@ const DetailsView = ({ title, value }: { title: string, value: string }) => {
 export const AccountTab = () => {
 
     const dispatch = useDispatch()
+    const navigation: any = useNavigation();
 
     const user = useSelector((store: any) => store.home.user)
     const { loading }: { loading: boolean } = useSelector(loaderSelector("Logout"));
 
     return (
-        <PrimaryView style={{ flex: 1, backgroundColor: '#9FE3AD' }}>
-            <StatusBar backgroundColor={"#43C6AC"} barStyle="dark-content" />
-            <ScrollView style={styles.container}>
-                <LoadingIndicator loading={loading} />
-                <LinearGradient colors={["#43C6AC", '#F8FFAE']} style={styles.container}>
-                    <LinearGradient colors={["#43C6AC", '#F8FFAE']} style={styles.topCircleStyle}>
-                    </LinearGradient>
-                    <View style={{ marginTop: moderateScale(125) }}>
+        <PrimaryView style={{ backgroundColor: '#43C6AC' }}>
+            <LinearGradient colors={["#43C6AC", '#F8FFAE']} style={styles.container}>
+                <StatusBar backgroundColor={"#43C6AC"} barStyle="dark-content" />
+                <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
+                    <LoadingIndicator loading={loading} />
+                    <View style={{ marginTop: moderateScale(15) }}>
                         {
                             user.photo ?
                                 <Image
@@ -98,63 +99,79 @@ export const AccountTab = () => {
                                 <EmptyImageView name={user.name} style={styles.imageStyle} labelStyle={{ fontSize: theme.fontSizes.xl5 }} />
                         }
                     </View>
-                    <LinearGradient colors={["#43C6AC", '#F8FFAE']} style={styles.bottomCircleStyle}>
-                    </LinearGradient>
                     <View style={styles.detailsView}>
                         <DetailsView title="NAME" value={user.name} />
                         <DetailsView title="EMAIL" value={user.email} />
                     </View>
                     <View style={styles.logoutButtonGradientView}>
-                        <LinearGradient
+
+                        <GradientButton
                             colors={['#bdc3c7', '#2c3e50']}
-                            style={styles.logoutButtonGradientStyle}>
-                            <CurvedButton
-                                title="DELETE ACCOUNT"
-                                bold
-                                buttonStyle={{ flex: 1, width: "100%", alignSelf: "center", backgroundColor: "transparent" }}
-                                onPress={() => {
-                                    Alert.alert('Delete Account', 'Are you sure you want to delete account ?', [
-                                        {
-                                            text: 'Cancel',
-                                            onPress: () => console.log('Cancel Pressed'),
-                                            style: 'cancel',
-                                        },
-                                        {
-                                            text: 'Yes', onPress: async () => {
-                                                dispatch(logoutAction({ deleteAccount: true }))
-                                            }
-                                        },
-                                    ]);
-                                }}
-                            />
-                        </LinearGradient>
-                        <LinearGradient
+                            title="EDIT PROFILE"
+                            bold
+                            m
+                            buttonStyle={styles.logoutButtonGradientStyle}
+                            onPress={() => {
+                                navigation.navigate("EditProfile")
+                            }} />
+
+                        <GradientButton
                             colors={['#bdc3c7', '#2c3e50']}
-                            style={styles.logoutButtonGradientStyle}>
-                            <CurvedButton
-                                title="LOGOUT"
-                                bold
-                                buttonStyle={{ flex: 1, width: "100%", alignSelf: "center", backgroundColor: "transparent" }}
-                                onPress={() => {
-                                    Alert.alert('Logout', 'Are you sure you want to logout ?', [
-                                        {
-                                            text: 'Cancel',
-                                            onPress: () => console.log('Cancel Pressed'),
-                                            style: 'cancel',
-                                        },
-                                        {
-                                            text: 'Yes', onPress: async () => {
-                                                dispatch(logoutAction())
-                                            }
-                                        },
-                                    ]);
-                                }}
-                            />
-                        </LinearGradient>
+                            title="CHANGE PASSWORD"
+                            bold
+                            m
+                            buttonStyle={styles.logoutButtonGradientStyle}
+                            onPress={() => {
+                                navigation.navigate("ChangePassword")
+                            }} />
+
+                        <GradientButton
+                            colors={['#bdc3c7', '#2c3e50']}
+                            title="DELETE ACCOUNT"
+                            bold
+                            m
+                            buttonStyle={styles.logoutButtonGradientStyle}
+                            onPress={() => {
+                                Alert.alert('Delete Account', 'Are you sure you want to delete account ?', [
+                                    {
+                                        text: 'Cancel',
+                                        onPress: () => console.log('Cancel Pressed'),
+                                        style: 'cancel',
+                                    },
+                                    {
+                                        text: 'Yes', onPress: async () => {
+                                            dispatch(logoutAction({ deleteAccount: true }))
+                                        }
+                                    },
+                                ]);
+                            }}
+                        />
+
+                        <GradientButton
+                            colors={['#bdc3c7', '#2c3e50']}
+                            title="LOGOUT"
+                            bold
+                            m
+                            buttonStyle={styles.logoutButtonGradientStyle}
+                            onPress={() => {
+                                Alert.alert('Logout', 'Are you sure you want to logout ?', [
+                                    {
+                                        text: 'Cancel',
+                                        onPress: () => console.log('Cancel Pressed'),
+                                        style: 'cancel',
+                                    },
+                                    {
+                                        text: 'Yes', onPress: async () => {
+                                            dispatch(logoutAction())
+                                        }
+                                    },
+                                ]);
+                            }}
+                        />
                     </View>
-                    <Label m bold white center title={`Version ${version}`} style={{ marginBottom: moderateScale(10) }} />
-                </LinearGradient>
-            </ScrollView>
+                    <Label m bold primary center title={`Version ${version}`} style={{ marginBottom: moderateScale(10) }} />
+                </ScrollView>
+            </LinearGradient>
         </PrimaryView>
     )
 }

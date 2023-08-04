@@ -27,13 +27,13 @@ const styles = StyleSheet.create({
 
 })
 
-export const ActivityTab = () => {
+export const ActivityTab = (params: any = {}) => {
 
     const navigation: any = useNavigation()
     const user = useSelector((store: any) => store.home.user)
     const usersList = useSelector((store: any) => store.home.usersList)
 
-    const id = user.id;
+    const id = params.user ? params.user.id : user.id;
     const userActivity = usersList[id] ?? {}
     const steps = [...(userActivity.steps ?? [])]
     steps.sort((a: any, b: any) => {
@@ -88,7 +88,7 @@ export const ActivityTab = () => {
                         })}
                     </Swiper>
                 </View>
-
+                {!params.user &&
                 <View style={styles.buttonGradientView}>
                     <LinearGradient
                         colors={['#bdc3c7', '#2c3e50']}
@@ -103,6 +103,7 @@ export const ActivityTab = () => {
                         />
                     </LinearGradient>
                 </View>
+                }
             </ScrollView>
         </LinearGradient>
     )

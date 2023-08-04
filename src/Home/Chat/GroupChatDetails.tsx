@@ -10,7 +10,6 @@ import { HeaderBackButton } from "@react-navigation/elements"
 import { useNavigation } from "@react-navigation/native"
 import { EmptyImageView } from "../LeaderBoard/IndividualRank"
 import { StatusBar } from "react-native"
-import { groupImage } from "../../common/constants"
 import { theme } from "../../common/theme"
 
 const styles = StyleSheet.create({
@@ -74,8 +73,8 @@ const SendMessage = ({ from, to, value, setMessage }: { from: string, to: string
 
     return (
         <KeyboardAvoidingView
-            keyboardVerticalOffset={Platform.select({ ios: moderateScale(50), android: 0 })}
-            behavior={Platform.OS === "ios" ? "padding" : "height"} >
+        keyboardVerticalOffset={Platform.select({ ios: moderateScale(50), android: 0 })}
+            behavior={Platform.OS === "ios" ? "padding" : undefined} >
             <View style={styles.inputContainer}>
                 <TextInput
                     placeholder="Type..."
@@ -106,7 +105,7 @@ const SendMessage = ({ from, to, value, setMessage }: { from: string, to: string
     )
 }
 
-const Header = ({ title = "", photo }: { title: string, photo: any }) => {
+const Header = ({ title = "", photo }: { title: string, photo?: any }) => {
     const navigation = useNavigation()
 
     return (
@@ -161,7 +160,7 @@ export const GroupChatDetails = ({ navigation, route: { params = {} } }: any) =>
         <PrimaryView>
             <View style={styles.container}>
                 <StatusBar backgroundColor={"#F2F2F2"} barStyle="dark-content" />
-                <Header title={group} photo={groupImage[group]} />
+                <Header title={group} />
                 <View
                     style={{ flex: 1 }}>
                     <FlatList

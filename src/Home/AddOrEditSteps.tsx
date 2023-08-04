@@ -1,7 +1,6 @@
 import moment from "moment"
 import React, { useState } from "react"
-import { Alert, Dimensions, KeyboardAvoidingView, ScrollView, StyleSheet, TextInput, View } from "react-native"
-import { Calendar } from "react-native-calendars"
+import { Dimensions, KeyboardAvoidingView, ScrollView, StyleSheet, TextInput, View } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import { moderateScale } from "react-native-size-matters"
 import { useSelector } from "react-redux"
@@ -22,6 +21,7 @@ const styles = StyleSheet.create({
     },
     inputContainer: {
         margin: moderateScale(10),
+        marginTop: moderateScale(20),
         alignSelf: 'center'
     },
     textInputStyle: {
@@ -91,21 +91,17 @@ export const AddOrEditSteps = () => {
     const { id } = useSelector((store: any) => store.home.user)
     const usersList = useSelector((store: any) => store.home.usersList)
     const user = usersList[id] ?? {}
+    const serverDate = global?.dateTime?.date ?? moment().format("MM/DD/YYYY")
 
     const [count, setCount] = useState("")
     const [km, setKm] = useState("")
     const [pedoType, setPedoType] = useState(data[0].label)
-    const [date, setDate] = useState(moment().format("YYYY-MM-DD"))
+    const [date] = useState(moment(serverDate, "MM/DD/YYYY").format("YYYY-MM-DD"))
     const loading = useSelector((store: any) => store.loader.loading)
 
     const stepDetails = user?.steps?.find((step: any) => step.date === moment(date, "YYYY-MM-DD").format("DD/MM/YYYY"))
 
     const save = async () => {
-        const totalSteps = parseInt((stepDetails?.count ?? 0), 10) + parseInt(count, 10)
-        if (totalSteps > 100000) {
-            Alert.alert("Alert", "Limit exceeded")
-            return
-        }
         const formattedDate = moment(date, "YYYY-MM-DD").format("DD/MM/YYYY")
         const steps = [...(user?.steps ?? [])]
         const index = steps.findIndex((step) => step.date === formattedDate)
@@ -128,15 +124,15 @@ export const AddOrEditSteps = () => {
         await Firestore.updateUser({ id, details: { ...user, steps } })
         setCount("")
         setKm("")
-        setDate(moment().format("YYYY-MM-DD"))
     }
 
     return (
         <LinearGradient colors={["#43C6AC", '#F8FFAE']} style={styles.container}>
             <LoadingIndicator loading={loading} />
-            <KeyboardAvoidingView style={styles.container}
-                keyboardVerticalOffset={Platform.select({ ios: moderateScale(100), android: 0 })}
-                behavior={Platform.OS === "ios" ? "padding" : "height"}>
+            <KeyboardAvoidingView
+                keyboardVerticalOffset={Platform.select({ ios: moderateScale(120), android: 0 })}
+                behavior={Platform.OS === "ios" ? "padding" : undefined}
+                style={styles.container}>
                 <ScrollView keyboardShouldPersistTaps="handled" style={styles.container}>
                     <View style={styles.container}>
 
@@ -155,7 +151,6 @@ export const AddOrEditSteps = () => {
                                 }}
                             />
                             <InputField
-                                maxLength={10}
                                 style={{ width: moderateScale(225) }}
                                 title={"ENTER STEPS"}
                                 value={count}
@@ -171,7 +166,6 @@ export const AddOrEditSteps = () => {
                                 keyboardType="numeric" />
                             <Label bold primary center title="(or)" style={{ marginHorizontal: moderateScale(5) }} />
                             <InputField
-                                maxLength={10}
                                 style={{ width: moderateScale(225) }}
                                 title={"ENTER KILOMETERS"}
                                 value={km}
@@ -187,25 +181,10 @@ export const AddOrEditSteps = () => {
                                 keyboardType="numeric" />
                             <InputField
                                 title={"DATE"}
-                                value={moment(date, "YYYY-MM-DD").format("DD MMM, ddd")}
-                                setText={setDate}
+                                value={moment(date, "YYYY-MM-DD").format("DD MMM, dddd")}
                                 editable={false}
                                 style={{ opacity: 0.75 }} />
                         </View>
-
-                        <Calendar
-                            style={styles.calendarStyle}
-                            minDate={moment().subtract(3, "days").format("YYYY-MM-DD")}
-                            maxDate={moment().format("YYYY-MM-DD")}
-                            markedDates={{
-                                [date]: { selected: true, disableTouchEvent: true, selectedColor: 'red' }
-                            }}
-                            onDayPress={day => {
-                                setDate(day.dateString)
-                            }}
-                            hideArrows
-                            disableMonthChange
-                        />
                     </View>
 
                     <View style={styles.saveButtonGradientView}>

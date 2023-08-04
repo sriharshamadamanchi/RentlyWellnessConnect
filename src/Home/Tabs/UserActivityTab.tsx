@@ -2,10 +2,11 @@ import React from "react"
 import { StatusBar, StyleSheet } from "react-native"
 import { moderateScale } from "react-native-size-matters"
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs"
-import { IndividualRank } from "./IndividualRank"
-import { TeamRank } from "./TeamRank"
-import { Label, PrimaryView } from "../../common/components"
+import { Label } from "../../common/components"
 import LinearGradient from "react-native-linear-gradient"
+import { ActivityTab } from "./ActivityTab"
+import { StepsList } from "../StepsList"
+import { View } from "react-native"
 
 const styles = StyleSheet.create({
     container: {
@@ -15,14 +16,20 @@ const styles = StyleSheet.create({
 
 const TopTab = createMaterialTopTabNavigator();
 
-export const LeaderTab = () => {
+export const UserActivityTab = ({navigation, route:{params = {}}}: any) => {
+
+    const user = params.user ?? {}
+
+    React.useEffect(() => {
+        navigation.setOptions({
+            headerTitle: user.name ?? "User Activity"
+        })
+    },[])
 
     return (
-        <PrimaryView style={{ backgroundColor: '#43C6AC' }}>
-            <StatusBar backgroundColor={"#43C6AC"} barStyle="dark-content" />
+        <View style={styles.container}>
+            <StatusBar backgroundColor={"#FFFFFF"} barStyle="dark-content" />
             <LinearGradient colors={["#43C6AC", '#F8FFAE']} style={styles.container}>
-                <Label xxl center bold white title={"Leaderboard"} style={{ marginVertical: moderateScale(20) }} />
-
                 <TopTab.Navigator
                     screenOptions={{
                         swipeEnabled: false,
@@ -41,13 +48,13 @@ export const LeaderTab = () => {
                     }}
                 >
                     <TopTab.Screen
-                        name={"INDIVIDUAL"}
-                        children={() => <IndividualRank />} />
+                        name={"ACTIVITY"}
+                        children={() => <StepsList user = {user} />} />
                     <TopTab.Screen
-                        name={"TEAM"}
-                        children={() => <TeamRank />} />
+                        name={"CHART"}
+                        children={() => <ActivityTab user = {user}/>} />
                 </TopTab.Navigator>
             </LinearGradient>
-        </PrimaryView>
+        </View>
     )
 }

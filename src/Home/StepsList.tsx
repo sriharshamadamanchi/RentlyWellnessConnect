@@ -1,6 +1,6 @@
 import React from "react"
 import { FlatList, StyleSheet, View } from "react-native"
-import { Card, Divider, Label } from "../common/components"
+import { Card, Divider, Label, Ripple } from "../common/components"
 import LinearGradient from "react-native-linear-gradient"
 import { moderateScale } from "react-native-size-matters"
 import { useSelector } from "react-redux"
@@ -21,7 +21,8 @@ const styles = StyleSheet.create({
         width: "90%",
         alignSelf: 'center',
         justifyContent: 'space-between',
-        marginVertical: moderateScale(5)
+        marginVertical: moderateScale(5),
+        overflow: 'hidden'
     },
     textInputStyle: {
         backgroundColor: 'white',
@@ -75,7 +76,7 @@ const DateView = ({ date }: { date: string }) => {
     )
 }
 
-const InputField = ({ value, index, showDropdown, setShowDropDown }: { value: string, index: number, showDropdown: any, setShowDropDown: (val: any) => void }) => {
+const InputField = ({ value, index, showDropdown }: { value: string, index: number, showDropdown: any }) => {
     return (
         <View style={styles.textInputStyle}>
             <View
@@ -86,26 +87,19 @@ const InputField = ({ value, index, showDropdown, setShowDropDown }: { value: st
                     name={showDropdown === index ? "upcircle" : "downcircle"}
                     color="black"
                     size={moderateScale(24)}
-                    style={{ padding: moderateScale(10), alignSelf: 'center' }}
-                    onPress={() => {
-                        if (showDropdown === index) {
-                            setShowDropDown(null)
-                        } else {
-                            setShowDropDown(index)
-                        }
-                    }} />
+                    style={{ padding: moderateScale(10), alignSelf: 'center' }} />
             </View>
         </View>
     )
 }
 
-export const StepsList = () => {
+export const StepsList = (params: any = {}) => {
 
     const user = useSelector((store: any) => store.home.user)
     const usersList = useSelector((store: any) => store.home.usersList)
-    const [showDropdown, setShowDropDown] = React.useState(null)
+    const [showDropdown, setShowDropDown]: any = React.useState(null)
 
-    const id = user.id;
+    const id = params.user ? params.user.id : user.id;
     const userActivity = usersList[id] ?? {}
     const steps = [...(userActivity.steps ?? [])]
     steps.sort((a: any, b: any) => {
@@ -118,7 +112,7 @@ export const StepsList = () => {
             <View style={styles.container}>
                 {steps.length === 0 &&
                     <View style={{ height: "80%", justifyContent: 'center', alignItems: 'center' }}>
-                        <Label xxl bold white center title={"No History"} />
+                        <Label xxl bold white center title={"No Activity"} />
                     </View>
                 }
                 <FlatList
@@ -126,10 +120,17 @@ export const StepsList = () => {
                     renderItem={({ item, index }: { item: any, index: number }) => {
                         return (
                             <View >
-                                <View style={styles.itemContainer}>
-                                <DateView date={item.date} />
-                                    <InputField value={`${item.count} steps`} index={index} showDropdown={showDropdown} setShowDropDown={setShowDropDown} />
-                                </View>
+                                <Ripple style={styles.itemContainer}
+                                    onPress={() => {
+                                        if (showDropdown === index) {
+                                            setShowDropDown(null)
+                                        } else {
+                                            setShowDropDown(index)
+                                        }
+                                    }}>
+                                    <DateView date={item.date} />
+                                    <InputField value={`${item.count} steps`} index={index} showDropdown={showDropdown} />
+                                </Ripple>
                                 {showDropdown === index &&
                                     <Card disabled style={styles.historyCardStyle}>
                                         <FlatList
@@ -139,7 +140,7 @@ export const StepsList = () => {
                                                     <>
                                                         <View style={styles.historyContainer}>
                                                             <Label m bold primary title={moment(item.time).format("hh:mm A")} />
-                                                            <Label m bold primary title={`${item.count} steps`} />
+                                                            <Label center style={{ flex: 0.8 }} ellipsizeMode="end" numberOfLines={2} m bold primary title={`${item.count} steps`} />
                                                             <Label m bold primary title={item.type} />
                                                         </View>
                                                         <Divider />

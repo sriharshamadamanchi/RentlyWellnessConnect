@@ -582,7 +582,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.rently.connect;
 				PRODUCT_NAME = RentlyConnect;
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = RentlyConnectAdHoc;
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = RentlyConnectAppStore;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};

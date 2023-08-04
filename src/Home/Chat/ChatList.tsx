@@ -107,7 +107,6 @@ export const ChatList = () => {
   const usersList = useSelector((store: any) => store.home.usersList ?? {})
   const [filteredChats, setFilteredChats] = React.useState(usersList)
   const keys = Object.keys(filteredChats)
-
   const chats = useSelector((store: any) => store.home.chats ?? {})
   const [searchQuery, setSearchQuery] = React.useState("")
 
@@ -123,6 +122,17 @@ export const ChatList = () => {
 
     setFilteredChats(filter)
   }, [searchQuery])
+
+  keys.sort((a: any, b: any) => {
+    const user_a = filteredChats[a] ?? {}
+    const messages_a = chats[`${user_a.id}`] ?? []
+    const lastMessage_a = messages_a[messages_a.length - 1] ?? {}
+
+    const user_b = filteredChats[b] ?? {}
+    const messages_b = chats[`${user_b.id}`] ?? []
+    const lastMessage_b = messages_b[messages_b.length - 1] ?? {}
+    return parseInt(lastMessage_b.t ?? "0", 10) - parseInt(lastMessage_a.t ?? "0", 10)
+  });
 
   return (
     <View style={styles.container}>

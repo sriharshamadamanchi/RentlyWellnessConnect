@@ -6,8 +6,9 @@ import { moderateScale } from "react-native-size-matters"
 import { useSelector } from "react-redux"
 import { Card, Divider, Label } from "../../common/components"
 import { AnimatedCircularProgress } from "react-native-circular-progress"
-import { groupImage, teams } from "../../common/constants"
-import { Image } from "react-native"
+import { colors, teams } from "../../common/constants"
+import { EmptyImageView } from "./IndividualRank"
+import { theme } from "../../common/theme"
 
 const styles = StyleSheet.create({
     container: {
@@ -79,10 +80,10 @@ const styles = StyleSheet.create({
     },
     cardStyle: {
         alignSelf: 'center',
-        height: moderateScale(200),
         borderRadius: moderateScale(10),
-        width: moderateScale(300),
-        padding: 0,
+        width: moderateScale(320),
+        padding: moderateScale(10),
+        paddingBottom: moderateScale(20),
         margin: 0
     },
     rankNumberViewInCard: {
@@ -119,7 +120,7 @@ const RankView = ({ rank, userDetails }: { rank: string, userDetails: any }) => 
     return (
         <View style={styles.rankMainContainer}>
             <View style={{ ...styles.rankContainer, ...style }}>
-                <Image source={groupImage[userDetails.name]} style={imageStyle} />
+                <EmptyImageView name={userDetails.name} style={imageStyle} labelStyle={{ fontSize: theme.fontSizes.xxl }} />
             </View>
             <View style={{ ...styles.rankView, ...style }}>
                 <Label s bold primary center title={rank} />
@@ -132,6 +133,7 @@ const RankView = ({ rank, userDetails }: { rank: string, userDetails: any }) => 
 export const TeamRank = () => {
     const GOAL = 504461942
     const usersList = useSelector((store: any) => store.home.usersList ?? {})
+    const captains = useSelector((store: any) => store.home.remoteConfig?.captains ?? {})
     const keys = Object.keys(usersList)
 
     const rankingList: any = teams.map((team) => {
@@ -189,30 +191,44 @@ export const TeamRank = () => {
                                     </View>
 
                                     <Divider style={{ backgroundColor: 'white', marginTop: moderateScale(10), marginBottom: moderateScale(30), alignSelf: 'center', width: Dimensions.get("window").width * 0.8 }} />
-                                    <Label bold xl title={`GOAL: ${GOAL} Steps`} center style={{ marginBottom: moderateScale(20)}} primary />
+                                    <Label bold xl title={`GOAL: ${GOAL} Steps`} center style={{ marginBottom: moderateScale(20) }} primary />
                                 </>
                             )
                         }}
                         renderItem={({ item, index }) => {
                             let percent = (((item?.steps ?? 0) / GOAL) * 100);
-                            if(percent > 100) percent = 100;
+                            if (percent > 100) percent = 100;
                             return (
                                 <Card disabled style={styles.cardStyle}>
-                                    <View style={{ flex: 0.8, justifyContent: 'center', alignItems: 'center' }}>
+                                    <View style={{ paddingVertical: moderateScale(10), justifyContent: 'center', alignItems: 'center' }}>
                                         <Label underLine center bold primary title={`Team ${item.name}`} />
-                                        <Label center bold s primary title={`Total steps: ${item.steps}`} />
-                                        <Label center bold s primary title={`Remaining steps: ${(GOAL - item.steps<0)?0:GOAL - item.steps}`} />
+                                        <Label style={{ width: "70%" }} center bold s primary title={`Total steps: ${item.steps}`} />
+                                        <Label center bold s primary title={`Remaining steps: ${(GOAL - item.steps < 0) ? 0 : GOAL - item.steps}`} />
                                     </View>
+                                    {
+                                        captains[item.name] &&
+                                        <View style={{ paddingBottom: moderateScale(10),justifyContent: 'center', alignItems: 'center' }}>
+                                            <Label underLine center bold primary title={"Captains"} />
+                                            {
+                                                captains[item.name].map((captain: string) => {
+                                                    return (
+                                                        <Label key={captain} center bold title={captain} style={{color: colors[captain.charAt(0).toUpperCase()]}}/>
+                                                    )
+                                                })
+                                            }
+                                        </View>
+
+                                    }
                                     <LinearGradient colors={["#200122", '#6f0000']} style={styles.rankNumberViewInCard}>
                                         <Label center bold white title={`${index + 1}`} style={{ paddingLeft: moderateScale(10), paddingBottom: moderateScale(10) }} />
                                     </LinearGradient>
-                                    <View style={{ alignSelf: 'center', width: moderateScale(120) }}>
+                                    <View style={{ alignSelf: 'center', width: moderateScale(150) }}>
                                         <AnimatedCircularProgress
                                             size={moderateScale(100)}
                                             width={moderateScale(15)}
                                             fill={(((item?.steps ?? 0) / GOAL) * 100)}
                                             duration={3000}
-                                            tintColor="cyan"
+                                            tintColor={colors[item.name.charAt(0).toUpperCase()]}
                                             style={{ alignSelf: 'center' }}
                                             onAnimationComplete={() => console.log('onAnimationComplete')}
                                             backgroundColor="black" />

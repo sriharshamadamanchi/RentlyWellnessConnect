@@ -68,8 +68,8 @@ const SendMessage = ({ from, to, token, value, setMessage }: { from: string, to:
 
     return (
         <KeyboardAvoidingView
-            keyboardVerticalOffset={Platform.select({ ios: moderateScale(50), android: 0 })}
-            behavior={Platform.OS === "ios" ? "padding" : "height"} >
+        keyboardVerticalOffset={Platform.select({ ios: moderateScale(50), android: 0 })}
+        behavior={Platform.OS === "ios" ? "padding" : undefined} >
             <View style={styles.inputContainer}>
                 <TextInput
                     placeholder="Type..."
@@ -81,7 +81,6 @@ const SendMessage = ({ from, to, token, value, setMessage }: { from: string, to:
                     onChangeText={(text: string) => {
                         setMessage(text)
                     }}
-                    autoFocus
                 />
                 <Ionicons
                     name={"send"}

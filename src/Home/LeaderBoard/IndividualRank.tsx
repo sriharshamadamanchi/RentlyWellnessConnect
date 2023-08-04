@@ -1,5 +1,5 @@
 import React from "react"
-import { Dimensions, FlatList, Image, Keyboard, TextInput } from "react-native"
+import { Dimensions, FlatList, Image, Keyboard, RefreshControl, TextInput } from "react-native"
 import { StyleSheet, View } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import { moderateScale } from "react-native-size-matters"
@@ -10,6 +10,8 @@ import { Platform } from "react-native"
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { colors } from "../../common/constants"
 import { theme } from "../../common/theme"
+import { DropDown } from "../../common/components/DropDown/DropDown"
+import { useNavigation } from "@react-navigation/native"
 
 const styles = StyleSheet.create({
     container: {
@@ -105,8 +107,8 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         alignItems: "center",
         flexDirection: 'row',
-        marginVertical: moderateScale(20),
-        width: "75%",
+        margin: moderateScale(20),
+        width: moderateScale(200),
         height: moderateScale(45),
         borderRadius: moderateScale(50),
         backgroundColor: "#FFFFFF"
@@ -123,6 +125,13 @@ const styles = StyleSheet.create({
         fontWeight: "400",
         marginHorizontal: moderateScale(10),
         color: '#454545',
+    },
+    filterContainer: {
+        flexDirection: 'row',
+        alignSelf: 'center',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginHorizontal: moderateScale(20)
     }
 })
 
@@ -185,7 +194,7 @@ const Search = ({ searchQuery, setSearchQuery }: { searchQuery: string, setSearc
     return (
         <KeyboardAvoidingView
             keyboardVerticalOffset={Platform.select({ ios: moderateScale(50), android: 0 })}
-            behavior={Platform.OS === "ios" ? "padding" : "height"} >
+            behavior={Platform.OS === "ios" ? "padding" : undefined} >
             <View style={styles.inputContainer}>
                 <TextInput
                     placeholder="Search..."
@@ -200,38 +209,61 @@ const Search = ({ searchQuery, setSearchQuery }: { searchQuery: string, setSearc
                     }}
                 />
                 <Ionicons
-                    name={"search"}
+                    name={searchQuery.trim() !== "" ? "close" : "search"}
                     color="#000000"
                     style={{ position: 'absolute', right: 0, padding: moderateScale(10) }}
                     size={moderateScale(20)}
                     onPress={() => {
-                        Keyboard.dismiss()
+                        if (searchQuery.trim() !== "") {
+                            setSearchQuery("")
+                        } else {
+                            Keyboard.dismiss()
+                        }
                     }} />
             </View>
         </KeyboardAvoidingView>
     )
 }
 
+const data = [
+    { label: 'All', value: 'All' },
+    { label: 'Luna', value: 'Luna' },
+    { label: 'Apollo', value: 'Apollo' },
+    { label: 'Ranger', value: 'Ranger' }
+];
+
 export const IndividualRank = () => {
 
+    const navigation: any = useNavigation()
     const user = useSelector((store: any) => store.home.user) ?? {}
     const usersList = useSelector((store: any) => store.home.usersList ?? {})
     const [searchQuery, setSearchQuery] = React.useState("")
     const keys = Object.keys(usersList)
+    const [team, setTeam] = React.useState(data[0].value)
 
-    const rankingList: any = []
+    const [rankingList, setRankingList] = React.useState([])
 
-    for (let i = 0; i < keys.length; i++) {
-        const userDetails = usersList[keys[i]] ?? {}
-        let totalSteps = 0;
-        const steps = userDetails?.steps ?? []
-        for (let j = 0; j < steps.length; j++) {
-            totalSteps = totalSteps + parseInt((steps[j]?.count ?? 0))
+    React.useEffect(() => {
+        const list: any = []
+        for (let i = 0; i < keys.length; i++) {
+            const userDetails = usersList[keys[i]] ?? {}
+            let totalSteps = 0;
+            const steps = userDetails?.steps ?? []
+            for (let j = 0; j < steps.length; j++) {
+                totalSteps = totalSteps + parseInt((steps[j]?.count ?? 0))
+            }
+            list.push({ ...userDetails, totalSteps })
         }
-        rankingList.push({ ...userDetails, totalSteps })
-    }
 
-    rankingList.sort((a: any, b: any) => b.totalSteps - a.totalSteps)
+        list.sort((a: any, b: any) => b.totalSteps - a.totalSteps)
+        if (team === "All") {
+            setRankingList(list)
+        } else {
+            setRankingList(list.filter((data: any) => data.team === team))
+        }
+    }, [team, user.name])
+
+
     const isFirstRankPresent = rankingList.length > 0
     const isSecondRankPresent = rankingList.length > 1
     const isThirdRankPresent = rankingList.length > 2
@@ -250,20 +282,31 @@ export const IndividualRank = () => {
         const filter: any = []
         Object.keys(usersList).map((id: any) => {
             const name = (usersList[id]?.name ?? "").toLowerCase()
-            if (name.includes(searchQuery.toLowerCase())) {
+            if (name.includes(searchQuery.toLowerCase()) && (usersList[id]?.team === team || team === "All")) {
                 filter.push(id)
             }
         })
 
         setFilteredRanks(filter)
 
-    }, [searchQuery])
+    }, [searchQuery, team])
 
     return (
         <View style={styles.container}>
             <LinearGradient colors={["#43C6AC", '#F8FFAE']} style={styles.container}>
                 <View style={styles.container}>
-                    <Search searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+                    <View style={styles.filterContainer}>
+                        <Search searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+                        <DropDown
+                            data={data}
+                            value={team}
+                            onChange={({ value }) => {
+                                setTeam(value)
+                            }}
+                            viewStyle={{ alignSelf: "center" }}
+                            style={{ width: moderateScale(110) }}
+                        />
+                    </View>
                     {searchQuery && filteredRanks.length === 0 &&
                         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                             <Label xl bold white title="No Users Found!!" />
@@ -271,6 +314,25 @@ export const IndividualRank = () => {
                     }
                     <FlatList
                         data={rankingList}
+                        refreshControl={<RefreshControl refreshing={false} onRefresh={() => {
+                            const list: any = []
+                            for (let i = 0; i < keys.length; i++) {
+                                const userDetails = usersList[keys[i]] ?? {}
+                                let totalSteps = 0;
+                                const steps = userDetails?.steps ?? []
+                                for (let j = 0; j < steps.length; j++) {
+                                    totalSteps = totalSteps + parseInt((steps[j]?.count ?? 0))
+                                }
+                                list.push({ ...userDetails, totalSteps })
+                            }
+
+                            list.sort((a: any, b: any) => b.totalSteps - a.totalSteps)
+                            if (team === "All") {
+                                setRankingList(list)
+                            } else {
+                                setRankingList(list.filter((data: any) => data.team === team))
+                            }
+                        }} />}
                         ListHeaderComponent={() => {
                             if (searchQuery) {
                                 return null
@@ -299,12 +361,15 @@ export const IndividualRank = () => {
                                 </>
                             )
                         }}
-                        renderItem={({ item, index }) => {
+                        renderItem={({ item, index }: any) => {
                             if (!(filteredRanks.includes(item.id))) {
                                 return null
                             }
                             return (
-                                <Card disabled style={styles.cardStyle}>
+                                <Card style={styles.cardStyle}
+                                    onPress={() => {
+                                        navigation.navigate("UserActivityTab", { user: item })
+                                    }}>
                                     <View style={{ marginLeft: moderateScale(5), justifyContent: 'center' }}>
                                         {
                                             item.photo ?
@@ -319,7 +384,7 @@ export const IndividualRank = () => {
 
                                     <View style={{ flex: 0.8, padding: moderateScale(5), justifyContent: 'center', alignItems: 'center' }}>
                                         <Label center bold m primary title={item.name} />
-                                        <Label center bold s primary title={`${item.totalSteps} steps`} />
+                                        <Label style={{width: "90%"}} center bold s primary title={`${item.totalSteps} steps`} />
                                         {item.team &&
                                             <Label center bold m primary title={`Team: ${item.team}`} />
                                         }
@@ -330,7 +395,7 @@ export const IndividualRank = () => {
                                 </Card>
                             )
                         }}
-                        keyExtractor={(item, index) => `${index}.${item.id}`}
+                        keyExtractor={(item: any, index: number) => `${index}.${item.id}`}
                     />
                 </View>
             </LinearGradient>

@@ -22,13 +22,16 @@ import { ChatList } from "./Chat/ChatList";
 import { ChatDetails } from "./Chat/ChatDetails";
 import { ChatTab } from "./Chat/ChatTab";
 import { reloadUserAction, storeChatsAction, storeGroupChatsAction } from "./redux/actions";
-import { Info } from "./Info";
 import firebase from "@react-native-firebase/firestore";
 import { GroupChatDetails } from "./Chat/GroupChatDetails";
 import { store } from "../common/store";
 import { Login } from "../Authentication/Login";
 import { Register } from "../Authentication/Register";
 import { ForgotPassword } from "../Authentication/ForgotPassword";
+import { useNavigation } from "@react-navigation/native";
+import { EditProfile } from "../Authentication/EditProfile";
+import { ChangePassword } from "../Authentication/ChangePassword";
+import { UserActivityTab } from "./Tabs/UserActivityTab";
 
 const Tab = createBottomTabNavigator();
 
@@ -56,6 +59,9 @@ const styles = StyleSheet.create({
 });
 
 export const HomeTabbar = () => {
+
+    const navigation: any = useNavigation();
+
     return (
         <View style={styles.tabsStyle}>
             <Tab.Navigator
@@ -79,7 +85,12 @@ export const HomeTabbar = () => {
                         tabBarIcon: ({ focused }) => <Icon name="home" color={focused ? "green" : "grey"} size={moderateScale(30)} />
                     }}
                     name={"DASHBOARD"}
-                    component={HomeTopTabbar} />
+                    component={HomeTopTabbar}
+                    listeners={{
+                        tabPress: (e) => {
+                            navigation.navigate("HOME")
+                        }
+                    }} />
                 <Tab.Screen
                     options={{
                         tabBarIcon: ({ focused }) => <MaterialIcon name="leaderboard" color={focused ? "green" : "grey"} size={moderateScale(30)} />
@@ -132,7 +143,7 @@ export const HomeTopTabbar = () => {
                         name={"HOME"}
                         children={() => <HomeTab />} />
                     <TopTab.Screen
-                        name={"ACTIVITY"}
+                        name={"CHART"}
                         children={() => <ActivityTab />} />
                 </TopTab.Navigator>
             </LinearGradient>
@@ -323,10 +334,29 @@ export const Home = () => {
                         />
                         <Stack.Screen
                             options={{
-                                headerShown: false
+                                title: "",
+                                headerStyle: {
+                                    borderBottomWidth: 0,
+                                    elevation: 0,
+                                    shadowOpacity: 0
+                                }
                             }}
-                            name="Info"
-                            component={Info}
+                            name="UserActivityTab"
+                            component={UserActivityTab}
+                        />
+                        <Stack.Screen
+                            options={{
+                                title: "Edit Profile"
+                            }}
+                            name="EditProfile"
+                            component={EditProfile}
+                        />
+                        <Stack.Screen
+                            options={{
+                                title: "Change Password"
+                            }}
+                            name="ChangePassword"
+                            component={ChangePassword}
                         />
                     </>
                     :

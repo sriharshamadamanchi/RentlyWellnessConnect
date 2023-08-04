@@ -1,17 +1,18 @@
 import React from "react"
 import { KeyboardAvoidingView, ScrollView, StyleSheet, View } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
-import { AnchorButton, GradientButton, InputField } from "../common/components"
+import { GradientButton, InputField } from "../common/components"
 import { moderateScale } from "react-native-size-matters"
-import { useDispatch, useSelector } from "react-redux"
-import { loaderSelector } from "../common/loaderRedux/selectors"
+import { useDispatch } from "react-redux"
 import { LoadingIndicator } from "../common/components/LoadingIndicator/LoadingIndicator"
 import { useNavigation } from "@react-navigation/native"
 import { Alert } from "react-native"
 import { StatusBar } from "react-native"
-import { registerAction } from "../Home/redux/actions"
 import { eyeIcon, eyeWithLineIcon } from "../common/constants"
 import { Platform } from "react-native"
+import auth from '@react-native-firebase/auth'
+import { logoutAction } from "../Home/redux/actions"
+import { Keyboard } from "react-native"
 
 const styles = StyleSheet.create({
     mainContainer: {
@@ -47,61 +48,68 @@ const formatName = (name: string) => {
         .join(' ');
 }
 
-export const Register = () => {
-    const [name, setName] = React.useState("")
-    const [email, setEmail] = React.useState("")
-    const [password, setPassword] = React.useState("")
+export const ChangePassword = () => {
+    const [loading, setLoading] = React.useState(false)
+    const [newPassword, setNewPassword] = React.useState("")
     const [confirmPassword, setConfirmPassword] = React.useState("")
 
-    const [showPassword, setShowPassword] = React.useState(eyeIcon)
+    const [showNewPassword, setShowNewPassword] = React.useState(eyeIcon)
     const [showConfirmPassword, setShowConfirmPassword] = React.useState(eyeIcon)
 
     const dispatch = useDispatch()
-    const { loading }: any = useSelector(loaderSelector("Register"))
     const navigation: any = useNavigation();
+
+    const update = async () => {
+        try {
+            setLoading(true)
+            await auth().currentUser?.updatePassword(newPassword)
+            Alert.alert("Success", "Updated successfully")
+        } catch (err: any) {
+            if (err.code === "auth/requires-recent-login") {
+                Alert.alert("Requires recent login", "This operation is sensitive and requires recent authentication. Log in again before retrying this request.", [
+                    {
+                        text: 'Cancel',
+                        onPress: () => console.log('Cancel Pressed'),
+                        style: 'cancel',
+                    },
+                    {
+                        text: 'Logout', onPress: async () => {
+                            dispatch(logoutAction())
+                        }
+                    },
+                ]);
+            } else if (err.message) {
+                Alert.alert("Error", err.message)
+            }
+        } finally {
+            setLoading(false)
+        }
+    }
 
     return (
         <LinearGradient colors={["#43C6AC", '#F8FFAE']} style={styles.mainContainer}>
             <StatusBar backgroundColor={"#FFFFFF"} barStyle="dark-content" />
             <LoadingIndicator loading={loading} />
             <KeyboardAvoidingView style={styles.mainContainer}
-                keyboardVerticalOffset={Platform.select({ ios: moderateScale(120), android: 0 })}
-                behavior={Platform.OS === "ios" ? "padding" : undefined}>
-                <ScrollView keyboardShouldPersistTaps="handled" style={styles.mainContainer}>
+                keyboardVerticalOffset={Platform.select({ ios: moderateScale(100), android: 0 })}
+                behavior={Platform.OS === "ios" ? "padding" : "height"}>
+                <ScrollView automaticallyAdjustKeyboardInsets={Platform.OS === 'android'} keyboardShouldPersistTaps="handled" style={styles.mainContainer}>
                     <View style={styles.container}>
-                        <InputField
-                            maxLength={30}
-                            title="NAME"
-                            value={name}
-                            onChangeText={(text) => {
-                                setName(text)
-                            }}
-                            inputStyle={styles.inputStyle}
-                        />
 
                         <InputField
-                            title="EMAIL"
-                            value={email}
+                            secureTextEntry={showNewPassword === eyeIcon}
+                            title="NEW PASSWORD"
+                            value={newPassword}
                             onChangeText={(text) => {
-                                setEmail(text)
+                                setNewPassword(text)
                             }}
                             inputStyle={styles.inputStyle}
-                        />
-
-                        <InputField
-                            secureTextEntry={showPassword === eyeIcon}
-                            title="PASSWORD"
-                            value={password}
-                            onChangeText={(text) => {
-                                setPassword(text)
-                            }}
-                            inputStyle={styles.inputStyle}
-                            icon={showPassword}
+                            icon={showNewPassword}
                             onPressIcon={() => {
-                                if (showPassword !== eyeIcon) {
-                                    setShowPassword(eyeIcon)
+                                if (showNewPassword !== eyeIcon) {
+                                    setShowNewPassword(eyeIcon)
                                 } else {
-                                    setShowPassword(eyeWithLineIcon)
+                                    setShowNewPassword(eyeWithLineIcon)
                                 }
                             }}
                         />
@@ -123,55 +131,28 @@ export const Register = () => {
                                 }
                             }}
                         />
-                        <AnchorButton
-                            bold
-                            s
-                            title="FORGOT PASSWORD ?"
-                            onPress={() => {
-                                navigation.navigate("ForgotPassword")
-                            }}
-                        />
                         <View style={styles.registerButtonContainer}>
                             <GradientButton
                                 colors={['#bdc3c7', '#2c3e50']}
-                                title="REGISTER"
+                                title="UPDATE"
                                 bold
                                 m
                                 buttonStyle={styles.registerButtonStyle}
                                 onPress={() => {
-                                    if (name.trim() === "") {
-                                        Alert.alert("Alert", "Name can't be blank")
-                                        return
-                                    }
-                                    if (name.trim().length < 8) {
-                                        Alert.alert("Alert", "Name should contain minimum of 8 characters")
-                                        return
-                                    }
-                                    if (!(/^[a-zA-Z\s]+$/.test(name.trim()))) {
-                                        Alert.alert("Alert", "Name should not contain other than alphabets")
-                                        return
-                                    }
-                                    if (email.trim() === "") {
-                                        Alert.alert("Alert", "Email can't be blank")
-                                        return
-                                    }
-                                    if (!(/^\S+@\S+\.\S+$/.test(email.trim()))) {
-                                        Alert.alert("Alert", "Invalid Email")
-                                        return
-                                    }
-                                    if (password.trim() === "") {
+                                    Keyboard.dismiss()
+                                    if (newPassword.trim() === "") {
                                         Alert.alert("Alert", "Password can't be blank")
                                         return
                                     }
-                                    if (password.trim().length < 8) {
+                                    if (newPassword.trim().length < 8) {
                                         Alert.alert("Alert", "Password should be of minimum length 8")
                                         return
                                     }
-                                    if (password.trim() !== confirmPassword.trim()) {
+                                    if (newPassword.trim() !== confirmPassword.trim()) {
                                         Alert.alert("Alert", "Passwords dosen't match")
                                         return
                                     }
-                                    dispatch(registerAction({ name: formatName(name.trim()), email: email.trim().toLowerCase(), password: password.trim() }))
+                                    update()
                                 }} />
                         </View>
                     </View>

@@ -209,7 +209,7 @@ export function* fetchRemotConfigSaga(): any {
       const [key, entry]: any = $;
       try {
         const parsedEntries = JSON.parse(entry.asString())
-        if (parsedEntries) {
+        if (parsedEntries && key === "moon_landing_teams") {
           Object.keys(parsedEntries).map((team: string) => {
             if (parsedEntries[team] && parsedEntries[team]?.length > 0) {
               parsedEntries[team] = parsedEntries[team].map((id: string) => id.toLowerCase())

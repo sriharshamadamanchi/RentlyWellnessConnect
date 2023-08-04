@@ -1,12 +1,12 @@
 import React from "react"
-import { FlatList, Image } from "react-native"
+import { FlatList } from "react-native"
 import { StyleSheet, View } from "react-native"
 import { moderateScale } from "react-native-size-matters"
 import { useSelector } from "react-redux"
 import { Label, Ripple } from "../../common/components"
 import { useNavigation } from "@react-navigation/native"
 import moment from "moment"
-import { groupImage, teams } from "../../common/constants"
+import { teams } from "../../common/constants"
 import { EmptyImageView } from "../LeaderBoard/IndividualRank"
 import { theme } from "../../common/theme"
 
@@ -45,7 +45,6 @@ export const Groups = () => {
     const navigation: any = useNavigation()
     const groupChats = useSelector((store: any) => store.home.groupChats ?? {})
 
-
     return (
         <View style={styles.container}>
             <View style={styles.container}>
@@ -70,15 +69,7 @@ export const Groups = () => {
                                         navigation.navigate("GroupChatDetails", { group: item })
                                     }}>
                                     <View style={{ width: "15%", marginHorizontal: moderateScale(5), alignSelf: 'center', }}>
-                                        {
-                                            groupImage[item] ?
-                                                <Image
-                                                    source={groupImage[item]}
-                                                    style={styles.cardImageStyle}
-                                                />
-                                                :
-                                                <EmptyImageView name={item} style={styles.cardImageStyle} labelStyle={{ fontSize: theme.fontSizes.xxl }} />
-                                        }
+                                    <EmptyImageView name={item} style={styles.cardImageStyle} labelStyle={{ fontSize: theme.fontSizes.xxl }} />
                                     </View>
                                     <View style={{ width: "55%", justifyContent: 'center' }}>
                                         <Label bold m primary title={item} style={{ marginLeft: moderateScale(10) }} />

@@ -48,7 +48,7 @@ export const ForgotPassword = () => {
         <LinearGradient colors={["#43C6AC", '#F8FFAE']} style={styles.mainContainer}>
             <StatusBar backgroundColor={"#FFFFFF"} barStyle="dark-content" />
             <LoadingIndicator loading={loading} />
-            <ScrollView keyboardShouldPersistTaps="always" style={styles.mainContainer}>
+            <ScrollView keyboardShouldPersistTaps="handled" style={styles.mainContainer}>
                 <View style={styles.container}>
                     <Label center bold white title="Please enter the email address you'd like your password reset information sent to" style={styles.labelStyle} />
                     <InputField
@@ -64,6 +64,7 @@ export const ForgotPassword = () => {
                             colors={['#bdc3c7', '#2c3e50']}
                             title="REQUEST LINK"
                             bold
+                            m
                             buttonStyle={styles.buttonStyle}
                             onPress={() => {
                                 Keyboard.dismiss()

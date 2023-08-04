@@ -58,8 +58,8 @@ export const Login = ({ route: { params = {} } }: any) => {
             <StatusBar backgroundColor={"#FFFFFF"} barStyle="dark-content" />
             <LoadingIndicator loading={loading} />
             <KeyboardAvoidingView style={styles.mainContainer}
-                keyboardVerticalOffset={Platform.select({ ios: moderateScale(100), android: 0 })}
-                behavior={Platform.OS === "ios" ? "padding" : "height"}>
+                keyboardVerticalOffset={Platform.select({ ios: moderateScale(120), android: 0 })}
+                behavior={Platform.OS === "ios" ? "padding" : undefined}>
                 <ScrollView keyboardShouldPersistTaps="handled" style={styles.mainContainer}>
                     <View style={styles.container}>
                         <InputField
@@ -101,6 +101,7 @@ export const Login = ({ route: { params = {} } }: any) => {
                                 colors={['#bdc3c7', '#2c3e50']}
                                 title="LOGIN"
                                 bold
+                                m
                                 buttonStyle={styles.loginButtonStyle}
                                 onPress={() => {
                                     Keyboard.dismiss()
@@ -121,7 +122,7 @@ export const Login = ({ route: { params = {} } }: any) => {
                         </View>
                     </View>
 
-                    <View style={{ marginTop: moderateScale(50) }}>
+                    <View style={{ marginTop: moderateScale(30) }}>
                         <Label white primary center title="Don't have an account ?" />
                         <AnchorButton
                             buttonStyle={{ alignSelf: "center" }}

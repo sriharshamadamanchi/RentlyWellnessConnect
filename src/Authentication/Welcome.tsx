@@ -60,6 +60,7 @@ export const Welcome = () => {
                         colors={['#bdc3c7', '#2c3e50']}
                         title="LOGIN"
                         bold
+                        m
                         buttonStyle={styles.buttonStyle}
                         onPress={() => {
                             navigation.navigate("Login")
@@ -69,6 +70,7 @@ export const Welcome = () => {
                         colors={['#bdc3c7', '#2c3e50']}
                         title="REGISTER"
                         bold
+                        m
                         buttonStyle={styles.buttonStyle}
                         onPress={() => {
                             navigation.navigate("Register")

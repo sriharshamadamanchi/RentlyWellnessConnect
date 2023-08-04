@@ -84,12 +84,21 @@ const styles = StyleSheet.create({
         position: 'absolute',
         right: moderateScale(20),
         bottom: moderateScale(20),
-        backgroundColor: 'red',
         width: moderateScale(50),
         height: moderateScale(50),
         borderRadius: moderateScale(50),
         justifyContent: 'center',
         alignItems: 'center'
+    },
+    badgeStyle: {
+        position: 'absolute',
+        justifyContent: 'center',
+        right: moderateScale(15),
+        bottom: moderateScale(55),
+        backgroundColor: "#0b9c17",
+        zIndex: 1, width: moderateScale(25),
+        height: moderateScale(25),
+        borderRadius: moderateScale(25)
     }
 
 })
@@ -99,6 +108,9 @@ export const HomeTab = () => {
 
     const user = useSelector((store: any) => store.home.user) ?? {}
     const usersList = useSelector((store: any) => store.home.usersList ?? {})
+    const chats = useSelector((store: any) => store.home.chats ?? {})
+    const groupChats = useSelector((store: any) => store.home.groupChats ?? {})
+
     const keys = Object.keys(usersList)
 
     const rankingList = []
@@ -128,6 +140,25 @@ export const HomeTab = () => {
     const steps = [...(userActivity.steps ?? [])]
     steps.map((obj: any) => {
         totalSteps = totalSteps + parseInt(obj.count)
+    })
+
+    let unreadCount = 0;
+    Object.keys(chats).map((id: string) => {
+        const messages = chats[id] ?? []
+        messages.map((m: any) => {
+            if (!m.read) {
+                unreadCount++
+            }
+        })
+    })
+
+    Object.keys(groupChats).map((id: string) => {
+        const messages = groupChats[id] ?? []
+        messages.map((m: any) => {
+            if (!m.read) {
+                unreadCount++
+            }
+        })
     })
 
     return (
@@ -160,7 +191,7 @@ export const HomeTab = () => {
                                 }} />
                         </View>
                         <View style={styles.kmView}>
-                            <Label maxFontSizeMultiplier={1.1} bold xxxl center white title={`${Math.round(totalSteps * 0.0008 * 100) / 100}`} />
+                            <Label style={{width: moderateScale(200)}} ellipsizeMode="end" numberOfLines={1} maxFontSizeMultiplier={1.1} bold xxxl center white title={`${Math.round(totalSteps * 0.0008 * 100) / 100}`} />
                             <Label maxFontSizeMultiplier={1.1} bold m center white title={"Total kilometers"} />
                         </View>
                     </LinearGradient>
@@ -193,6 +224,11 @@ export const HomeTab = () => {
                         loop
                     />
                 </View>
+                {unreadCount > 0 &&
+                    <View style={styles.badgeStyle}>
+                        <Label white bold xs center title={`${unreadCount > 99 ? ">99" : unreadCount}`}/>
+                    </View>
+                }
                 <LinearGradient colors={["#200122", '#6f0000']} style={styles.chatButtonView}>
                     <Ripple
                         style={{ flex: 1, width: "100%", justifyContent: "center", alignItems: "center" }}
