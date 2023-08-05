@@ -9,6 +9,7 @@ import { AnimatedCircularProgress } from "react-native-circular-progress"
 import { colors, teams } from "../../common/constants"
 import { EmptyImageView } from "./IndividualRank"
 import { theme } from "../../common/theme"
+import { useIsFocused } from "@react-navigation/native"
 
 const styles = StyleSheet.create({
     container: {
@@ -131,10 +132,12 @@ const RankView = ({ rank, userDetails }: { rank: string, userDetails: any }) => 
 }
 
 export const TeamRank = () => {
+    const isFocused = useIsFocused()
     const GOAL = 504461942
     const usersList = useSelector((store: any) => store.home.usersList ?? {})
     const captains = useSelector((store: any) => store.home.remoteConfig?.captains ?? {})
     const keys = Object.keys(usersList)
+    const flatListRef: any = React.useRef()
 
     const rankingList: any = teams.map((team) => {
         return { name: team, steps: 0 }
@@ -161,6 +164,13 @@ export const TeamRank = () => {
     const isSecondRankPresent = rankingList.length > 1
     const isThirdRankPresent = rankingList.length > 2
 
+    React.useEffect(() => {
+        if (isFocused) {
+            if (flatListRef.current) {
+                flatListRef.current.scrollToOffset({ animated: true, offset: 0 });
+            }
+        }
+    }, [isFocused])
 
     return (
         <View style={styles.container}>
@@ -168,6 +178,7 @@ export const TeamRank = () => {
                 <View style={styles.container}>
 
                     <FlatList
+                        ref={flatListRef}
                         data={rankingList}
                         ListHeaderComponent={() => {
                             return (

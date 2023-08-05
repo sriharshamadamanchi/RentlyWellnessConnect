@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
         width: moderateScale(36)
     },
     welcomeLabelStyle: {
-        margin: moderateScale(20)
+        margin: moderateScale(15)
     },
     teamNameStyle: {
         marginBottom: moderateScale(20)
@@ -85,12 +85,7 @@ export const HomeTabbar = () => {
                         tabBarIcon: ({ focused }) => <Icon name="home" color={focused ? "green" : "grey"} size={moderateScale(30)} />
                     }}
                     name={"DASHBOARD"}
-                    component={HomeTopTabbar}
-                    listeners={{
-                        tabPress: (e) => {
-                            navigation.navigate("HOME")
-                        }
-                    }} />
+                    component={HomeTopTabbar} />
                 <Tab.Screen
                     options={{
                         tabBarIcon: ({ focused }) => <MaterialIcon name="leaderboard" color={focused ? "green" : "grey"} size={moderateScale(30)} />

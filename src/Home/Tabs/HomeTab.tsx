@@ -7,7 +7,7 @@ import { useSelector } from "react-redux"
 import LottieView from 'lottie-react-native'
 import Icon from 'react-native-vector-icons/AntDesign'
 import EntypoIcon from 'react-native-vector-icons/Entypo'
-import { useNavigation } from "@react-navigation/native"
+import { useIsFocused, useNavigation } from "@react-navigation/native"
 import { Image } from "react-native"
 import { EmptyImageView } from "../LeaderBoard/IndividualRank"
 import { theme } from "../../common/theme"
@@ -105,6 +105,8 @@ const styles = StyleSheet.create({
 
 export const HomeTab = () => {
     const navigation: any = useNavigation()
+    const isFocused = useIsFocused()
+    const scrollRef: any = React.useRef()
 
     const user = useSelector((store: any) => store.home.user) ?? {}
     const usersList = useSelector((store: any) => store.home.usersList ?? {})
@@ -161,10 +163,18 @@ export const HomeTab = () => {
         })
     })
 
+    React.useEffect(() => {
+        if (isFocused) {
+            if (scrollRef.current) {
+                scrollRef.current.scrollTo({ animated: true, y: 0 });
+            }
+        }
+    }, [isFocused])
+
     return (
         <LinearGradient colors={["#43C6AC", '#F8FFAE']} style={styles.container}>
             <StatusBar backgroundColor={"#43C6AC"} barStyle="dark-content" />
-            <ScrollView style={styles.container}>
+            <ScrollView ref={scrollRef} style={styles.container}>
                 <View style={styles.mainContainer}>
                     <LinearGradient colors={["#43C6AC", '#F8FFAE']} style={styles.innerContainer}>
 

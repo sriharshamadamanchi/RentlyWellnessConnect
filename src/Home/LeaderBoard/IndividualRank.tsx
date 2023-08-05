@@ -11,7 +11,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import { colors } from "../../common/constants"
 import { theme } from "../../common/theme"
 import { DropDown } from "../../common/components/DropDown/DropDown"
-import { useNavigation } from "@react-navigation/native"
+import { useIsFocused, useNavigation } from "@react-navigation/native"
 
 const styles = StyleSheet.create({
     container: {
@@ -235,6 +235,7 @@ const data = [
 export const IndividualRank = () => {
 
     const navigation: any = useNavigation()
+    const isFocused = useIsFocused()
     const user = useSelector((store: any) => store.home.user) ?? {}
     const usersList = useSelector((store: any) => store.home.usersList ?? {})
     const [searchQuery, setSearchQuery] = React.useState("")
@@ -276,6 +277,7 @@ export const IndividualRank = () => {
     }
 
     const [filteredRanks, setFilteredRanks]: any = React.useState([])
+    const flatListRef: any = React.useRef()
 
     React.useEffect(() => {
 
@@ -290,6 +292,16 @@ export const IndividualRank = () => {
         setFilteredRanks(filter)
 
     }, [searchQuery, team])
+
+    React.useEffect(() => {
+        if (isFocused) {
+            setSearchQuery("")
+            setTeam(data[0].value)
+            if (flatListRef.current) {
+                flatListRef.current.scrollToOffset({ animated: true, offset: 0 });
+            }
+        }
+    }, [isFocused])
 
     return (
         <View style={styles.container}>
@@ -313,6 +325,7 @@ export const IndividualRank = () => {
                         </View>
                     }
                     <FlatList
+                        ref={flatListRef}
                         data={rankingList}
                         refreshControl={<RefreshControl refreshing={false} onRefresh={() => {
                             const list: any = []
@@ -357,7 +370,7 @@ export const IndividualRank = () => {
                                         }
                                     </View>
 
-                                    <Divider style={{ backgroundColor: 'white', marginVertical: moderateScale(10), alignSelf: 'center', width: Dimensions.get("window").width * 0.8 }} />
+                                    <Divider style={{ backgroundColor: 'white', marginBottom: moderateScale(20), alignSelf: 'center', width: Dimensions.get("window").width * 0.8 }} />
                                 </>
                             )
                         }}
