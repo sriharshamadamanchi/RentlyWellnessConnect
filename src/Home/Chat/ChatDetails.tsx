@@ -30,9 +30,9 @@ const styles = StyleSheet.create({
         height: moderateScale(45),
         paddingHorizontal: moderateScale(20),
         fontSize: moderateScale(16),
-        fontWeight: "400",
+        fontFamily: theme.fonts.medium,
         marginHorizontal: moderateScale(10),
-        color: '#454545',
+        color: theme.colors.font.primary
     },
     inputContainer: {
         justifyContent: 'flex-start',

@@ -6,6 +6,7 @@ import { moderateScale } from "react-native-size-matters"
 import { useSelector } from "react-redux"
 import moment from "moment"
 import Icon from "react-native-vector-icons/AntDesign"
+import { theme } from "../common/theme"
 
 const styles = StyleSheet.create({
     container: {
@@ -31,8 +32,8 @@ const styles = StyleSheet.create({
         width: moderateScale(200),
         height: moderateScale(45),
         fontSize: moderateScale(18),
-        fontWeight: "600",
-        color: '#454545'
+        fontFamily: theme.fonts.bold,
+        color: theme.colors.font.primary
     },
     dateViewContainer: {
         padding: moderateScale(5),

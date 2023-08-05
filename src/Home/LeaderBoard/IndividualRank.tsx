@@ -122,9 +122,9 @@ const styles = StyleSheet.create({
         paddingHorizontal: moderateScale(10),
         marginVertical: moderateScale(5),
         fontSize: moderateScale(16),
-        fontWeight: "400",
+        fontFamily: theme.fonts.medium,
         marginHorizontal: moderateScale(10),
-        color: '#454545',
+        color: theme.colors.font.primary
     },
     filterContainer: {
         flexDirection: 'row',

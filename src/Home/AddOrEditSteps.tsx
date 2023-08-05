@@ -12,6 +12,7 @@ import { Platform } from "react-native"
 import { getDateTime } from "../common/constants"
 import { Alert } from "react-native"
 import { hideLoaderAction, showLoaderAction } from "../common/loaderRedux/actions"
+import { theme } from "../common/theme"
 
 const styles = StyleSheet.create({
     container: {
@@ -34,9 +35,9 @@ const styles = StyleSheet.create({
         height: moderateScale(45),
         paddingLeft: moderateScale(10),
         fontSize: moderateScale(18),
-        fontWeight: "600",
+        fontFamily: theme.fonts.bold,
         marginVertical: moderateScale(10),
-        color: '#454545'
+        color: theme.colors.font.primary
     },
     saveButtonGradientView: {
         flex: 1,
