@@ -28,7 +28,6 @@ import { store } from "../common/store";
 import { Login } from "../Authentication/Login";
 import { Register } from "../Authentication/Register";
 import { ForgotPassword } from "../Authentication/ForgotPassword";
-import { useNavigation } from "@react-navigation/native";
 import { EditProfile } from "../Authentication/EditProfile";
 import { ChangePassword } from "../Authentication/ChangePassword";
 import { UserActivityTab } from "./Tabs/UserActivityTab";
@@ -59,8 +58,6 @@ const styles = StyleSheet.create({
 });
 
 export const HomeTabbar = () => {
-
-    const navigation: any = useNavigation();
 
     return (
         <View style={styles.tabsStyle}>
@@ -177,7 +174,7 @@ export const Home = () => {
     React.useEffect(() => {
         setTimeout(() => {
             SplashScreen.hide();
-        }, 1200)
+        }, 1000)
     }, []);
 
     React.useEffect(() => {
