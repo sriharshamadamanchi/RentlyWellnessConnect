@@ -1,12 +1,12 @@
 import React from "react"
 import { FlatList, StyleSheet, View } from "react-native"
-import { Card, Divider, Label, Ripple } from "../common/components"
+import { Card, Divider, Label, Ripple } from "../../common/components"
 import LinearGradient from "react-native-linear-gradient"
 import { moderateScale } from "react-native-size-matters"
 import { useSelector } from "react-redux"
 import moment from "moment"
 import Icon from "react-native-vector-icons/AntDesign"
-import { theme } from "../common/theme"
+import { theme } from "../../common/theme"
 
 const styles = StyleSheet.create({
     container: {
@@ -94,7 +94,7 @@ const InputField = ({ value, index, showDropdown }: { value: string, index: numb
     )
 }
 
-export const StepsList = (params: any = {}) => {
+export const Activity = (params: any = {}) => {
 
     const user = useSelector((store: any) => store.home.user)
     const usersList = useSelector((store: any) => store.home.usersList)

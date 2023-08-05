@@ -4,15 +4,15 @@ import { Dimensions, KeyboardAvoidingView, ScrollView, StyleSheet, TextInput, Vi
 import LinearGradient from "react-native-linear-gradient"
 import { moderateScale } from "react-native-size-matters"
 import { useDispatch, useSelector } from "react-redux"
-import { CurvedButton, Label } from "../common/components"
-import { LoadingIndicator } from "../common/components/LoadingIndicator/LoadingIndicator"
-import { Firestore } from "./Firestore"
-import { DropDown } from "../common/components/DropDown/DropDown"
+import { CurvedButton, Label } from "../../common/components"
+import { LoadingIndicator } from "../../common/components/LoadingIndicator/LoadingIndicator"
+import { Firestore } from "../Firestore"
+import { DropDown } from "../../common/components/DropDown/DropDown"
 import { Platform } from "react-native"
-import { getDateTime } from "../common/constants"
+import { getDateTime } from "../../common/constants"
 import { Alert } from "react-native"
-import { hideLoaderAction, showLoaderAction } from "../common/loaderRedux/actions"
-import { theme } from "../common/theme"
+import { hideLoaderAction, showLoaderAction } from "../../common/loaderRedux/actions"
+import { theme } from "../../common/theme"
 
 const styles = StyleSheet.create({
     container: {
@@ -90,7 +90,7 @@ const data = [
     { label: 'Daily Activities', value: 'Daily Activities' }
 ];
 
-export const AddOrEditSteps = () => {
+export const AddSteps = () => {
     const dispatch = useDispatch()
     const { id } = useSelector((store: any) => store.home.user)
     const usersList = useSelector((store: any) => store.home.usersList)

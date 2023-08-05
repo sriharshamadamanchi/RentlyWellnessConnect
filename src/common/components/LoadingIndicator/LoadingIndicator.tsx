@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
   }
 });
 
-export const LoadingIndicator = ({ loading, color }: {loading: boolean, color?: string}): any => {
+export const LoadingIndicator = ({ loading, color }: {loading: boolean, color?: string}) => {
   if (loading){
     return (
       <View style = {styles.viewStyle}>

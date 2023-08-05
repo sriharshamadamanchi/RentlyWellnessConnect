@@ -1,17 +1,17 @@
 import React from "react"
 import { KeyboardAvoidingView, ScrollView, StyleSheet, View } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
-import { GradientButton, InputField } from "../common/components"
+import { GradientButton, InputField } from "../../common/components"
 import { moderateScale } from "react-native-size-matters"
 import { useDispatch } from "react-redux"
-import { LoadingIndicator } from "../common/components/LoadingIndicator/LoadingIndicator"
+import { LoadingIndicator } from "../../common/components/LoadingIndicator/LoadingIndicator"
 import { useNavigation } from "@react-navigation/native"
 import { Alert } from "react-native"
 import { StatusBar } from "react-native"
-import { eyeIcon, eyeWithLineIcon } from "../common/constants"
+import { eyeIcon, eyeWithLineIcon } from "../../common/constants"
 import { Platform } from "react-native"
 import auth from '@react-native-firebase/auth'
-import { logoutAction } from "../Home/redux/actions"
+import { logoutAction } from "../redux/actions"
 import { Keyboard } from "react-native"
 
 const styles = StyleSheet.create({

@@ -1,6 +1,6 @@
 import React from "react"
 import { ScrollView, StatusBar, StyleSheet, View } from "react-native"
-import { Card, Label, Ripple } from "../../common/components"
+import { Card, Label, Ripple } from "../common/components"
 import LinearGradient from "react-native-linear-gradient"
 import { moderateScale } from "react-native-size-matters"
 import { useSelector } from "react-redux"
@@ -9,8 +9,8 @@ import Icon from 'react-native-vector-icons/AntDesign'
 import EntypoIcon from 'react-native-vector-icons/Entypo'
 import { useIsFocused, useNavigation } from "@react-navigation/native"
 import { Image } from "react-native"
-import { EmptyImageView } from "../LeaderBoard/IndividualRank"
-import { theme } from "../../common/theme"
+import { EmptyImageView } from "./LeaderBoard/IndividualRank"
+import { theme } from "../common/theme"
 
 const styles = StyleSheet.create({
     container: {
@@ -181,7 +181,7 @@ export const HomeTab = () => {
                         <LottieView
                             speed={0.6}
                             style={[styles.lottieStyle]}
-                            source={require('../../../res/lottie/walking.json')}
+                            source={require('../../res/lottie/walking.json')}
                             autoPlay
                             loop
                         />
@@ -229,7 +229,7 @@ export const HomeTab = () => {
                     <LottieView
                         speed={0.6}
                         style={[styles.rankLottieStyle]}
-                        source={require('../../../res/lottie/rank.json')}
+                        source={require('../../res/lottie/rank.json')}
                         autoPlay
                         loop
                     />

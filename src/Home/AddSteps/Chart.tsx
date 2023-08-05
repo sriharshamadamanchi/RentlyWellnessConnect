@@ -2,12 +2,12 @@ import React from "react"
 import { ScrollView, StyleSheet, View } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import { useSelector } from "react-redux"
-import { Chart } from "../Chart"
 import moment from "moment"
 import Swiper from "react-native-swiper"
 import { CurvedButton, Label } from "../../common/components"
 import { moderateScale } from "react-native-size-matters"
 import { useNavigation } from "@react-navigation/native"
+import { ChartComponent } from "../../common/components/ChartComponent/ChartComponent"
 
 const styles = StyleSheet.create({
     container: {
@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
 
 })
 
-export const ActivityTab = (params: any = {}) => {
+export const Chart = (params: any = {}) => {
 
     const navigation: any = useNavigation()
     const user = useSelector((store: any) => store.home.user)
@@ -82,7 +82,7 @@ export const ActivityTab = (params: any = {}) => {
                             return (
                                 <View key={index}>
                                     <Label center white bold title={label} style={{ marginTop: moderateScale(20), marginBottom: moderateScale(10) }} />
-                                    <Chart type={"week"} data={data[label]?.steps ?? []} labels={data[label]?.labels ?? []} />
+                                    <ChartComponent type={"week"} data={data[label]?.steps ?? []} labels={data[label]?.labels ?? []} />
                                 </View>
                             )
                         })}

@@ -5,16 +5,16 @@ import { Platform, StyleSheet, View } from "react-native";
 import { theme } from "../common/theme";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
-import { AccountTab } from "./Tabs/AccountTab";
+import { ProfileTab } from "./Profile/ProfileTab";
 import { useDispatch, useSelector } from "react-redux";
-import { Welcome } from "../Authentication/Welcome";
+import { Welcome } from "./LoginOrRegister/Welcome";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import { HomeTab } from "./Tabs/HomeTab";
-import { ActivityTab } from "./Tabs/ActivityTab";
+import { HomeTab } from "./HomeTab";
+import { Chart } from "./AddSteps/Chart";
 import LinearGradient from "react-native-linear-gradient";
 import Icon from 'react-native-vector-icons/AntDesign';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-import { Details } from "./Details";
+import { DetailsTab } from "./AddSteps/DetailsTab";
 import { Firestore } from "./Firestore";
 import { LeaderTab } from "./LeaderBoard/LeaderTab";
 import SplashScreen from "react-native-splash-screen";
@@ -25,12 +25,12 @@ import { reloadUserAction, storeChatsAction, storeGroupChatsAction } from "./red
 import firebase from "@react-native-firebase/firestore";
 import { GroupChatDetails } from "./Chat/GroupChatDetails";
 import { store } from "../common/store";
-import { Login } from "../Authentication/Login";
-import { Register } from "../Authentication/Register";
-import { ForgotPassword } from "../Authentication/ForgotPassword";
-import { EditProfile } from "../Authentication/EditProfile";
-import { ChangePassword } from "../Authentication/ChangePassword";
-import { UserActivityTab } from "./Tabs/UserActivityTab";
+import { Login } from "./LoginOrRegister/Login";
+import { Register } from "./LoginOrRegister/Register";
+import { ForgotPassword } from "./LoginOrRegister/ForgotPassword";
+import { EditProfile } from "./Profile/EditProfile";
+import { ChangePassword } from "./Profile/ChangePassword";
+import { ActivityTab } from "./LeaderBoard/ActivityTab";
 
 const Tab = createBottomTabNavigator();
 
@@ -94,7 +94,7 @@ export const HomeTabbar = () => {
                         tabBarIcon: ({ focused }) => <Icon name="profile" color={focused ? "green" : "grey"} size={moderateScale(30)} />
                     }}
                     name={"PROFILE"}
-                    component={AccountTab} />
+                    component={ProfileTab} />
             </Tab.Navigator>
         </View>
     );
@@ -136,7 +136,7 @@ export const HomeTopTabbar = () => {
                         children={() => <HomeTab />} />
                     <TopTab.Screen
                         name={"CHART"}
-                        children={() => <ActivityTab />} />
+                        children={() => <Chart />} />
                 </TopTab.Navigator>
             </LinearGradient>
         </PrimaryView>
@@ -292,7 +292,7 @@ export const Home = () => {
                                 }
                             }}
                             name="Details"
-                            component={Details}
+                            component={DetailsTab}
                         />
                         <Stack.Screen
                             options={{
@@ -334,7 +334,7 @@ export const Home = () => {
                                 }
                             }}
                             name="UserActivityTab"
-                            component={UserActivityTab}
+                            component={ActivityTab}
                         />
                         <Stack.Screen
                             options={{

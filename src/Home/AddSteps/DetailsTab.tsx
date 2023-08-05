@@ -2,9 +2,9 @@ import React from "react"
 import { StatusBar, StyleSheet } from "react-native"
 import { moderateScale } from "react-native-size-matters"
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs"
-import { StepsList } from "./StepsList"
-import { AddOrEditSteps } from "./AddOrEditSteps"
-import { Label } from "../common/components"
+import { Activity } from "./Activity"
+import { Label } from "../../common/components"
+import { AddSteps } from "./AddSteps"
 
 const styles = StyleSheet.create({
     container: {
@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
 
 const TopTab = createMaterialTopTabNavigator();
 
-export const Details = () => {
+export const DetailsTab = () => {
 
     return (
         <>
@@ -38,10 +38,10 @@ export const Details = () => {
             >
                 <TopTab.Screen
                     name={"ADD"}
-                    children={() => <AddOrEditSteps />} />
+                    children={() => <AddSteps />} />
                 <TopTab.Screen
-                    name={"HISTORY"}
-                    children={() => <StepsList />} />
+                    name={"ACTIVITY"}
+                    children={() => <Activity />} />
             </TopTab.Navigator>
         </>
     )

@@ -74,7 +74,7 @@ const DetailsView = ({ title, value }: { title: string, value: string }) => {
     )
 }
 
-export const AccountTab = () => {
+export const ProfileTab = () => {
 
     const dispatch = useDispatch()
     const navigation: any = useNavigation();

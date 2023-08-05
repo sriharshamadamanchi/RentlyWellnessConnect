@@ -4,8 +4,8 @@ import { moderateScale } from "react-native-size-matters"
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs"
 import { Label } from "../../common/components"
 import LinearGradient from "react-native-linear-gradient"
-import { ActivityTab } from "./ActivityTab"
-import { StepsList } from "../StepsList"
+import { Chart } from "../AddSteps/Chart"
+import { Activity } from "../AddSteps/Activity"
 import { View } from "react-native"
 
 const styles = StyleSheet.create({
@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
 
 const TopTab = createMaterialTopTabNavigator();
 
-export const UserActivityTab = ({ navigation, route: { params = {} } }: any) => {
+export const ActivityTab = ({ navigation, route: { params = {} } }: any) => {
 
     const user = params.user ?? {}
 
@@ -49,10 +49,10 @@ export const UserActivityTab = ({ navigation, route: { params = {} } }: any) => 
                 >
                     <TopTab.Screen
                         name={"ACTIVITY"}
-                        children={() => <StepsList user={user} />} />
+                        children={() => <Activity user={user} />} />
                     <TopTab.Screen
                         name={"CHART"}
-                        children={() => <ActivityTab user={user} />} />
+                        children={() => <Chart user={user} />} />
                 </TopTab.Navigator>
             </LinearGradient>
         </View>

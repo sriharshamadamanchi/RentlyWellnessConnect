@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
     }
 })
 
-export const Chart = ({ type, data, labels = [] }: { type: string, data: any, labels: Array<string> }) => {
+export const ChartComponent = ({ type, data, labels = [] }: { type: string, data: any, labels: Array<string> }) => {
 
     return (
         <View style={styles.container}>

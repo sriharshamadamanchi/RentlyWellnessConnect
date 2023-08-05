@@ -1,6 +1,6 @@
 import React from "react"
 import { StatusBar, StyleSheet, View } from "react-native"
-import { GradientButton, Label } from "../common/components"
+import { GradientButton, Label } from "../../common/components"
 import { moderateScale } from "react-native-size-matters"
 import { useDispatch } from "react-redux"
 import LinearGradient from "react-native-linear-gradient"
