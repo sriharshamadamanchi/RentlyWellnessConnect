@@ -10,7 +10,7 @@ import { loaderSelector } from "../../common/loaderRedux/selectors"
 import { EmptyImageView } from "../LeaderBoard/IndividualRank"
 import { theme } from "../../common/theme"
 import { version } from "../../../package.json"
-import { useNavigation } from "@react-navigation/native"
+import { useIsFocused, useNavigation } from "@react-navigation/native"
 
 const styles = StyleSheet.create({
     container: {
@@ -78,15 +78,25 @@ export const AccountTab = () => {
 
     const dispatch = useDispatch()
     const navigation: any = useNavigation();
+    const isFocused = useIsFocused()
+    const scrollRef: any = React.useRef()
 
     const user = useSelector((store: any) => store.home.user)
     const { loading }: { loading: boolean } = useSelector(loaderSelector("Logout"));
+
+    React.useEffect(() => {
+        if (isFocused) {
+            if (scrollRef.current) {
+                scrollRef.current.scrollTo({ animated: true, y: 0 });
+            }
+        }
+    }, [isFocused])
 
     return (
         <PrimaryView style={{ backgroundColor: '#43C6AC' }}>
             <LinearGradient colors={["#43C6AC", '#F8FFAE']} style={styles.container}>
                 <StatusBar backgroundColor={"#43C6AC"} barStyle="dark-content" />
-                <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
+                <ScrollView ref={scrollRef} showsVerticalScrollIndicator={false} style={styles.container}>
                     <LoadingIndicator loading={loading} />
                     <View style={{ marginTop: moderateScale(15) }}>
                         {
