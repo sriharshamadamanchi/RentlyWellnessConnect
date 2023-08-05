@@ -48,6 +48,7 @@
 		5DCACB8F33CDC322A6C60F78 /* libPods-RentlyConnect.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RentlyConnect.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = RentlyConnect/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-RentlyConnect-RentlyConnectTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RentlyConnect-RentlyConnectTests.release.xcconfig"; path = "Target Support Files/Pods-RentlyConnect-RentlyConnectTests/Pods-RentlyConnect-RentlyConnectTests.release.xcconfig"; sourceTree = "<group>"; };
+		A166719F2A7E566F003B3DC0 /* RentlyConnectRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = RentlyConnectRelease.entitlements; path = RentlyConnect/RentlyConnectRelease.entitlements; sourceTree = "<group>"; };
 		A1981B682A66F728008C3152 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		A3685BBFBE5F4961B6E3D296 /* Quicksand-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Quicksand-Medium.ttf"; path = "../assets/fonts/Quicksand-Medium.ttf"; sourceTree = "<group>"; };
 		AC9247D111894F86A8199E3C /* Quicksand-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Quicksand-Bold.ttf"; path = "../assets/fonts/Quicksand-Bold.ttf"; sourceTree = "<group>"; };
@@ -96,6 +97,7 @@
 		13B07FAE1A68108700A75B9A /* RentlyConnect */ = {
 			isa = PBXGroup;
 			children = (
+				A166719F2A7E566F003B3DC0 /* RentlyConnectRelease.entitlements */,
 				A1981B682A66F728008C3152 /* GoogleService-Info.plist */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
@@ -560,6 +562,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = RentlyConnect/RentlyConnectRelease.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
@@ -582,7 +585,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.rently.connect;
 				PRODUCT_NAME = RentlyConnect;
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = RentlyConnectAppStore;
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = RentlyConnectAdHoc;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
