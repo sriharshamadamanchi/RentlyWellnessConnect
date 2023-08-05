@@ -191,7 +191,7 @@ export const HomeTab = () => {
                                 }} />
                         </View>
                         <View style={styles.kmView}>
-                            <Label style={{width: moderateScale(200)}} ellipsizeMode="end" numberOfLines={1} maxFontSizeMultiplier={1.1} bold xxxl center white title={`${Math.round(totalSteps * 0.0008 * 100) / 100}`} />
+                            <Label style={{ width: moderateScale(200) }} ellipsizeMode="end" numberOfLines={1} maxFontSizeMultiplier={1.1} bold xxxl center white title={`${Math.round(totalSteps * 0.0008 * 100) / 100}`} />
                             <Label maxFontSizeMultiplier={1.1} bold m center white title={"Total kilometers"} />
                         </View>
                     </LinearGradient>
@@ -226,7 +226,7 @@ export const HomeTab = () => {
                 </View>
                 {unreadCount > 0 &&
                     <View style={styles.badgeStyle}>
-                        <Label white bold xs center title={`${unreadCount > 99 ? ">99" : unreadCount}`}/>
+                        <Label white bold xs center title={`${unreadCount > 99 ? ">99" : unreadCount}`} />
                     </View>
                 }
                 <LinearGradient colors={["#200122", '#6f0000']} style={styles.chatButtonView}>

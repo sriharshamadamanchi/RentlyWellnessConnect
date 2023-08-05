@@ -3,12 +3,15 @@ import React, { useState } from "react"
 import { Dimensions, KeyboardAvoidingView, ScrollView, StyleSheet, TextInput, View } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import { moderateScale } from "react-native-size-matters"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { CurvedButton, Label } from "../common/components"
 import { LoadingIndicator } from "../common/components/LoadingIndicator/LoadingIndicator"
 import { Firestore } from "./Firestore"
 import { DropDown } from "../common/components/DropDown/DropDown"
 import { Platform } from "react-native"
+import { getDateTime } from "../common/constants"
+import { Alert } from "react-native"
+import { hideLoaderAction, showLoaderAction } from "../common/loaderRedux/actions"
 
 const styles = StyleSheet.create({
     container: {
@@ -87,43 +90,59 @@ const data = [
 ];
 
 export const AddOrEditSteps = () => {
-
+    const dispatch = useDispatch()
     const { id } = useSelector((store: any) => store.home.user)
     const usersList = useSelector((store: any) => store.home.usersList)
     const user = usersList[id] ?? {}
-    const serverDate = global?.dateTime?.date ?? moment().format("MM/DD/YYYY")
 
     const [count, setCount] = useState("")
     const [km, setKm] = useState("")
     const [pedoType, setPedoType] = useState(data[0].label)
-    const [date] = useState(moment(serverDate, "MM/DD/YYYY").format("YYYY-MM-DD"))
+    const [date] = useState(moment().format("YYYY-MM-DD"))
     const loading = useSelector((store: any) => store.loader.loading)
 
     const stepDetails = user?.steps?.find((step: any) => step.date === moment(date, "YYYY-MM-DD").format("DD/MM/YYYY"))
 
     const save = async () => {
-        const formattedDate = moment(date, "YYYY-MM-DD").format("DD/MM/YYYY")
-        const steps = [...(user?.steps ?? [])]
-        const index = steps.findIndex((step) => step.date === formattedDate)
-        if (index !== -1) {
-            const step = steps[index]
-            steps[index] = {
-                ...step,
-                date: formattedDate,
-                count: `${parseInt(step.count, 10) + parseInt(count, 10)}`,
-                history: [...(step.history ?? []), { type: pedoType, count, time: Date.now() }]
+        try {
+            dispatch(showLoaderAction())
+            const globalDateTime = await getDateTime();
+            const globalDate = globalDateTime.date ?? moment().format("MM/DD/YYYY");
+            const formattedGlobalDate = moment(globalDate, "MM/DD/YYYY").format("DD/MM/YYYY")
+            const formattedDate = moment().format("DD/MM/YYYY")
+            if (formattedDate !== formattedGlobalDate) {
+                Alert.alert("Alert", "You can only add steps for today")
+                return
             }
-        } else {
-            steps.push({
-                date: formattedDate,
-                count,
-                history: [{ type: pedoType, count, time: Date.now() }]
-            })
-        }
+            const steps = [...(user?.steps ?? [])]
+            const index = steps.findIndex((step) => step.date === formattedDate)
+            if (index !== -1) {
+                const step = steps[index]
+                steps[index] = {
+                    ...step,
+                    date: formattedDate,
+                    count: `${parseInt(step.count, 10) + parseInt(count, 10)}`,
+                    history: [...(step.history ?? []), { type: pedoType, count, time: Date.now() }]
+                }
+            } else {
+                steps.push({
+                    date: formattedDate,
+                    count,
+                    history: [{ type: pedoType, count, time: Date.now() }]
+                })
+            }
 
-        await Firestore.updateUser({ id, details: { ...user, steps } })
-        setCount("")
-        setKm("")
+            await Firestore.updateUser({ id, details: { ...user, steps } })
+            setCount("")
+            setKm("")
+        } catch (err: any) {
+            console.log("err in updateSteps", err)
+            if (err.message) {
+                Alert.alert("Error", err.message)
+            }
+        } finally {
+            dispatch(hideLoaderAction())
+        }
     }
 
     return (

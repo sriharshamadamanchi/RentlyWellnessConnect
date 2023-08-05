@@ -207,12 +207,12 @@ export const TeamRank = () => {
                                     </View>
                                     {
                                         captains[item.name] &&
-                                        <View style={{ paddingBottom: moderateScale(10),justifyContent: 'center', alignItems: 'center' }}>
+                                        <View style={{ paddingBottom: moderateScale(10), justifyContent: 'center', alignItems: 'center' }}>
                                             <Label underLine center bold primary title={"Captains"} />
                                             {
                                                 captains[item.name].map((captain: string) => {
                                                     return (
-                                                        <Label key={captain} center bold title={captain} style={{color: colors[captain.charAt(0).toUpperCase()]}}/>
+                                                        <Label key={captain} center bold title={captain} style={{ color: colors[captain.charAt(0).toUpperCase()] }} />
                                                     )
                                                 })
                                             }

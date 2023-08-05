@@ -57,20 +57,19 @@ export const EditProfile = () => {
     const [loading, setLoading] = React.useState(false)
 
     const update = async () => {
-        setName(name.trim())
         try {
             if (!id) {
                 throw new Error("Invalid user id")
             }
             setLoading(true)
-            await auth().currentUser?.updateProfile({ displayName: name })
+            await auth().currentUser?.updateProfile({ displayName: name.trim() })
             await firestore().collection('users').doc('activity')
                 .update({
-                    [id]: JSON.stringify({ ...details, name })
+                    [id]: JSON.stringify({ ...details, name: name.trim() })
                 })
-            dispatch((storeUsersListAction({ usersList: { ...usersList, [id]: { ...details, name } } })))
-            dispatch(storeLoginDetailsAction({ user: { ...details, name } }))
-            setName(name)
+            dispatch((storeUsersListAction({ usersList: { ...usersList, [id]: { ...details, name: name.trim() } } })))
+            dispatch(storeLoginDetailsAction({ user: { ...details, name: name.trim() } }))
+            setName(name.trim())
             Alert.alert("Success", "Profile updated successfully")
         } catch (err: any) {
             if (err.message) {

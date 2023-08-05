@@ -89,20 +89,20 @@ export const ActivityTab = (params: any = {}) => {
                     </Swiper>
                 </View>
                 {!params.user &&
-                <View style={styles.buttonGradientView}>
-                    <LinearGradient
-                        colors={['#bdc3c7', '#2c3e50']}
-                        style={styles.buttonGradientStyle}>
-                        <CurvedButton
-                            title="ADD DETAILS"
-                            bold
-                            buttonStyle={{ flex: 1, width: "100%", alignSelf: "center", backgroundColor: "transparent" }}
-                            onPress={() => {
-                                navigation.navigate("Details")
-                            }}
-                        />
-                    </LinearGradient>
-                </View>
+                    <View style={styles.buttonGradientView}>
+                        <LinearGradient
+                            colors={['#bdc3c7', '#2c3e50']}
+                            style={styles.buttonGradientStyle}>
+                            <CurvedButton
+                                title="ADD DETAILS"
+                                bold
+                                buttonStyle={{ flex: 1, width: "100%", alignSelf: "center", backgroundColor: "transparent" }}
+                                onPress={() => {
+                                    navigation.navigate("Details")
+                                }}
+                            />
+                        </LinearGradient>
+                    </View>
                 }
             </ScrollView>
         </LinearGradient>

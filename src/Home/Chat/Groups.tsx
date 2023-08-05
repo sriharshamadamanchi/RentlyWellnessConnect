@@ -69,7 +69,7 @@ export const Groups = () => {
                                         navigation.navigate("GroupChatDetails", { group: item })
                                     }}>
                                     <View style={{ width: "15%", marginHorizontal: moderateScale(5), alignSelf: 'center', }}>
-                                    <EmptyImageView name={item} style={styles.cardImageStyle} labelStyle={{ fontSize: theme.fontSizes.xxl }} />
+                                        <EmptyImageView name={item} style={styles.cardImageStyle} labelStyle={{ fontSize: theme.fontSizes.xxl }} />
                                     </View>
                                     <View style={{ width: "55%", justifyContent: 'center' }}>
                                         <Label bold m primary title={item} style={{ marginLeft: moderateScale(10) }} />

@@ -1,7 +1,6 @@
 import firestore from '@react-native-firebase/firestore';
 import { store } from '../common/store';
 import { storeUsersListAction } from './redux/actions';
-import { hideLoaderAction, showLoaderAction } from '../common/loaderRedux/actions';
 
 interface detailsType {
     id: string,
@@ -25,7 +24,6 @@ const addUser: any = async ({ id, details }: { id: string, details: detailsType 
 
 const updateUser: any = async ({ id, details }: { id: string, details: detailsType }) => {
     try {
-        store.dispatch(showLoaderAction())
         await firestore().collection('users').doc('activity')
             .update({
                 [id]: JSON.stringify(details)
@@ -33,8 +31,6 @@ const updateUser: any = async ({ id, details }: { id: string, details: detailsTy
         await getUsersList()
     } catch (err) {
         console.log("Error in addUser", err)
-    } finally {
-        store.dispatch(hideLoaderAction())
     }
 }
 

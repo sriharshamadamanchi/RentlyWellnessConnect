@@ -73,7 +73,7 @@ const SendMessage = ({ from, to, value, setMessage }: { from: string, to: string
 
     return (
         <KeyboardAvoidingView
-        keyboardVerticalOffset={Platform.select({ ios: moderateScale(50), android: 0 })}
+            keyboardVerticalOffset={Platform.select({ ios: moderateScale(50), android: 0 })}
             behavior={Platform.OS === "ios" ? "padding" : undefined} >
             <View style={styles.inputContainer}>
                 <TextInput

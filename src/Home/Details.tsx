@@ -29,9 +29,9 @@ export const Details = () => {
                         borderBottomWidth: moderateScale(2),
                         borderBottomColor: "#0f9b0f"
                     },
-                    tabBarLabel: ({color, children}) => {
-                        return(
-                            <Label m bold title={children} style={{color: color}}/>
+                    tabBarLabel: ({ color, children }) => {
+                        return (
+                            <Label m bold title={children} style={{ color: color }} />
                         )
                     }
                 }}

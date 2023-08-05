@@ -384,7 +384,7 @@ export const IndividualRank = () => {
 
                                     <View style={{ flex: 0.8, padding: moderateScale(5), justifyContent: 'center', alignItems: 'center' }}>
                                         <Label center bold m primary title={item.name} />
-                                        <Label style={{width: "90%"}} center bold s primary title={`${item.totalSteps} steps`} />
+                                        <Label style={{ width: "90%" }} center bold s primary title={`${item.totalSteps} steps`} />
                                         {item.team &&
                                             <Label center bold m primary title={`Team: ${item.team}`} />
                                         }
