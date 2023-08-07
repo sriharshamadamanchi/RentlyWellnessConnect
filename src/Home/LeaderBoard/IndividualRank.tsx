@@ -277,7 +277,6 @@ export const IndividualRank = () => {
     }
 
     const [filteredRanks, setFilteredRanks]: any = React.useState([])
-    const flatListRef: any = React.useRef()
 
     React.useEffect(() => {
 
@@ -297,9 +296,6 @@ export const IndividualRank = () => {
         if (isFocused) {
             setSearchQuery("")
             setTeam(data[0].value)
-            if (flatListRef.current) {
-                flatListRef.current.scrollToOffset({ animated: true, offset: 0 });
-            }
         }
     }, [isFocused])
 
@@ -325,7 +321,8 @@ export const IndividualRank = () => {
                         </View>
                     }
                     <FlatList
-                        ref={flatListRef}
+                        initialNumToRender={200}
+                        maxToRenderPerBatch={200}
                         data={rankingList}
                         refreshControl={<RefreshControl refreshing={false} onRefresh={() => {
                             const list: any = []

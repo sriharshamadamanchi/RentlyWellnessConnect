@@ -78,7 +78,7 @@ export function* loginSaga(action: { payload: { email: string, password: string 
           text: 'Yes', onPress: async () => {
             try {
               await auth().currentUser?.sendEmailVerification()
-              Alert.alert("Success", "A verification link has been sent to your email acount. Please verify your email to continue")
+              Alert.alert("Success", "A verification link has been sent to your email account. Please verify your email to continue")
             } catch (err: any) {
               if (err.code === "auth/too-many-requests") {
                 Alert.alert("Too many requests", "We have blocked all requests from this device due to unusual activity. Try again later.")
@@ -106,7 +106,7 @@ export function* registerSaga(action: { payload: { name: string, email: string, 
     yield call([auth(), auth().createUserWithEmailAndPassword], email, password)
     yield call(updateProfile, { displayName: name })
     yield put(successLoadingAction({ name: "Register", msg: "" }))
-    Alert.alert("Verification Pending", "A verification link has been sent to your email acount. Please verify your email to continue")
+    Alert.alert("Verification Pending", "A verification link has been sent to your email account. Please verify your email to continue")
     navigate("Welcome")
     navigate("Login", { email, password })
   } catch (error: any) {

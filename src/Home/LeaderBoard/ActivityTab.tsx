@@ -32,7 +32,7 @@ export const ActivityTab = ({ navigation, route: { params = {} } }: any) => {
             <LinearGradient colors={["#43C6AC", '#F8FFAE']} style={styles.container}>
                 <TopTab.Navigator
                     screenOptions={{
-                        swipeEnabled: false,
+                        swipeEnabled: true,
                         tabBarPressColor: "#CBF5DD",
                         tabBarActiveTintColor: "#0f9b0f",
                         tabBarInactiveTintColor: "black",

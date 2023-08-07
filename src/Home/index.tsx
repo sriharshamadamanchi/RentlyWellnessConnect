@@ -116,7 +116,7 @@ export const HomeTopTabbar = () => {
                 </View>
                 <TopTab.Navigator
                     screenOptions={{
-                        swipeEnabled: false,
+                        swipeEnabled: true,
                         tabBarPressColor: "#CBF5DD",
                         tabBarActiveTintColor: "#0f9b0f",
                         tabBarInactiveTintColor: "black",

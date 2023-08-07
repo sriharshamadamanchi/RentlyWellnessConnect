@@ -147,6 +147,8 @@ export const ChatList = () => {
             </View>
             :
             <FlatList
+              initialNumToRender={200}
+              maxToRenderPerBatch={200}
               data={keys}
               renderItem={({ item }) => {
                 if (item === id) {
