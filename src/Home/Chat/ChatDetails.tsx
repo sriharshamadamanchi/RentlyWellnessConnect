@@ -1,5 +1,5 @@
 import React from "react"
-import { FlatList, Image, StyleSheet, TextInput, View } from "react-native"
+import { Image, StyleSheet, TextInput, View } from "react-native"
 import { moderateScale } from "react-native-size-matters"
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { useDispatch, useSelector } from "react-redux"
@@ -13,6 +13,7 @@ import { StatusBar } from "react-native"
 import { Platform } from "react-native"
 import { KeyboardAvoidingView } from "react-native"
 import { theme } from "../../common/theme"
+import { FlashList } from "@shopify/flash-list"
 
 const styles = StyleSheet.create({
     container: {
@@ -158,7 +159,8 @@ export const ChatDetails = ({ navigation, route: { params = {} } }: any) => {
                 <Header title={user.name} photo={user.photo} />
                 <View
                     style={{ flex: 1 }}>
-                    <FlatList
+                    <FlashList
+                        estimatedItemSize={200}
                         inverted
                         ref={flatListRef}
                         data={[...userMessages].reverse()}

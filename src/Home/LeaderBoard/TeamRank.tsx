@@ -1,5 +1,5 @@
 import React from "react"
-import { Dimensions, FlatList } from "react-native"
+import { Dimensions } from "react-native"
 import { StyleSheet, View } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import { moderateScale } from "react-native-size-matters"
@@ -10,6 +10,7 @@ import { colors, teams } from "../../common/constants"
 import { EmptyImageView } from "./IndividualRank"
 import { theme } from "../../common/theme"
 import { useIsFocused } from "@react-navigation/native"
+import { FlashList } from "@shopify/flash-list"
 
 const styles = StyleSheet.create({
     container: {
@@ -177,7 +178,8 @@ export const TeamRank = () => {
             <LinearGradient colors={["#43C6AC", '#F8FFAE']} style={styles.container}>
                 <View style={styles.container}>
 
-                    <FlatList
+                    <FlashList
+                        estimatedItemSize={200}
                         ref={flatListRef}
                         data={rankingList}
                         ListHeaderComponent={() => {
@@ -206,7 +208,7 @@ export const TeamRank = () => {
                                 </>
                             )
                         }}
-                        renderItem={({ item, index }) => {
+                        renderItem={({ item, index }: any) => {
                             let percent = (((item?.steps ?? 0) / GOAL) * 100);
                             if (percent > 100) percent = 100;
                             return (
@@ -248,7 +250,7 @@ export const TeamRank = () => {
                                 </Card>
                             )
                         }}
-                        keyExtractor={(item, index) => `${index}.${item.name}`}
+                        keyExtractor={(item: any, index: number) => `${index}.${item.name}`}
                     />
                 </View>
             </LinearGradient>

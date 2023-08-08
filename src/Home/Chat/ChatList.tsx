@@ -1,5 +1,5 @@
 import React from "react"
-import { FlatList, Image, Keyboard } from "react-native"
+import { Image, Keyboard } from "react-native"
 import { StyleSheet, View } from "react-native"
 import { moderateScale } from "react-native-size-matters"
 import { useSelector } from "react-redux"
@@ -12,6 +12,7 @@ import { Platform } from "react-native"
 import { TextInput } from "react-native"
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { theme } from "../../common/theme"
+import { FlashList } from "@shopify/flash-list"
 
 const styles = StyleSheet.create({
   container: {
@@ -146,9 +147,8 @@ export const ChatList = () => {
               <Label primary bold center title="No Users!" />
             </View>
             :
-            <FlatList
-              initialNumToRender={200}
-              maxToRenderPerBatch={200}
+            <FlashList
+              estimatedItemSize={200}
               data={keys}
               renderItem={({ item }) => {
                 if (item === id) {

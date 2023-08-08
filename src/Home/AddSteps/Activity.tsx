@@ -10,6 +10,7 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import { theme } from "../../common/theme"
 import { hideLoaderAction, showLoaderAction } from "../../common/loaderRedux/actions"
 import { Firestore } from "../Firestore"
+import { FlashList } from "@shopify/flash-list"
 
 const styles = StyleSheet.create({
     container: {
@@ -146,7 +147,8 @@ export const Activity = (params: any = {}) => {
                         <Label xxl bold white center title={"No Activity"} />
                     </View>
                 }
-                <FlatList
+                <FlashList
+                    estimatedItemSize={200}
                     data={steps}
                     renderItem={({ item, index }: { item: any, index: number }) => {
                         return (

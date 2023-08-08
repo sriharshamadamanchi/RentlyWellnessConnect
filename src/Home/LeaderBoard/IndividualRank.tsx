@@ -1,5 +1,5 @@
 import React from "react"
-import { Dimensions, FlatList, Image, Keyboard, RefreshControl, TextInput } from "react-native"
+import { Dimensions, Image, Keyboard, RefreshControl, TextInput } from "react-native"
 import { StyleSheet, View } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import { moderateScale } from "react-native-size-matters"
@@ -12,6 +12,7 @@ import { colors } from "../../common/constants"
 import { theme } from "../../common/theme"
 import { DropDown } from "../../common/components/DropDown/DropDown"
 import { useIsFocused, useNavigation } from "@react-navigation/native"
+import { FlashList } from "@shopify/flash-list"
 
 const styles = StyleSheet.create({
     container: {
@@ -320,10 +321,9 @@ export const IndividualRank = () => {
                             <Label xl bold white title="No Users Found!!" />
                         </View>
                     }
-                    <FlatList
-                        initialNumToRender={200}
-                        maxToRenderPerBatch={200}
-                        data={rankingList}
+                    <FlashList
+                        estimatedItemSize={200}
+                        data={[...rankingList,...rankingList,...rankingList,...rankingList,...rankingList, ...rankingList,...rankingList,...rankingList,...rankingList,...rankingList, ...rankingList,...rankingList,...rankingList,...rankingList,...rankingList, ...rankingList,...rankingList,...rankingList,...rankingList,...rankingList, ...rankingList,...rankingList,...rankingList,...rankingList,...rankingList, ...rankingList,...rankingList,...rankingList,...rankingList,...rankingList, ...rankingList,...rankingList,...rankingList,...rankingList,...rankingList, ...rankingList,...rankingList,...rankingList,...rankingList,...rankingList, ...rankingList,...rankingList,...rankingList,...rankingList,...rankingList, ...rankingList,...rankingList,...rankingList,...rankingList,...rankingList, ...rankingList,...rankingList,...rankingList,...rankingList,...rankingList, ...rankingList,...rankingList,...rankingList,...rankingList,...rankingList, ...rankingList,...rankingList,...rankingList,...rankingList,...rankingList, ...rankingList,...rankingList,...rankingList,...rankingList,...rankingList, ...rankingList,...rankingList,...rankingList,...rankingList,...rankingList, ...rankingList,...rankingList,...rankingList,...rankingList,...rankingList, ...rankingList,...rankingList,...rankingList,...rankingList,...rankingList, ...rankingList,...rankingList,...rankingList,...rankingList,...rankingList, ...rankingList,...rankingList,...rankingList,...rankingList,...rankingList, ...rankingList,...rankingList,...rankingList,...rankingList,...rankingList]}
                         refreshControl={<RefreshControl refreshing={false} onRefresh={() => {
                             const list: any = []
                             for (let i = 0; i < keys.length; i++) {

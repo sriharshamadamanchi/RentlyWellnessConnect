@@ -1,5 +1,5 @@
 import React from "react"
-import { FlatList, Image, KeyboardAvoidingView, Platform, StyleSheet, TextInput, View } from "react-native"
+import { Image, KeyboardAvoidingView, Platform, StyleSheet, TextInput, View } from "react-native"
 import { moderateScale } from "react-native-size-matters"
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { useDispatch, useSelector } from "react-redux"
@@ -11,6 +11,7 @@ import { useNavigation } from "@react-navigation/native"
 import { EmptyImageView } from "../LeaderBoard/IndividualRank"
 import { theme } from "../../common/theme"
 import { StatusBar } from "react-native"
+import { FlashList } from "@shopify/flash-list"
 
 const styles = StyleSheet.create({
     container: {
@@ -163,7 +164,8 @@ export const GroupChatDetails = ({ navigation, route: { params = {} } }: any) =>
                 <Header title={group} />
                 <View
                     style={{ flex: 1 }}>
-                    <FlatList
+                    <FlashList
+                        estimatedItemSize={200}
                         inverted
                         ref={flatListRef}
                         data={[...groupMessages].reverse()}
