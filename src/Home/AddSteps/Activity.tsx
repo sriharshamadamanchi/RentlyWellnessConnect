@@ -1,12 +1,15 @@
 import React from "react"
-import { FlatList, StyleSheet, View } from "react-native"
-import { Card, Divider, Label, Ripple } from "../../common/components"
+import { Alert, FlatList, StyleSheet, View } from "react-native"
+import { Card, Divider, Label, LoadingIndicator, Ripple } from "../../common/components"
 import LinearGradient from "react-native-linear-gradient"
 import { moderateScale } from "react-native-size-matters"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import moment from "moment"
 import Icon from "react-native-vector-icons/AntDesign"
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons"
 import { theme } from "../../common/theme"
+import { hideLoaderAction, showLoaderAction } from "../../common/loaderRedux/actions"
+import { Firestore } from "../Firestore"
 
 const styles = StyleSheet.create({
     container: {
@@ -19,7 +22,7 @@ const styles = StyleSheet.create({
     },
     historyContainer: {
         flexDirection: 'row',
-        width: "90%",
+        width: "95%",
         alignSelf: 'center',
         justifyContent: 'space-between',
         marginVertical: moderateScale(5),
@@ -96,8 +99,11 @@ const InputField = ({ value, index, showDropdown }: { value: string, index: numb
 
 export const Activity = (params: any = {}) => {
 
+    const admin = useSelector((store: any) => store.home.remoteConfig?.admin?.keys) ?? []
     const user = useSelector((store: any) => store.home.user)
     const usersList = useSelector((store: any) => store.home.usersList)
+    const loading = useSelector((store: any) => store.loader.loading)
+
     const [showDropdown, setShowDropDown]: any = React.useState(null)
 
     const id = params.user ? params.user.id : user.id;
@@ -107,9 +113,33 @@ export const Activity = (params: any = {}) => {
         return moment(b.date, "DD/MM/YYYY").valueOf() - moment(a.date, "DD/MM/YYYY").toDate().valueOf()
     });
 
+    const dispatch = useDispatch()
+
+    const deleteRecord = async (record: any, deleteRecord: any) => {
+        try {
+            dispatch(showLoaderAction())
+            const index = steps.findIndex((step) => step.date === record.date)
+            if (index !== -1) {
+                steps[index] = { ...steps[index], count: parseInt(record?.count ?? 0, 10) - parseInt(deleteRecord?.count ?? 0, 10), history: (record?.history.filter((history: any) => history.time !== deleteRecord.time) ?? []) }
+            }
+
+            const updatedSteps = (steps?.filter((step) => step.history?.length !== 0)) ?? []
+
+            await Firestore.updateUser({ id, details: { ...userActivity, steps: updatedSteps } })
+        } catch (err: any) {
+            console.log("err in deleteRecord", err)
+            if (err.message) {
+                Alert.alert("Error", err.message)
+            }
+        } finally {
+            dispatch(hideLoaderAction())
+        }
+    }
+
 
     return (
         <LinearGradient colors={["#43C6AC", '#F8FFAE']} style={styles.container}>
+            <LoadingIndicator loading={loading} />
             <View style={styles.container}>
                 {steps.length === 0 &&
                     <View style={{ height: "80%", justifyContent: 'center', alignItems: 'center' }}>
@@ -136,13 +166,38 @@ export const Activity = (params: any = {}) => {
                                     <Card disabled style={styles.historyCardStyle}>
                                         <FlatList
                                             data={item.history}
-                                            renderItem={({ item = {} }: { item: any }) => {
+                                            renderItem={({ item: history = {} }: { item: any }) => {
                                                 return (
                                                     <>
                                                         <View style={styles.historyContainer}>
-                                                            <Label m bold primary title={moment(item.time).format("hh:mm A")} />
-                                                            <Label center style={{ flex: 0.8 }} ellipsizeMode="end" numberOfLines={2} m bold primary title={`${item.count} steps`} />
-                                                            <Label m bold primary title={item.type} />
+                                                            <Label m bold primary title={moment(history.time).format("hh:mm A")} />
+                                                            <Label m bold primary title={`${history.count} steps`} />
+                                                            <Label m bold primary title={history.type} />
+                                                            {
+                                                                (user.id === id || admin.includes(user.email)) &&
+                                                                <MaterialCommunityIcons
+                                                                    name={"delete"}
+                                                                    color="red"
+                                                                    size={moderateScale(20)}
+                                                                    style={{ padding: moderateScale(5), bottom: moderateScale(3) }}
+                                                                    onPress={() => {
+                                                                        Alert.alert('Delete record', `Are you sure you want to delete the record of ${history.count} steps ?`, [
+                                                                            {
+                                                                                text: 'Cancel',
+                                                                                onPress: () => console.log('Cancel Pressed'),
+                                                                                style: 'cancel',
+                                                                            },
+                                                                            {
+                                                                                text: 'Delete', onPress: async () => {
+                                                                                    try {
+                                                                                        deleteRecord(item, history)
+                                                                                    } catch (err: any) {
+                                                                                    }
+                                                                                }
+                                                                            },
+                                                                        ]);
+                                                                    }} />
+                                                            }
                                                         </View>
                                                         <Divider />
                                                     </>

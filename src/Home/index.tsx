@@ -31,6 +31,8 @@ import { ForgotPassword } from "./LoginOrRegister/ForgotPassword";
 import { EditProfile } from "./Profile/EditProfile";
 import { ChangePassword } from "./Profile/ChangePassword";
 import { ActivityTab } from "./LeaderBoard/ActivityTab";
+import { useNavigation } from "@react-navigation/native";
+import { HeaderBackButton } from "@react-navigation/elements";
 
 const Tab = createBottomTabNavigator();
 
@@ -54,8 +56,30 @@ const styles = StyleSheet.create({
         padding: moderateScale(10),
         right: moderateScale(90),
         bottom: moderateScale(12)
-    }
+    },
+    headerContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginVertical: moderateScale(20)
+    },
 });
+
+export const Header = ({ name }: { name: string }) => {
+    const navigation = useNavigation()
+
+    return (
+        <View style={styles.headerContainer}>
+            <HeaderBackButton
+                style={{ paddingLeft: moderateScale(10) }}
+                tintColor="#FFFFFF"
+                onPress={() => {
+                    navigation.goBack()
+                }}
+            />
+            <Label ellipsizeMode="end" numberOfLines={1} center xl22 bold white title={name} style={{ width: moderateScale(275), right: moderateScale(10) }} />
+        </View>
+    )
+}
 
 export const HomeTabbar = () => {
 
@@ -284,12 +308,7 @@ export const Home = () => {
                         />
                         <Stack.Screen
                             options={{
-                                title: "Details",
-                                headerStyle: {
-                                    borderBottomWidth: 0,
-                                    elevation: 0,
-                                    shadowOpacity: 0
-                                }
+                                headerShown: false
                             }}
                             name="Details"
                             component={DetailsTab}
@@ -326,26 +345,21 @@ export const Home = () => {
                         />
                         <Stack.Screen
                             options={{
-                                title: "",
-                                headerStyle: {
-                                    borderBottomWidth: 0,
-                                    elevation: 0,
-                                    shadowOpacity: 0
-                                }
+                                headerShown: false
                             }}
                             name="UserActivityTab"
                             component={ActivityTab}
                         />
                         <Stack.Screen
                             options={{
-                                title: "Edit Profile"
+                                headerShown: false
                             }}
                             name="EditProfile"
                             component={EditProfile}
                         />
                         <Stack.Screen
                             options={{
-                                title: "Change Password"
+                                headerShown: false
                             }}
                             name="ChangePassword"
                             component={ChangePassword}

@@ -1,5 +1,5 @@
 import React from "react"
-import { KeyboardAvoidingView, ScrollView, StyleSheet, View } from "react-native"
+import { KeyboardAvoidingView, SafeAreaView, ScrollView, StyleSheet, View } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import { GradientButton, InputField } from "../../common/components"
 import { moderateScale } from "react-native-size-matters"
@@ -7,12 +7,12 @@ import { useDispatch } from "react-redux"
 import { LoadingIndicator } from "../../common/components/LoadingIndicator/LoadingIndicator"
 import { useNavigation } from "@react-navigation/native"
 import { Alert } from "react-native"
-import { StatusBar } from "react-native"
 import { eyeIcon, eyeWithLineIcon } from "../../common/constants"
 import { Platform } from "react-native"
 import auth from '@react-native-firebase/auth'
 import { logoutAction } from "../redux/actions"
 import { Keyboard } from "react-native"
+import { Header } from ".."
 
 const styles = StyleSheet.create({
     mainContainer: {
@@ -87,77 +87,80 @@ export const ChangePassword = () => {
     }
 
     return (
-        <LinearGradient colors={["#43C6AC", '#F8FFAE']} style={styles.mainContainer}>
-            <StatusBar backgroundColor={"#FFFFFF"} barStyle="dark-content" />
-            <LoadingIndicator loading={loading} />
-            <KeyboardAvoidingView style={styles.mainContainer}
-                keyboardVerticalOffset={Platform.select({ ios: moderateScale(100), android: 0 })}
-                behavior={Platform.OS === "ios" ? "padding" : "height"}>
-                <ScrollView automaticallyAdjustKeyboardInsets={Platform.OS === 'android'} keyboardShouldPersistTaps="handled" style={styles.mainContainer}>
-                    <View style={styles.container}>
+        <>
+            <SafeAreaView style={{ backgroundColor: '#43C6AC' }} />
+            <LinearGradient colors={["#43C6AC", '#F8FFAE']} style={styles.mainContainer}>
+                <Header name={"Change Password"} />
+                <LoadingIndicator loading={loading} />
+                <KeyboardAvoidingView style={styles.mainContainer}
+                    keyboardVerticalOffset={Platform.select({ ios: moderateScale(100), android: 0 })}
+                    behavior={Platform.OS === "ios" ? "padding" : "height"}>
+                    <ScrollView automaticallyAdjustKeyboardInsets={Platform.OS === 'android'} keyboardShouldPersistTaps="handled" style={styles.mainContainer}>
+                        <View style={styles.container}>
 
-                        <InputField
-                            secureTextEntry={showNewPassword === eyeIcon}
-                            title="NEW PASSWORD"
-                            value={newPassword}
-                            onChangeText={(text) => {
-                                setNewPassword(text)
-                            }}
-                            inputStyle={styles.inputStyle}
-                            icon={showNewPassword}
-                            onPressIcon={() => {
-                                if (showNewPassword !== eyeIcon) {
-                                    setShowNewPassword(eyeIcon)
-                                } else {
-                                    setShowNewPassword(eyeWithLineIcon)
-                                }
-                            }}
-                        />
+                            <InputField
+                                secureTextEntry={showNewPassword === eyeIcon}
+                                title="NEW PASSWORD"
+                                value={newPassword}
+                                onChangeText={(text) => {
+                                    setNewPassword(text)
+                                }}
+                                inputStyle={styles.inputStyle}
+                                icon={showNewPassword}
+                                onPressIcon={() => {
+                                    if (showNewPassword !== eyeIcon) {
+                                        setShowNewPassword(eyeIcon)
+                                    } else {
+                                        setShowNewPassword(eyeWithLineIcon)
+                                    }
+                                }}
+                            />
 
-                        <InputField
-                            secureTextEntry={showConfirmPassword === eyeIcon}
-                            title="CONFIRM PASSWORD"
-                            value={confirmPassword}
-                            onChangeText={(text) => {
-                                setConfirmPassword(text)
-                            }}
-                            inputStyle={styles.inputStyle}
-                            icon={showConfirmPassword}
-                            onPressIcon={() => {
-                                if (showConfirmPassword !== eyeIcon) {
-                                    setShowConfirmPassword(eyeIcon)
-                                } else {
-                                    setShowConfirmPassword(eyeWithLineIcon)
-                                }
-                            }}
-                        />
-                        <View style={styles.registerButtonContainer}>
-                            <GradientButton
-                                colors={['#bdc3c7', '#2c3e50']}
-                                title="UPDATE"
-                                bold
-                                m
-                                buttonStyle={styles.registerButtonStyle}
-                                onPress={() => {
-                                    Keyboard.dismiss()
-                                    if (newPassword.trim() === "") {
-                                        Alert.alert("Alert", "Password can't be blank")
-                                        return
+                            <InputField
+                                secureTextEntry={showConfirmPassword === eyeIcon}
+                                title="CONFIRM PASSWORD"
+                                value={confirmPassword}
+                                onChangeText={(text) => {
+                                    setConfirmPassword(text)
+                                }}
+                                inputStyle={styles.inputStyle}
+                                icon={showConfirmPassword}
+                                onPressIcon={() => {
+                                    if (showConfirmPassword !== eyeIcon) {
+                                        setShowConfirmPassword(eyeIcon)
+                                    } else {
+                                        setShowConfirmPassword(eyeWithLineIcon)
                                     }
-                                    if (newPassword.trim().length < 8) {
-                                        Alert.alert("Alert", "Password should be of minimum length 8")
-                                        return
-                                    }
-                                    if (newPassword.trim() !== confirmPassword.trim()) {
-                                        Alert.alert("Alert", "Passwords dosen't match")
-                                        return
-                                    }
-                                    update()
-                                }} />
+                                }}
+                            />
+                            <View style={styles.registerButtonContainer}>
+                                <GradientButton
+                                    colors={['#bdc3c7', '#2c3e50']}
+                                    title="UPDATE"
+                                    bold
+                                    m
+                                    buttonStyle={styles.registerButtonStyle}
+                                    onPress={() => {
+                                        Keyboard.dismiss()
+                                        if (newPassword.trim() === "") {
+                                            Alert.alert("Alert", "Password can't be blank")
+                                            return
+                                        }
+                                        if (newPassword.trim().length < 8) {
+                                            Alert.alert("Alert", "Password should be of minimum length 8")
+                                            return
+                                        }
+                                        if (newPassword.trim() !== confirmPassword.trim()) {
+                                            Alert.alert("Alert", "Passwords dosen't match")
+                                            return
+                                        }
+                                        update()
+                                    }} />
+                            </View>
                         </View>
-                    </View>
-                </ScrollView>
-            </KeyboardAvoidingView>
-        </LinearGradient>
+                    </ScrollView>
+                </KeyboardAvoidingView>
+            </LinearGradient>
+        </>
     )
 }

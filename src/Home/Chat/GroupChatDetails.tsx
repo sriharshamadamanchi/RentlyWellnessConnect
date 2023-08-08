@@ -9,8 +9,8 @@ import { readGroupMessageAction, sendMessageAction } from "../redux/actions"
 import { HeaderBackButton } from "@react-navigation/elements"
 import { useNavigation } from "@react-navigation/native"
 import { EmptyImageView } from "../LeaderBoard/IndividualRank"
-import { StatusBar } from "react-native"
 import { theme } from "../../common/theme"
+import { StatusBar } from "react-native"
 
 const styles = StyleSheet.create({
     container: {

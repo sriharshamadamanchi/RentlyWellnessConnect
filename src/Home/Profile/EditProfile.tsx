@@ -1,16 +1,16 @@
 import React from "react"
-import { Keyboard, KeyboardAvoidingView, ScrollView, StyleSheet, View } from "react-native"
+import { Keyboard, KeyboardAvoidingView, SafeAreaView, ScrollView, StyleSheet, View } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import { GradientButton, InputField } from "../../common/components"
 import { moderateScale } from "react-native-size-matters"
 import { LoadingIndicator } from "../../common/components/LoadingIndicator/LoadingIndicator"
 import { Alert } from "react-native"
-import { StatusBar } from "react-native"
 import { Platform } from "react-native"
 import auth from '@react-native-firebase/auth'
 import firestore from '@react-native-firebase/firestore'
 import { useDispatch, useSelector } from "react-redux"
 import { storeLoginDetailsAction, storeUsersListAction } from "../redux/actions"
+import { Header } from ".."
 
 const styles = StyleSheet.create({
     mainContainer: {
@@ -81,50 +81,53 @@ export const EditProfile = () => {
     }
 
     return (
-        <LinearGradient colors={["#43C6AC", '#F8FFAE']} style={styles.mainContainer}>
-            <StatusBar backgroundColor={"#FFFFFF"} barStyle="dark-content" />
-            <LoadingIndicator loading={loading} />
-            <KeyboardAvoidingView style={styles.mainContainer}
-                keyboardVerticalOffset={Platform.select({ ios: moderateScale(100), android: 0 })}
-                behavior={Platform.OS === "ios" ? "padding" : "height"}>
-                <ScrollView automaticallyAdjustKeyboardInsets={Platform.OS === 'android'} keyboardShouldPersistTaps="handled" style={styles.mainContainer}>
-                    <View style={styles.container}>
-                        <InputField
-                            maxLength={30}
-                            title="NAME"
-                            value={name}
-                            onChangeText={(text) => {
-                                setName(text)
-                            }}
-                            inputStyle={styles.inputStyle}
-                        />
-                        <View style={styles.registerButtonContainer}>
-                            <GradientButton
-                                colors={['#bdc3c7', '#2c3e50']}
-                                title="UPDATE"
-                                bold
-                                m
-                                buttonStyle={styles.registerButtonStyle}
-                                onPress={() => {
-                                    Keyboard.dismiss()
-                                    if (name.trim() === "") {
-                                        Alert.alert("Alert", "Name can't be blank")
-                                        return
-                                    }
-                                    if (name.trim().length < 8) {
-                                        Alert.alert("Alert", "Name should contain minimum of 8 characters")
-                                        return
-                                    }
-                                    if (!(/^[a-zA-Z\s]+$/.test(name.trim()))) {
-                                        Alert.alert("Alert", "Name should not contain other than alphabets")
-                                        return
-                                    }
-                                    update()
-                                }} />
+        <>
+            <SafeAreaView style={{ backgroundColor: '#43C6AC' }} />
+            <LinearGradient colors={["#43C6AC", '#F8FFAE']} style={styles.mainContainer}>
+                <Header name={"Edit Profile"} />
+                <LoadingIndicator loading={loading} />
+                <KeyboardAvoidingView style={styles.mainContainer}
+                    keyboardVerticalOffset={Platform.select({ ios: moderateScale(100), android: 0 })}
+                    behavior={Platform.OS === "ios" ? "padding" : "height"}>
+                    <ScrollView automaticallyAdjustKeyboardInsets={Platform.OS === 'android'} keyboardShouldPersistTaps="handled" style={styles.mainContainer}>
+                        <View style={styles.container}>
+                            <InputField
+                                maxLength={30}
+                                title="NAME"
+                                value={name}
+                                onChangeText={(text) => {
+                                    setName(text)
+                                }}
+                                inputStyle={styles.inputStyle}
+                            />
+                            <View style={styles.registerButtonContainer}>
+                                <GradientButton
+                                    colors={['#bdc3c7', '#2c3e50']}
+                                    title="UPDATE"
+                                    bold
+                                    m
+                                    buttonStyle={styles.registerButtonStyle}
+                                    onPress={() => {
+                                        Keyboard.dismiss()
+                                        if (name.trim() === "") {
+                                            Alert.alert("Alert", "Name can't be blank")
+                                            return
+                                        }
+                                        if (name.trim().length < 8) {
+                                            Alert.alert("Alert", "Name should contain minimum of 8 characters")
+                                            return
+                                        }
+                                        if (!(/^[a-zA-Z\s]+$/.test(name.trim()))) {
+                                            Alert.alert("Alert", "Name should not contain other than alphabets")
+                                            return
+                                        }
+                                        update()
+                                    }} />
+                            </View>
                         </View>
-                    </View>
-                </ScrollView>
-            </KeyboardAvoidingView>
-        </LinearGradient>
+                    </ScrollView>
+                </KeyboardAvoidingView>
+            </LinearGradient>
+        </>
     )
 }

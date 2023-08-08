@@ -5,8 +5,8 @@ import { createMaterialTopTabNavigator } from "@react-navigation/material-top-ta
 import LinearGradient from "react-native-linear-gradient"
 import { ChatList } from "./ChatList"
 import { Groups } from "./Groups"
-import { StatusBar } from "react-native"
 import { Label } from "../../common/components"
+import { StatusBar } from "react-native"
 
 const styles = StyleSheet.create({
     container: {

@@ -123,13 +123,13 @@ export const AddSteps = () => {
                     ...step,
                     date: formattedDate,
                     count: `${parseInt(step.count, 10) + parseInt(count, 10)}`,
-                    history: [...(step.history ?? []), { type: pedoType, count, time: Date.now() }]
+                    history: [...(step.history ?? []), { type: pedoType, count: `${parseInt(count, 10)}`, time: Date.now() }]
                 }
             } else {
                 steps.push({
                     date: formattedDate,
-                    count,
-                    history: [{ type: pedoType, count, time: Date.now() }]
+                    count: `${parseInt(count, 10)}`,
+                    history: [{ type: pedoType, count: `${parseInt(count, 10)}`, time: Date.now() }]
                 })
             }
 
@@ -212,7 +212,7 @@ export const AddSteps = () => {
                             colors={['#bdc3c7', '#2c3e50']}
                             style={styles.saveButtonGradientStyle}>
                             <CurvedButton
-                                disableButton={loading || !(/^\d+$/.test(count))}
+                                disableButton={loading || !(/^\d+$/.test(count)) || parseInt(count, 10) === 0}
                                 title="SAVE"
                                 bold
                                 buttonStyle={{ flex: 1, width: "100%", alignSelf: "center", backgroundColor: "transparent" }}

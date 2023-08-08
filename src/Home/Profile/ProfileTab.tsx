@@ -1,5 +1,5 @@
 import React from "react"
-import { Alert, Image, ScrollView, StatusBar, StyleSheet, View } from "react-native"
+import { Alert, Image, ScrollView, StyleSheet, View } from "react-native"
 import { GradientButton, Label, PrimaryView } from "../../common/components"
 import LinearGradient from "react-native-linear-gradient"
 import { moderateScale } from "react-native-size-matters"
@@ -80,8 +80,9 @@ export const ProfileTab = () => {
     const navigation: any = useNavigation();
     const isFocused = useIsFocused()
     const scrollRef: any = React.useRef()
-
+    const admin = useSelector((store: any) => store.home.remoteConfig?.admin?.keys) ?? []
     const user = useSelector((store: any) => store.home.user)
+    const isUserAdmin = admin.includes(user.email)
     const { loading }: { loading: boolean } = useSelector(loaderSelector("Logout"));
 
     React.useEffect(() => {
@@ -95,7 +96,6 @@ export const ProfileTab = () => {
     return (
         <PrimaryView style={{ backgroundColor: '#43C6AC' }}>
             <LinearGradient colors={["#43C6AC", '#F8FFAE']} style={styles.container}>
-                <StatusBar backgroundColor={"#43C6AC"} barStyle="dark-content" />
                 <ScrollView ref={scrollRef} showsVerticalScrollIndicator={false} style={styles.container}>
                     <LoadingIndicator loading={loading} />
                     <View style={{ marginTop: moderateScale(15) }}>
@@ -179,6 +179,10 @@ export const ProfileTab = () => {
                             }}
                         />
                     </View>
+                    {
+                        isUserAdmin &&
+                        <Label bold center title="You are an admin" style={{ color: 'red' }} />
+                    }
                     <Label m bold primary center title={`Version ${version}`} style={{ marginBottom: moderateScale(10) }} />
                 </ScrollView>
             </LinearGradient>
