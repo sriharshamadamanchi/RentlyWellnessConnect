@@ -173,7 +173,7 @@ export const Activity = (params: any = {}) => {
                                                     <>
                                                         <View style={styles.historyContainer}>
                                                             <Label m bold primary title={moment(history.time).format("hh:mm A")} />
-                                                            <Label m bold primary title={`${history.count} steps`} />
+                                                            <Label m bold primary title={`${history.count?.length > 5 ? history.count.slice(0, 6) + "..." : history.count} steps`} />
                                                             <Label m bold primary title={history.type} />
                                                             {
                                                                 (user.id === id || admin.includes(user.email)) &&
