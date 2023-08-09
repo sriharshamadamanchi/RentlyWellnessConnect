@@ -269,9 +269,15 @@ export const IndividualRank = () => {
     React.useEffect(() => {
 
         if (team === "All") {
-            setFilteredRankList(rankingList.filter((data: any) => data.name?.toLowerCase()?.includes(searchQuery.toLowerCase())))
+            setFilteredRankList(rankingList.filter((data: any) => data?.name?.toLowerCase()?.includes(searchQuery.toLowerCase())))
         } else {
-            setFilteredRankList(rankingList.filter((data: any) => data.name?.toLowerCase()?.includes(searchQuery.toLowerCase()) && (data.team === team)))
+            let list = rankingList.filter((data: any) => (data?.team === team))
+            list = list.map((details: any, index: number) => {
+                return { ...details, rank: index + 1 }
+            })
+            list = list.filter((data: any) => data?.name?.toLowerCase()?.includes(searchQuery.toLowerCase()))
+
+            setFilteredRankList(list)
         }
 
     }, [searchQuery, team])
@@ -283,9 +289,11 @@ export const IndividualRank = () => {
         }
     }, [isFocused])
 
-    const isFirstRankPresent = rankingList.length > 0
-    const isSecondRankPresent = rankingList.length > 1
-    const isThirdRankPresent = rankingList.length > 2
+    const rankList = (searchQuery || team !== "All") ? filteredRankList : rankingList
+
+    const isFirstRankPresent = rankList.length > 0
+    const isSecondRankPresent = rankList.length > 1
+    const isThirdRankPresent = rankList.length > 2
 
     return (
         <View style={styles.container}>
@@ -310,7 +318,7 @@ export const IndividualRank = () => {
                     }
                     <FlashList
                         estimatedItemSize={200}
-                        data={(searchQuery || team !== "All") ? filteredRankList : rankingList}
+                        data={rankList}
                         refreshControl={<RefreshControl refreshing={false} onRefresh={() => {
                             let list: any = []
                             for (let i = 0; i < keys.length; i++) {
@@ -340,16 +348,16 @@ export const IndividualRank = () => {
                                     <View style={styles.rankSuperContainer}>
 
                                         {isFirstRankPresent &&
-                                            <RankView rank="1" userDetails={rankingList[0]} />
+                                            <RankView rank="1" userDetails={rankList[0]} />
                                         }
                                         {isSecondRankPresent && isThirdRankPresent &&
                                             <>
                                                 <View style={styles.secondRankStyle}>
-                                                    <RankView rank="2" userDetails={rankingList[1]} />
+                                                    <RankView rank="2" userDetails={rankList[1]} />
                                                 </View>
 
                                                 <View style={styles.thirdRankStyle}>
-                                                    <RankView rank="3" userDetails={rankingList[2]} />
+                                                    <RankView rank="3" userDetails={rankList[2]} />
                                                 </View>
                                             </>
                                         }
