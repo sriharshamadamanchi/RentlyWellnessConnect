@@ -1,5 +1,5 @@
 import React from "react"
-import { StyleSheet, View } from "react-native"
+import { FlatList, StyleSheet, View } from "react-native"
 import { moderateScale } from "react-native-size-matters"
 import { useSelector } from "react-redux"
 import { Label, Ripple } from "../../common/components"
@@ -8,7 +8,6 @@ import moment from "moment"
 import { teams } from "../../common/constants"
 import { EmptyImageView } from "../LeaderBoard/IndividualRank"
 import { theme } from "../../common/theme"
-import { FlashList } from "@shopify/flash-list"
 
 const styles = StyleSheet.create({
     container: {
@@ -48,8 +47,7 @@ export const Groups = () => {
     return (
         <View style={styles.container}>
             <View style={styles.container}>
-                <FlashList
-                    estimatedItemSize={200}
+                <FlatList
                     data={teams}
                     renderItem={({ item }) => {
                         const groupMessages = groupChats[item] ?? []
