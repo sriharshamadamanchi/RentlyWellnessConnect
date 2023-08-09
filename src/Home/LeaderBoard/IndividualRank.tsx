@@ -243,10 +243,11 @@ export const IndividualRank = () => {
     const keys = Object.keys(usersList)
     const [team, setTeam] = React.useState(data[0].value)
 
-    const [rankingList, setRankingList] = React.useState([])
+    const [rankingList, setRankingList]: any = React.useState([])
+    const [filteredRankList, setFilteredRankList]: any = React.useState([])
 
     React.useEffect(() => {
-        const list: any = []
+        let list: any = []
         for (let i = 0; i < keys.length; i++) {
             const userDetails = usersList[keys[i]] ?? {}
             let totalSteps = 0;
@@ -258,38 +259,20 @@ export const IndividualRank = () => {
         }
 
         list.sort((a: any, b: any) => b.totalSteps - a.totalSteps)
-        if (team === "All") {
-            setRankingList(list)
-        } else {
-            setRankingList(list.filter((data: any) => data.team === team))
-        }
-    }, [team, user.name])
+        list = list.map((details: any, index: number) => {
+            return { ...details, rank: index + 1 }
+        })
 
-
-    const isFirstRankPresent = rankingList.length > 0
-    const isSecondRankPresent = rankingList.length > 1
-    const isThirdRankPresent = rankingList.length > 2
-
-    let myRank = rankingList.findIndex((list: any) => list.id === user.id)
-    if (myRank === -1) {
-        myRank = rankingList.length + 1
-    } else {
-        myRank = myRank + 1
-    }
-
-    const [filteredRanks, setFilteredRanks]: any = React.useState([])
+        setRankingList(list)
+    }, [user.name])
 
     React.useEffect(() => {
 
-        const filter: any = []
-        Object.keys(usersList).map((id: any) => {
-            const name = (usersList[id]?.name ?? "").toLowerCase()
-            if (name.includes(searchQuery.toLowerCase()) && (usersList[id]?.team === team || team === "All")) {
-                filter.push(id)
-            }
-        })
-
-        setFilteredRanks(filter)
+        if (team === "All") {
+            setFilteredRankList(rankingList.filter((data: any) => data.name?.toLowerCase()?.includes(searchQuery.toLowerCase())))
+        } else {
+            setFilteredRankList(rankingList.filter((data: any) => data.name?.toLowerCase()?.includes(searchQuery.toLowerCase()) && (data.team === team)))
+        }
 
     }, [searchQuery, team])
 
@@ -299,6 +282,10 @@ export const IndividualRank = () => {
             setTeam(data[0].value)
         }
     }, [isFocused])
+
+    const isFirstRankPresent = rankingList.length > 0
+    const isSecondRankPresent = rankingList.length > 1
+    const isThirdRankPresent = rankingList.length > 2
 
     return (
         <View style={styles.container}>
@@ -316,16 +303,16 @@ export const IndividualRank = () => {
                             style={{ width: moderateScale(110) }}
                         />
                     </View>
-                    {searchQuery && filteredRanks.length === 0 &&
+                    {searchQuery && filteredRankList.length === 0 &&
                         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                             <Label xl bold white title="No Users Found!!" />
                         </View>
                     }
                     <FlashList
                         estimatedItemSize={200}
-                        data={rankingList}
+                        data={(searchQuery || team !== "All") ? filteredRankList : rankingList}
                         refreshControl={<RefreshControl refreshing={false} onRefresh={() => {
-                            const list: any = []
+                            let list: any = []
                             for (let i = 0; i < keys.length; i++) {
                                 const userDetails = usersList[keys[i]] ?? {}
                                 let totalSteps = 0;
@@ -337,12 +324,13 @@ export const IndividualRank = () => {
                             }
 
                             list.sort((a: any, b: any) => b.totalSteps - a.totalSteps)
-                            if (team === "All") {
-                                setRankingList(list)
-                            } else {
-                                setRankingList(list.filter((data: any) => data.team === team))
-                            }
-                        }} />}
+                            list = list.map((details: any, index: number) => {
+                                return { ...details, rank: index + 1 }
+                            })
+
+                            setRankingList(list)
+                        }} />
+                        }
                         ListHeaderComponent={() => {
                             if (searchQuery) {
                                 return null
@@ -371,10 +359,7 @@ export const IndividualRank = () => {
                                 </>
                             )
                         }}
-                        renderItem={({ item, index }: any) => {
-                            if (!(filteredRanks.includes(item.id))) {
-                                return null
-                            }
+                        renderItem={({ item }: any) => {
                             return (
                                 <Card style={styles.cardStyle}
                                     onPress={() => {
@@ -400,7 +385,7 @@ export const IndividualRank = () => {
                                         }
                                     </View>
                                     <LinearGradient colors={["#200122", '#6f0000']} style={styles.rankNumberViewInCard}>
-                                        <Label center bold white title={`${index + 1}`} />
+                                        <Label center bold white title={`${item.rank ?? "-"}`} />
                                     </LinearGradient>
                                 </Card>
                             )
