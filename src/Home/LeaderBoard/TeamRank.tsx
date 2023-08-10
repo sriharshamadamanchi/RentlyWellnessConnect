@@ -134,7 +134,7 @@ const RankView = ({ rank, userDetails }: { rank: string, userDetails: any }) => 
 
 export const TeamRank = () => {
     const isFocused = useIsFocused()
-    const GOAL = 504461942
+    const GOAL = 477710000
     const usersList = useSelector((store: any) => store.home.usersList ?? {})
     const captains = useSelector((store: any) => store.home.remoteConfig?.captains ?? {})
     const keys = Object.keys(usersList)
